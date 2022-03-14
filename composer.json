@@ -1,0 +1,123 @@
+{
+    "name": "ghostwriter/event-dispatcher",
+    "description": "Provides a PSR-14 Event Dispatcher implementation.",
+    "license": "BSD-3-Clause",
+    "type": "library",
+    "keywords": [
+        "ghostwriter",
+        "event-dispatcher",
+        "psr-14"
+    ],
+    "authors": [
+        {
+            "name": "Nathanael Esayeas",
+            "email": "nathanael.esayeas@protonmail.com",
+            "homepage": "https://github.com/ghostwriter",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ghostwriter/event-dispatcher/issues",
+        "forum": "https://github.com/ghostwriter/event-dispatcher/discussions",
+        "source": "https://github.com/ghostwriter/event-dispatcher",
+        "docs": "https://github.com/ghostwriter/event-dispatcher",
+        "rss": "https://github.com/ghostwriter/event-dispatcher/releases.atom"
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/ghostwriter"
+        }
+    ],
+    "require": {
+        "php": ">=8.0, <8.2",
+        "ghostwriter/container": "^0.3.1",
+        "psr/container": "^1.0 || ^2.0",
+        "psr/event-dispatcher": "^1.0,<2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5.20",
+        "psalm/plugin-phpunit": "^0.16.1",
+        "rector/rector": "^0.12.23",
+        "roave/security-advisories": "dev-latest",
+        "symplify/easy-coding-standard": "^10.2.3",
+        "vimeo/psalm": "^4.23.0"
+    },
+    "replace": {},
+    "conflict": {
+        "ext-psr": "*"
+    },
+    "provide": {
+        "psr/event-dispatcher-implementation": "^1.0"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Ghostwriter\\EventDispatcher\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ghostwriter\\EventDispatcher\\Tests\\": "tests/"
+        },
+        "files": [
+            "tests/Fixture/functions.php"
+        ]
+    },
+    "config": {
+        "allow-plugins": {},
+        "classmap-authoritative": true,
+        "discard-changes": true,
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "prepend-autoloader": true,
+        "process-timeout": 5000,
+        "sort-packages": true
+    },
+    "scripts": {
+        "cache:clear": [
+            "rm -fr ./.cache"
+        ],
+        "check": [
+            "@composer validate",
+            "@normalizer",
+            "@cs-check",
+            "@cs-fix",
+            "@test",
+            "@psalm",
+            "@rector:dry-run",
+            "@psalm:security"
+        ],
+        "cs-check": "vendor/bin/ecs check --clear-cache || true",
+        "cs-fix": "vendor/bin/ecs check --fix --clear-cache",
+        "dev": [
+            "@cs-fix",
+            "@test",
+            "@psalm",
+            "@infection"
+        ],
+        "missing-returntypes": "psalm --alter --issues=MissingReturnType",
+        "normalizer": "composer normalize --no-check-lock",
+        "phpunit": "phpunit --colors=always --testdox --stop-on-failure",
+        "psalm": "@psalm:shepherd",
+        "psalm:baseline": "psalm --set-baseline=psalm-baseline.xml",
+        "psalm:dry-run": "psalm --alter --issues=all --dry-run",
+        "psalm:missing": "psalm --alter --issues=MissingReturnType",
+        "psalm:security": "psalm --taint-analysis",
+        "psalm:shepherd": "psalm --shepherd --stats --no-diff --no-cache",
+        "rector": "vendor/bin/rector process",
+        "rector:dry-run": "vendor/bin/rector process --dry-run || true",
+        "test": [
+            "@phpunit"
+        ],
+        "test:coverage": [
+            "@cache:clear",
+            "@xdebug",
+            "@phpunit"
+        ],
+        "xdebug": [
+            "@putenv XDEBUG_MODE=coverage"
+        ]
+    }
+}
