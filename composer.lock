@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2694923dd9d15c1ad85fa432e187c6b9",
+    "content-hash": "ec266c39c2a7ca5b0e78a8647f4d5821",
     "packages": [
         {
             "name": "ghostwriter/container",
@@ -4511,7 +4511,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.0,<8.2"
+        "php": ">=8.0, <8.2"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
