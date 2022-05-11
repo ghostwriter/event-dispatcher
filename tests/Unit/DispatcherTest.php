@@ -118,8 +118,8 @@ final class DispatcherTest extends PHPUnitTestCase
      */
     public function testDispatch(object $event): void
     {
-        $error = $event instanceof ErrorEventInterface;
-        $stoppable = $event instanceof PsrStoppableEventInterface;
+//        $error = $event instanceof ErrorEventInterface;
+//        $stoppable = $event instanceof PsrStoppableEventInterface;
 
         try {
             self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
