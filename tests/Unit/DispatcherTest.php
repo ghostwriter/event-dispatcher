@@ -259,7 +259,7 @@ final class DispatcherTest extends PHPUnitTestCase
 
         yield ErrorEventInterface::class => [new ErrorEvent(
             (object) [],
-            static function () {
+            static function (): void {
             },
             new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
         )];
