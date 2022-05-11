@@ -193,20 +193,18 @@ final class ListenerProvider implements ListenerProviderInterface
         $this->providers[$id] = $psrListenerProvider;
     }
 
-    public function addSubscriber(SubscriberInterface ...$subscribers): void
+    public function addSubscriber(SubscriberInterface $subscriber): void
     {
-        foreach ($subscribers as $subscriber) {
-            if (array_key_exists($subscriber::class, $this->subscribers)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Subscriber with ID "%s" has already been registered',
-                    $subscriber::class
-                ));
-            }
-
-            $subscriber($this);
-
-            $this->subscribers[$subscriber::class] = $subscriber;
+        if (array_key_exists($subscriber::class, $this->subscribers)) {
+            throw new InvalidArgumentException(sprintf(
+                'Subscriber with ID "%s" has already been registered',
+                $subscriber::class
+            ));
         }
+
+        $subscriber($this);
+
+        $this->subscribers[$subscriber::class] = $subscriber;
     }
 
     public function getContainer(): ContainerInterface
