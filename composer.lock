@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec266c39c2a7ca5b0e78a8647f4d5821",
+    "content-hash": "a6a2130ff5c9858a3a2d0352c3e9bb76",
     "packages": [
         {
             "name": "ghostwriter/container",
-            "version": "0.3.1",
+            "version": "0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/container.git",
-                "reference": "824e29e197753600a6c04483c8557366d6a70002"
+                "reference": "30ae4977c697dc540cd1d1fc5b3b02060184e412"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/container/zipball/824e29e197753600a6c04483c8557366d6a70002",
-                "reference": "824e29e197753600a6c04483c8557366d6a70002",
+                "url": "https://api.github.com/repos/ghostwriter/container/zipball/30ae4977c697dc540cd1d1fc5b3b02060184e412",
+                "reference": "30ae4977c697dc540cd1d1fc5b3b02060184e412",
                 "shasum": ""
             },
             "require": {
@@ -31,12 +31,12 @@
                 "psr/container-implementation": "^1.1 || ^2.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.5",
-                "psalm/plugin-phpunit": "^0.16",
-                "rector/rector": "^0.12",
+                "phpunit/phpunit": "^9.5.20",
+                "psalm/plugin-phpunit": "^0.16.1",
+                "rector/rector": "^0.12.23",
                 "roave/security-advisories": "dev-latest",
-                "symplify/easy-coding-standard": "^10.2",
-                "vimeo/psalm": "^4.23"
+                "symplify/easy-coding-standard": "^10.2.7",
+                "vimeo/psalm": "^4.23.0"
             },
             "type": "library",
             "autoload": {
@@ -65,7 +65,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ghostwriter/container/issues",
-                "source": "https://github.com/ghostwriter/container/tree/0.3.1"
+                "source": "https://github.com/ghostwriter/container/tree/0.3.2"
             },
             "funding": [
                 {
@@ -73,7 +73,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-09T16:54:13+00:00"
+            "time": "2022-05-21T16:20:03+00:00"
         },
         {
             "name": "psr/container",
@@ -1404,16 +1404,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.6.8",
+            "version": "1.6.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "d76498c5531232cb8386ceb6004f7e013138d3ba"
+                "reference": "8c98899c7c54251a098befd23b50a983594a20f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d76498c5531232cb8386ceb6004f7e013138d3ba",
-                "reference": "d76498c5531232cb8386ceb6004f7e013138d3ba",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8c98899c7c54251a098befd23b50a983594a20f9",
+                "reference": "8c98899c7c54251a098befd23b50a983594a20f9",
                 "shasum": ""
             },
             "require": {
@@ -1439,7 +1439,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.6.8"
+                "source": "https://github.com/phpstan/phpstan/tree/1.6.9"
             },
             "funding": [
                 {
@@ -1459,7 +1459,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-10T06:54:21+00:00"
+            "time": "2022-05-21T11:34:44+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2058,12 +2058,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "2ed308386e65cafaadd54723f5b57775374c2ae8"
+                "reference": "c491d086242983f784b8af91cbb9de43d3374971"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2ed308386e65cafaadd54723f5b57775374c2ae8",
-                "reference": "2ed308386e65cafaadd54723f5b57775374c2ae8",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c491d086242983f784b8af91cbb9de43d3374971",
+                "reference": "c491d086242983f784b8af91cbb9de43d3374971",
                 "shasum": ""
             },
             "conflict": {
@@ -2096,6 +2096,7 @@
                 "bolt/core": "<=4.2",
                 "bottelet/flarepoint": "<2.2.1",
                 "brightlocal/phpwhois": "<=4.2.5",
+                "brotkrueml/codehighlight": "<2.7",
                 "buddypress/buddypress": "<7.2.1",
                 "bugsnag/bugsnag-laravel": ">=2,<2.0.2",
                 "bytefury/crater": "<6.0.2",
@@ -2540,7 +2541,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-11T11:06:18+00:00"
+            "time": "2022-05-16T08:10:11+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -4183,20 +4184,20 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "10.2.3",
+            "version": "10.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "7303e9b0a6ac61b2a0cf5185a2078b7af25fba9d"
+                "reference": "e34a105876b0640e70c584d75adaf9c0b03cf0f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/7303e9b0a6ac61b2a0cf5185a2078b7af25fba9d",
-                "reference": "7303e9b0a6ac61b2a0cf5185a2078b7af25fba9d",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/e34a105876b0640e70c584d75adaf9c0b03cf0f3",
+                "reference": "e34a105876b0640e70c584d75adaf9c0b03cf0f3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "conflict": {
                 "friendsofphp/php-cs-fixer": "<3.0",
@@ -4222,7 +4223,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/10.2.3"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/10.2.7"
             },
             "funding": [
                 {
@@ -4234,7 +4235,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-03T14:07:44+00:00"
+            "time": "2022-05-21T11:14:40+00:00"
         },
         {
             "name": "theseer/tokenizer",
