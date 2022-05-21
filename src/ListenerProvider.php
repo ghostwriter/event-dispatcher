@@ -330,19 +330,19 @@ final class ListenerProvider implements ListenerProviderInterface
 
             throw new InvalidArgumentException(
                 sprintf(
-                'Invalid type declarations for "$%s" parameter; %s "%s" given.',
-                $parameters[0]->getName(),
-                $reflectionType ? 'UnionType' : 'IntersectionType',
-                implode(
-                    $reflectionType ? '&' : '|',
-                    array_map(
-                        static fn (
-                            ReflectionNamedType $reflectionParameter
-                        ): string => $reflectionParameter->getName(),
-                        $parameterTypes
+                    'Invalid type declarations for "$%s" parameter; %s "%s" given.',
+                    $parameters[0]->getName(),
+                    $reflectionType ? 'UnionType' : 'IntersectionType',
+                    implode(
+                        $reflectionType ? '&' : '|',
+                        array_map(
+                            static fn (
+                                ReflectionNamedType $reflectionParameter
+                            ): string => $reflectionParameter->getName(),
+                            $parameterTypes
+                        )
                     )
                 )
-            )
             );
         }
 
