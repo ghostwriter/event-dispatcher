@@ -28,8 +28,10 @@ use function interface_exists;
 use function is_array;
 use function is_object;
 use function is_string;
+use function is_subclass_of;
 use function krsort;
 use function md5;
+use function method_exists;
 use function spl_object_hash;
 use function sprintf;
 
@@ -207,6 +209,18 @@ final class ListenerProvider implements ListenerProviderInterface
         $this->subscribers[$subscriber::class] = $subscriber;
     }
 
+    public function addSubscriberService(string $subscriber): void
+    {
+        if (! is_subclass_of($subscriber, SubscriberInterface::class)) {
+            throw new InvalidArgumentException(sprintf(
+                'Subscriber with ID "%s" must implement %s.',
+                $subscriber,
+                SubscriberInterface::class
+            ));
+        }
+        $this->addSubscriber($this->container->get($subscriber));
+    }
+
     public function getContainer(): ContainerInterface
     {
         return $this->container;
@@ -310,11 +324,12 @@ final class ListenerProvider implements ListenerProviderInterface
 
         $reflectionType = $parameter instanceof ReflectionUnionType;
 
-        /** @var ReflectionNamedType[] $parameterTypes */
-        $parameterTypes = $parameter->getTypes();
+        if (method_exists($parameter, 'getTypes')) {
+            /** @var ReflectionNamedType[] $parameterTypes */
+            $parameterTypes = $parameter->getTypes();
 
-        throw new InvalidArgumentException(
-            sprintf(
+            throw new InvalidArgumentException(
+                sprintf(
                 'Invalid type declarations for "$%s" parameter; %s "%s" given.',
                 $parameters[0]->getName(),
                 $reflectionType ? 'UnionType' : 'IntersectionType',
@@ -328,6 +343,11 @@ final class ListenerProvider implements ListenerProviderInterface
                     )
                 )
             )
+            );
+        }
+
+        throw new InvalidArgumentException(
+            sprintf('Invalid type declarations for "$%s" parameter.', $parameters[0]->getName(),)
         );
     }
 
