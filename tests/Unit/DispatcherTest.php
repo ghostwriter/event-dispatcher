@@ -217,7 +217,7 @@ final class DispatcherTest extends PHPUnitTestCase
     {
         $testEvent = new TestEvent();
 
-        $this->provider->addSubscriber(new TestEventSubscriber());
+        $this->provider->addSubscriberService(TestEventSubscriber::class);
 
         $expected = iterator_count($this->provider->getListenersForEvent($testEvent));
 
