@@ -57,6 +57,38 @@ final class DispatcherTest extends PHPUnitTestCase
     }
 
     /**
+     * @coversNothing
+     *
+     * @return Traversable<string,array<object>>
+     */
+    public function eventDataProvider(): iterable
+    {
+        yield stdClass::class => [new stdClass()];
+
+        yield from $this->stoppableEventDataProvider();
+    }
+
+    /**
+     * @coversNothing
+     *
+     * @return Traversable<string,array<PsrStoppableEventInterface>>
+     */
+    public function stoppableEventDataProvider(): iterable
+    {
+        yield EventInterface::class => [new class() extends AbstractEvent {
+        }];
+
+        yield ErrorEventInterface::class => [new ErrorEvent(
+            (object) [],
+            static function (): void {
+            },
+            new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
+        )];
+
+        yield TestEventInterface::class => [new TestEvent()];
+    }
+
+    /**
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\AbstractEvent::isPropagationStopped
      * @covers \Ghostwriter\EventDispatcher\AbstractEvent::stopPropagation
@@ -233,37 +265,5 @@ final class DispatcherTest extends PHPUnitTestCase
 //        self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
 //        self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
 //        self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
-    }
-
-    /**
-     * @coversNothing
-     *
-     * @return Traversable<string,array<object>>
-     */
-    public function eventDataProvider(): iterable
-    {
-        yield stdClass::class => [new stdClass()];
-
-        yield from $this->stoppableEventDataProvider();
-    }
-
-    /**
-     * @coversNothing
-     *
-     * @return Traversable<string,array<PsrStoppableEventInterface>>
-     */
-    public function stoppableEventDataProvider(): iterable
-    {
-        yield EventInterface::class => [new class() extends AbstractEvent {
-        }];
-
-        yield ErrorEventInterface::class => [new ErrorEvent(
-            (object) [],
-            static function (): void {
-            },
-            new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
-        )];
-
-        yield TestEventInterface::class => [new TestEvent()];
     }
 }
