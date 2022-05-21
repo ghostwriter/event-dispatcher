@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Contract;
 
 use Ghostwriter\Container\Contract\ContainerInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 use Traversable;
 
@@ -60,6 +61,13 @@ interface ListenerProviderInterface extends PsrListenerProviderInterface
     public function addProvider(PsrListenerProviderInterface $psrListenerProvider): void;
 
     public function addSubscriber(SubscriberInterface $subscriber): void;
+
+    /**
+     * @param class-string<SubscriberInterface> $subscriber
+     *
+     * @throws ContainerExceptionInterface
+     */
+    public function addSubscriberService(string $subscriber): void;
 
     public function getContainer(): ContainerInterface;
 

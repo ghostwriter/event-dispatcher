@@ -8,7 +8,6 @@
          beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
-         beStrictAboutResourceUsageDuringSmallTests="true"
          convertDeprecationsToExceptions="true"
          failOnRisky="true"
          failOnWarning="true"
