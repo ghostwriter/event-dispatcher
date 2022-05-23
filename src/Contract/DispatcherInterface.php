@@ -15,6 +15,10 @@ interface DispatcherInterface extends PsrEventDispatcherInterface
     /**
      * Provides type-compatible Listeners, an event to process.
      *
+     * @template TObject of object
+     *
+     * @param TObject $event
+     * @return TObject
      * @throws Throwable
      */
     public function dispatch(object $event): object;
