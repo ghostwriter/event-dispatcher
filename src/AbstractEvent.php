@@ -7,7 +7,7 @@ namespace Ghostwriter\EventDispatcher;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 
 /**
- * @template TPropagationStopped of bool
+ * @template TPropagationStopped of false
  * @implements EventInterface<TPropagationStopped>
  */
 abstract class AbstractEvent implements EventInterface
