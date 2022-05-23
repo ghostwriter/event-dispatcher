@@ -6,6 +6,10 @@ namespace Ghostwriter\EventDispatcher;
 
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 
+/**
+ * @template TPropagationStopped of bool
+ * @implements EventInterface<TPropagationStopped>
+ */
 abstract class AbstractEvent implements EventInterface
 {
     private bool $propagationStopped = false;
