@@ -8,6 +8,9 @@ use Throwable;
 
 /**
  * An object that contains information about an error triggered by Event handling.
+ *
+ * @template TPropagationStopped of bool
+ * @extends EventInterface<TPropagationStopped>
  */
 interface ErrorEventInterface extends EventInterface
 {

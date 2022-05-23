@@ -79,10 +79,10 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         if (
-                array_key_exists($event, $this->listeners) &&
-                array_key_exists($priority, $this->listeners[$event]) &&
-                array_key_exists($id, $this->listeners[$event][$priority])
-            ) {
+            array_key_exists($event, $this->listeners) &&
+            array_key_exists($priority, $this->listeners[$event]) &&
+            array_key_exists($id, $this->listeners[$event][$priority])
+        ) {
             throw new InvalidArgumentException(sprintf(
                 'Duplicate Listener with ID "%s" detected for Event with ID "%s".',
                 $id,
@@ -119,7 +119,7 @@ final class ListenerProvider implements ListenerProviderInterface
             throw new InvalidArgumentException(sprintf('Listener "%s" cannot be found.', $listenerId));
         }
 
-        return $this->addListener($listener, $priority-1, $event, $id);
+        return $this->addListener($listener, $priority - 1, $event, $id);
     }
 
     public function addListenerBefore(
@@ -144,7 +144,7 @@ final class ListenerProvider implements ListenerProviderInterface
             throw new InvalidArgumentException(sprintf('Listener "%s" cannot be found.', $listenerId));
         }
 
-        return $this->addListener($listener, $priority+1, $event, $id);
+        return $this->addListener($listener, $priority + 1, $event, $id);
     }
 
     public function addListenerService(string $event, string $listener, int $priority = 0, ?string $id = null): string
@@ -218,7 +218,8 @@ final class ListenerProvider implements ListenerProviderInterface
                 SubscriberInterface::class
             ));
         }
-        $this->addSubscriber($this->container->get($subscriber));
+
+        $this->addSubscriber($this->container->build($subscriber));
     }
 
     public function getContainer(): ContainerInterface
@@ -233,12 +234,13 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     public function getListenersForEvent(object $event): iterable
     {
-        foreach ($this->listeners as $type => $priority) {
+        foreach ($this->listeners as $type => $priorities) {
             if ('object' !== $type && ! $event instanceof $type) {
                 continue;
             }
-            foreach ($priority as $listeners) {
-                foreach ($listeners as $listener) {
+
+            foreach ($priorities as $priority) {
+                foreach ($priority as $listener) {
                     yield $listener;
                 }
             }

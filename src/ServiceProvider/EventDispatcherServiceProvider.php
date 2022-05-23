@@ -27,14 +27,12 @@ final class EventDispatcherServiceProvider implements ServiceProviderInterface
         $container->alias(PsrListenerProviderInterface::class, ListenerProvider::class);
         $container->alias(ListenerProviderInterface::class, ListenerProvider::class);
 
-        $container->set(Dispatcher::class, static function (ContainerInterface $container): object {
-            return $container->build(
-                Dispatcher::class,
-                [
-                    'psrListenerProvider'=> $container->get(PsrListenerProviderInterface::class),
-                ]
-            );
-        });
+        $container->set(Dispatcher::class, static fn (ContainerInterface $container): object => $container->build(
+            Dispatcher::class,
+            [
+                'psrListenerProvider'=> $container->get(PsrListenerProviderInterface::class),
+            ]
+        ));
         $container->alias(PsrEventDispatcherInterface::class, Dispatcher::class);
         $container->alias(DispatcherInterface::class, Dispatcher::class);
     }
