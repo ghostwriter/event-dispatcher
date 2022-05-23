@@ -11,7 +11,7 @@ use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
  *
  * MUST be implemented to provide type-safety to both listeners and listener providers.
  *
- * @template TPropagationStopped of bool
+ * @template TPropagationStopped of false
  */
 interface EventInterface extends PsrStoppableEventInterface
 {
