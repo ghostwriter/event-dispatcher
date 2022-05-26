@@ -18,8 +18,10 @@ interface DispatcherInterface extends PsrEventDispatcherInterface
      * @template TObject of object
      *
      * @param TObject $event
-     * @return TObject
+     *
      * @throws Throwable
+     *
+     * @return TObject
      */
     public function dispatch(object $event): object;
 }
