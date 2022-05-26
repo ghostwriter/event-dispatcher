@@ -71,7 +71,12 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::PHP_81,
         SetList::RECTOR_CONFIG,
     ]);
-    $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/ecs.php', __DIR__ . '/rector.php']);
+    $rectorConfig->paths([
+        __DIR__ . '/src', __DIR__ . '/tests',
+        __DIR__ . '/config/compliance.php',
+        __DIR__ . '/ecs.php',
+        __DIR__ . '/rector.php',
+    ]);
     $rectorConfig->phpVersion(PhpVersion::PHP_80);
     $rectorConfig->skip([
         __DIR__ . '*/tests/Fixture/*',
