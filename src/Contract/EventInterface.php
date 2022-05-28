@@ -11,14 +11,14 @@ use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
  *
  * MUST be implemented to provide type-safety to both listeners and listener providers.
  *
- * @template TPropagationStopped of false
+ * @template TPropagationStopped of bool
  */
 interface EventInterface extends PsrStoppableEventInterface
 {
     /**
      * Determine if the previous listener halted propagation.
      *
-     * @return (TPropagationStopped is true ? true : false)
+     * @return (TPropagationStopped is true ? true : bool)
      */
     public function isPropagationStopped(): bool;
 
