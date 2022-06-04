@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
+use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
@@ -34,7 +35,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
      *
      * @return Traversable<string,array<callable|int|string>>
      */
-    public function supportedListenersDataProvider(): iterable
+    public function supportedListenersDataProvider(): Traversable
     {
         $priority = 0;
 
@@ -86,7 +87,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::removeListener
      *
-     * @param callable(object):void $listener
+     * @param callable(EventInterface):void $listener
      * @dataProvider supportedListenersDataProvider
      */
     public function testProviderDetectsEventType(
