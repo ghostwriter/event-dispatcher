@@ -63,13 +63,11 @@ final class ErrorEventTest extends PHPUnitTestCase
     /**
      * @coversNothing
      *
-     * @return Traversable<string,list<class-string>>
+     * @return Traversable<string,list<class-string<EventInterface>>>
      */
-    public function dataProviderImplementsInterface(): iterable
+    public function dataProviderImplementsInterface(): Traversable
     {
-        $interfaces =  [EventInterface::class, ErrorEventInterface::class];
-
-        foreach ($interfaces as $interface) {
+        foreach ([EventInterface::class, ErrorEventInterface::class] as $interface) {
             yield $interface => [$interface];
         }
     }
