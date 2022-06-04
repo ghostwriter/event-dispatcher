@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.23.0@f1fe6ff483bf325c803df9f510d09a03fd796f88">
-  <file src="src/ListenerProvider.php">
-    <UndefinedMethod occurrences="1">
-      <code>getTypes</code>
-    </UndefinedMethod>
-  </file>
-  <file src="tests/Unit/DispatcherTest.php">
-    <InvalidArgument occurrences="2">
-      <code>testAlreadyStoppedEventCallsNoListeners</code>
-      <code>testThrows</code>
-    </InvalidArgument>
-    <MixedArrayAssignment occurrences="1">
-      <code>$called[$psrStoppableEvent::class]</code>
-    </MixedArrayAssignment>
-  </file>
   <file src="tests/Unit/ErrorEventTest.php">
-    <ArgumentTypeCoercion occurrences="1">
+    <ArgumentTypeCoercion occurrences="3">
       <code>$interface</code>
+      <code>$this-&gt;listener</code>
     </ArgumentTypeCoercion>
+    <PropertyTypeCoercion occurrences="1">
+      <code>new TestEventListener()</code>
+    </PropertyTypeCoercion>
   </file>
   <file src="tests/Unit/ListenerProviderTest.php">
     <PossiblyInvalidArgument occurrences="1">
