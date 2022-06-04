@@ -22,9 +22,7 @@ use Throwable;
 use Traversable;
 use const SORT_NUMERIC;
 use function array_key_exists;
-use function array_map;
 use function class_exists;
-use function implode;
 use function interface_exists;
 use function is_array;
 use function is_object;
@@ -32,7 +30,6 @@ use function is_string;
 use function is_subclass_of;
 use function krsort;
 use function md5;
-use function method_exists;
 use function spl_object_hash;
 use function sprintf;
 
@@ -322,31 +319,12 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         $reflectionType = $parameter instanceof ReflectionUnionType;
-
-        if (method_exists($parameter, 'getTypes')) {
-            /** @var ReflectionNamedType[] $parameterTypes */
-            $parameterTypes = $parameter->getTypes();
-
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Invalid type declarations for "$%s" parameter; %s "%s" given.',
-                    $parameters[0]->getName(),
-                    $reflectionType ? 'UnionType' : 'IntersectionType',
-                    implode(
-                        $reflectionType ? '&' : '|',
-                        array_map(
-                            static fn (
-                                ReflectionNamedType $reflectionParameter
-                            ): string => $reflectionParameter->getName(),
-                            $parameterTypes
-                        )
-                    )
-                )
-            );
-        }
-
         throw new InvalidArgumentException(
-            sprintf('Invalid type declarations for "$%s" parameter.', $parameters[0]->getName(),)
+            sprintf(
+                'Invalid type declarations for "$%s" parameter; %s given.',
+                $parameters[0]->getName(),
+                $reflectionType ? 'UnionType' : 'IntersectionType'
+            )
         );
     }
 
