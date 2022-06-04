@@ -18,8 +18,11 @@ final class ErrorEvent extends AbstractEvent implements ErrorEventInterface
     /**
      * @param callable(EventInterface):void $listener
      */
-    public function __construct(private EventInterface $event, callable $listener, private Throwable $throwable)
-    {
+    public function __construct(
+        private EventInterface $event,
+        callable $listener,
+        private Throwable $throwable
+    ) {
         $this->listener = $listener;
     }
 
