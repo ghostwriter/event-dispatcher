@@ -54,19 +54,9 @@ final class DispatcherTest extends PHPUnitTestCase
     /**
      * @coversNothing
      *
-     * @return Traversable<string,array<EventInterface>>
+     * @return Traversable<string,list<EventInterface>>
      */
-    public function eventDataProvider(): iterable
-    {
-        yield from $this->stoppableEventDataProvider();
-    }
-
-    /**
-     * @coversNothing
-     *
-     * @return Traversable<string,array<EventInterface>>
-     */
-    public function stoppableEventDataProvider(): iterable
+    public function eventDataProvider(): Traversable
     {
         yield EventInterface::class => [new class() extends AbstractEvent {
         }];
@@ -91,24 +81,21 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
      *
-     * @dataProvider stoppableEventDataProvider
+     * @dataProvider eventDataProvider
      *
      * @throws Throwable
      */
     public function testAlreadyStoppedEventCallsNoListeners(EventInterface $event): void
     {
-        $called = [];
         self::assertFalse($event->isPropagationStopped());
 
-//        $event->stopPropagation();
+        $event->stopPropagation();
 
-//        self::assertTrue($event->isPropagationStopped());
+        self::assertTrue($event->isPropagationStopped());
 
         $this->provider->addListener(
-            static function (EventInterface $psrStoppableEvent) use (&$called): void {
-                $called[$psrStoppableEvent::class] = $psrStoppableEvent::class;
-
-                throw new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
+            static function (EventInterface $event): void {
+                throw new RuntimeException(self::ERROR_MESSAGE . $event::class, self::ERROR_CODE);
             }
         );
 
@@ -210,20 +197,23 @@ final class DispatcherTest extends PHPUnitTestCase
     }
 
     /**
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
+     * @covers       \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @dataProvider eventDataProvider
+     *
+     * @throws Throwable
      */
-    public function testThrows(object $event, ?Throwable $throwable = null): void
+    public function testThrows(EventInterface $event): void
     {
-        if (null !== $throwable) {
+        if ($event instanceof ErrorEventInterface) {
+            $throwable = $event->getThrowable();
+
             $this->expectException($throwable::class);
             $this->expectExceptionMessage($throwable->getMessage());
-            $this->expectExceptionCode($throwable->getMessage());
+            $this->expectExceptionCode($throwable->getCode());
+
+            throw $throwable;
         }
 
         self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
-//        self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
-//        self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
-//        self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
     }
 }
