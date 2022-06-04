@@ -4,28 +4,22 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Contract;
 
-use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
-
 /**
  * An Event that can stop propagation to any further Listeners.
  *
  * MUST be implemented to provide type-safety to both listeners and listener providers.
- *
- * @template TPropagationStopped of bool
  */
-interface EventInterface extends PsrStoppableEventInterface
+interface EventInterface
 {
     /**
      * Determine if the previous listener halted propagation.
      *
-     * @return (TPropagationStopped is true ? true : bool)
+     * @impure
      */
     public function isPropagationStopped(): bool;
 
     /**
      * Stop event propagation.
-     *
-     * @psalm-this-out self<true>
      */
-    public function stopPropagation(): void;
+    public function stopPropagation(bool $bool = true): void;
 }
