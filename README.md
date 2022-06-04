@@ -1,12 +1,12 @@
 # Event Dispatcher
 
-[![Continuous Integration](https://github.com/ghostwriter/event-dispatcher/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/continuous-integration.yml)
+[![Compliance](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/continuous-integration.yml)
 [![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/event-dispatcher?color=8892bf)](https://www.php.net/supported-versions)
 [![Type Coverage](https://shepherd.dev/github/ghostwriter/event-dispatcher/coverage.svg)](https://shepherd.dev/github/ghostwriter/event-dispatcher)
 [![Latest Version on Packagist](https://badgen.net/packagist/v/ghostwriter/event-dispatcher)](https://packagist.org/packages/ghostwriter/event-dispatcher)
 [![Downloads](https://badgen.net/packagist/dt/ghostwriter/event-dispatcher?color=blue)](https://packagist.org/packages/ghostwriter/event-dispatcher)
 
-Provides a [PSR-14](https://www.php-fig.org/psr/psr-14/) Event Dispatcher implementation.
+Provides an Event Dispatcher implementation for PHP inspired by [PSR-14](https://www.php-fig.org/psr/psr-14/)
 
 ## Installation
 
