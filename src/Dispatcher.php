@@ -6,35 +6,30 @@ namespace Ghostwriter\EventDispatcher;
 
 use Ghostwriter\EventDispatcher\Contract\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
-use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
-use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
+use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Throwable;
 
 final class Dispatcher implements DispatcherInterface
 {
-    private PsrListenerProviderInterface $provider;
+    private ListenerProviderInterface $listenerProvider;
 
-    public function __construct(?PsrListenerProviderInterface $psrListenerProvider = null)
+    public function __construct(?ListenerProviderInterface $listenerProvider = null)
     {
-        $this->provider = $psrListenerProvider ?? new ListenerProvider();
+        $this->listenerProvider = $listenerProvider ?? new ListenerProvider();
     }
 
     /**
-     * @psalm-suppress MixedMethodCall
-     *
      * @throws Throwable
      */
-    public function dispatch(object $event): object
+    public function dispatch(EventInterface $event): EventInterface
     {
-        $stoppable = $event instanceof PsrStoppableEventInterface;
-
         // If event propagation has stopped, return the event object passed.
-        if ($stoppable && $event->isPropagationStopped()) {
+        if ($event->isPropagationStopped()) {
             return $event;
         }
 
-        /** @var callable(object):void $listener */
-        foreach ($this->provider->getListenersForEvent($event) as $listener) {
+        foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
             try {
                 $listener($event);
             } catch (Throwable $throwable) {
@@ -51,15 +46,9 @@ final class Dispatcher implements DispatcherInterface
                 throw $throwable;
             }
 
-            if (! $stoppable) {
-                continue;
+            if ($event->isPropagationStopped()) {
+                break;
             }
-
-            if (! $event->isPropagationStopped()) {
-                continue;
-            }
-
-            break;
         }
 
         return $event;
