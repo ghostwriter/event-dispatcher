@@ -10,23 +10,17 @@ use Throwable;
 
 final class ErrorEvent extends AbstractEvent implements ErrorEventInterface
 {
-    private EventInterface $event;
-
     /**
      * @var callable(EventInterface):void
      */
     private $listener;
 
-    private Throwable $throwable;
-
     /**
      * @param callable(EventInterface):void $listener
      */
-    public function __construct(EventInterface $event, callable $listener, Throwable $throwable)
+    public function __construct(private EventInterface $event, callable $listener, private Throwable $throwable)
     {
-        $this->event = $event;
         $this->listener = $listener;
-        $this->throwable = $throwable;
     }
 
     public function getEvent(): EventInterface
