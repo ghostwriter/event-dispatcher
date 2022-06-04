@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Contract;
 
-use Ghostwriter\Container\Contract\ContainerInterface;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
+use Ghostwriter\Container\Contract\ContainerExceptionInterface;
 use Traversable;
 
 /**
  * Maps registered Listeners, Providers and Subscribers.
  */
-interface ListenerProviderInterface extends PsrListenerProviderInterface
+interface ListenerProviderInterface
 {
+    /**
+     * @param callable(EventInterface):void $listener
+     */
     public function addListener(
         callable $listener,
         int $priority = 0,
@@ -21,6 +22,9 @@ interface ListenerProviderInterface extends PsrListenerProviderInterface
         ?string $id = null
     ): string;
 
+    /**
+     * @param callable(EventInterface):void $listener
+     */
     public function addListenerAfter(
         string $listenerId,
         callable $listener,
@@ -28,6 +32,9 @@ interface ListenerProviderInterface extends PsrListenerProviderInterface
         ?string $id = null
     ): string;
 
+    /**
+     * @param callable(EventInterface):void $listener
+     */
     public function addListenerBefore(
         string $listenerId,
         callable $listener,
@@ -58,7 +65,7 @@ interface ListenerProviderInterface extends PsrListenerProviderInterface
         ?string $id = null
     ): string;
 
-    public function addProvider(PsrListenerProviderInterface $psrListenerProvider): void;
+    public function addProvider(self $psrListenerProvider): void;
 
     public function addSubscriber(SubscriberInterface $subscriber): void;
 
@@ -69,15 +76,17 @@ interface ListenerProviderInterface extends PsrListenerProviderInterface
      */
     public function addSubscriberService(string $subscriber): void;
 
-    public function getContainer(): ContainerInterface;
-
-    /** @return Traversable<callable> */
-    public function getListenersForEvent(object $event): iterable;
+    /**
+     * Return relevant/type-compatible Listeners for the Event.
+     *
+     * @return Traversable<callable(EventInterface):void>
+     */
+    public function getListenersForEvent(EventInterface $event): Traversable;
 
     public function removeListener(string $listenerId): void;
 
     /**
-     * @param class-string<PsrListenerProviderInterface> $providerId
+     * @param class-string<ListenerProviderInterface> $providerId
      */
     public function removeProvider(string $providerId): void;
 
