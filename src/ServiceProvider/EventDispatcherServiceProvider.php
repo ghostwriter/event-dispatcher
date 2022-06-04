@@ -12,8 +12,6 @@ use Ghostwriter\EventDispatcher\Contract\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Dispatcher;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
-use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 
 final class EventDispatcherServiceProvider implements ServiceProviderInterface
 {
@@ -24,16 +22,14 @@ final class EventDispatcherServiceProvider implements ServiceProviderInterface
     public function __invoke(ContainerInterface $container): void
     {
         $container->bind(ListenerProvider::class);
-        $container->alias(PsrListenerProviderInterface::class, ListenerProvider::class);
         $container->alias(ListenerProviderInterface::class, ListenerProvider::class);
 
         $container->set(Dispatcher::class, static fn (ContainerInterface $container): object => $container->build(
             Dispatcher::class,
             [
-                'psrListenerProvider'=> $container->get(PsrListenerProviderInterface::class),
+                'listenerProvider'=> $container->get(ListenerProviderInterface::class),
             ]
         ));
-        $container->alias(PsrEventDispatcherInterface::class, Dispatcher::class);
         $container->alias(DispatcherInterface::class, Dispatcher::class);
     }
 }
