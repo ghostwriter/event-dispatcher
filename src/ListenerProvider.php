@@ -7,10 +7,10 @@ namespace Ghostwriter\EventDispatcher;
 use Closure;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Contract\ContainerInterface;
+use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
 use InvalidArgumentException;
-use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
@@ -18,12 +18,11 @@ use ReflectionNamedType;
 use ReflectionType;
 use ReflectionUnionType;
 use RuntimeException;
+use Throwable;
 use Traversable;
 use const SORT_NUMERIC;
 use function array_key_exists;
-use function array_map;
 use function class_exists;
-use function implode;
 use function interface_exists;
 use function is_array;
 use function is_object;
@@ -31,10 +30,12 @@ use function is_string;
 use function is_subclass_of;
 use function krsort;
 use function md5;
-use function method_exists;
 use function spl_object_hash;
 use function sprintf;
 
+/**
+ * Maps registered Listeners, Providers and Subscribers.
+ */
 final class ListenerProvider implements ListenerProviderInterface
 {
     private ContainerInterface $container;
@@ -42,14 +43,14 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * Map of registered Listeners.
      *
-     * @var array<string,array<int,array<string,callable>>>
+     * @var array<string,array<int,array<string,callable(EventInterface):void>>>
      */
     private array $listeners = [];
 
     /**
      * Map of registered Providers.
      *
-     * @var array<class-string<PsrListenerProviderInterface>,PsrListenerProviderInterface>
+     * @var array<class-string<ListenerProviderInterface>,ListenerProviderInterface>
      */
     private array $providers = [];
 
@@ -150,8 +151,8 @@ final class ListenerProvider implements ListenerProviderInterface
     public function addListenerService(string $event, string $listener, int $priority = 0, ?string $id = null): string
     {
         return $this->addListener(
-            function (object $event) use ($listener): void {
-                /** @var callable(object):void $callable */
+            function (EventInterface $event) use ($listener): void {
+                /** @var callable(EventInterface):void $callable */
                 $callable = $this->container->get($listener);
                 $callable($event);
             },
@@ -181,7 +182,7 @@ final class ListenerProvider implements ListenerProviderInterface
         return $this->addListenerService($event, $listener, $priority, $id);
     }
 
-    public function addProvider(PsrListenerProviderInterface $psrListenerProvider): void
+    public function addProvider(ListenerProviderInterface $psrListenerProvider): void
     {
         $id = $psrListenerProvider::class;
 
@@ -209,6 +210,7 @@ final class ListenerProvider implements ListenerProviderInterface
         $this->subscribers[$subscriber::class] = $subscriber;
     }
 
+    /** @throws Throwable */
     public function addSubscriberService(string $subscriber): void
     {
         if (! is_subclass_of($subscriber, SubscriberInterface::class)) {
@@ -222,17 +224,7 @@ final class ListenerProvider implements ListenerProviderInterface
         $this->addSubscriber($this->container->build($subscriber));
     }
 
-    public function getContainer(): ContainerInterface
-    {
-        return $this->container;
-    }
-
-    /**
-     * Return relevant/type-compatible Listeners for the Event.
-     *
-     * @return Traversable<callable>
-     */
-    public function getListenersForEvent(object $event): iterable
+    public function getListenersForEvent(EventInterface $event): Traversable
     {
         foreach ($this->listeners as $type => $priorities) {
             if ('object' !== $type && ! $event instanceof $type) {
@@ -291,6 +283,8 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * Resolves the class type of the first argument on a callable.
      *
+     * @param callable(EventInterface):void $listener
+     *
      * @throws InvalidArgumentException if $listener does not define a valid Event argument with type declarations
      * @throws RuntimeException         if $listener does not exist
      */
@@ -325,36 +319,19 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         $reflectionType = $parameter instanceof ReflectionUnionType;
-
-        if (method_exists($parameter, 'getTypes')) {
-            /** @var ReflectionNamedType[] $parameterTypes */
-            $parameterTypes = $parameter->getTypes();
-
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Invalid type declarations for "$%s" parameter; %s "%s" given.',
-                    $parameters[0]->getName(),
-                    $reflectionType ? 'UnionType' : 'IntersectionType',
-                    implode(
-                        $reflectionType ? '&' : '|',
-                        array_map(
-                            static fn (
-                                ReflectionNamedType $reflectionParameter
-                            ): string => $reflectionParameter->getName(),
-                            $parameterTypes
-                        )
-                    )
-                )
-            );
-        }
-
         throw new InvalidArgumentException(
-            sprintf('Invalid type declarations for "$%s" parameter.', $parameters[0]->getName(),)
+            sprintf(
+                'Invalid type declarations for "$%s" parameter; %s given.',
+                $parameters[0]->getName(),
+                $reflectionType ? 'UnionType' : 'IntersectionType'
+            )
         );
     }
 
     /**
      * Derives a unique ID from the listener.
+     *
+     * @param callable(EventInterface):void $listener
      */
     private function getListenerId(callable $listener): string
     {

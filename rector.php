@@ -73,7 +73,7 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
     $rectorConfig->paths([
         __DIR__ . '/src', __DIR__ . '/tests',
-        __DIR__ . '/config/compliance.php',
+        __DIR__ . '/compliance.php',
         __DIR__ . '/ecs.php',
         __DIR__ . '/rector.php',
     ]);
