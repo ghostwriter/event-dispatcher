@@ -6,7 +6,7 @@
 [![Latest Version on Packagist](https://badgen.net/packagist/v/ghostwriter/event-dispatcher)](https://packagist.org/packages/ghostwriter/event-dispatcher)
 [![Downloads](https://badgen.net/packagist/dt/ghostwriter/event-dispatcher?color=blue)](https://packagist.org/packages/ghostwriter/event-dispatcher)
 
-Provides an Event Dispatcher implementation for PHP inspired by [PSR-14](https://www.php-fig.org/psr/psr-14/)
+Provides an Event Dispatcher implementation for PHP inspired by [PSR-14](https://www.php-fig.org/psr/psr-14/) specification.
 
 ## Installation
 
