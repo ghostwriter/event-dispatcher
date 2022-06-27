@@ -1,6 +1,6 @@
 # Event Dispatcher
 
-[![Compliance](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/continuous-integration.yml)
+[![Compliance](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml)
 [![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/event-dispatcher?color=8892bf)](https://www.php.net/supported-versions)
 [![Type Coverage](https://shepherd.dev/github/ghostwriter/event-dispatcher/coverage.svg)](https://shepherd.dev/github/ghostwriter/event-dispatcher)
 [![Latest Version on Packagist](https://badgen.net/packagist/v/ghostwriter/event-dispatcher)](https://packagist.org/packages/ghostwriter/event-dispatcher)
@@ -124,6 +124,12 @@ Please see [CHANGELOG.md](./CHANGELOG.md) for more information what has changed 
 ### Security
 
 If you discover any security related issues, please email `nathanael.esayeas@protonmail.com` instead of using the issue tracker.
+
+## Thank you
+
+Thank you for freely sharing your knowledge and free time with me in [Laminas Chat](https://laminas.dev/chat).
+
+- [Matthew Weier O'Phinney](https://github.com/weierophinney)
 
 ## Credits
 
