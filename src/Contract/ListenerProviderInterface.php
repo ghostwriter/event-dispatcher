@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Contract;
 
+use Generator;
 use Ghostwriter\Container\Contract\ContainerExceptionInterface;
-use Traversable;
 
 /**
  * Maps registered Listeners, Providers and Subscribers.
@@ -79,9 +79,9 @@ interface ListenerProviderInterface
     /**
      * Return relevant/type-compatible Listeners for the Event.
      *
-     * @return Traversable<callable(EventInterface):void>
+     * @return Generator<callable(EventInterface):void>
      */
-    public function getListenersForEvent(EventInterface $event): Traversable;
+    public function getListenersForEvent(EventInterface $event): Generator;
 
     public function removeListener(string $listenerId): void;
 
