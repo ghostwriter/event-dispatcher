@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
+use DateTimeImmutable;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 
 abstract class AbstractEvent implements EventInterface
 {
-    private bool $propagationStopped = false;
+    private ?DateTimeImmutable $dateTimePropagationStopped = null;
+
+    public function getDateTimePropagationStopped(): ?DateTimeImmutable
+    {
+        return $this->dateTimePropagationStopped;
+    }
 
     public function isPropagationStopped(): bool
     {
-        return $this->propagationStopped;
+        return $this->dateTimePropagationStopped instanceof DateTimeImmutable;
     }
 
-    public function stopPropagation(bool $bool = true): void
+    public function stopPropagation(): void
     {
-        $this->propagationStopped = $bool;
+        $this->dateTimePropagationStopped = new DateTimeImmutable();
     }
 }
