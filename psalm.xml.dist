@@ -12,7 +12,6 @@
         <directory name="src"/>
         <directory name="tests"/>
         <ignoreFiles>
-            <directory name=".cache"/>
             <directory name=".github"/>
             <directory name="tests/Fixture"/>
             <directory name="vendor"/>
