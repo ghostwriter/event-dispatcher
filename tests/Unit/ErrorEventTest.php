@@ -53,10 +53,12 @@ final class ErrorEventTest extends PHPUnitTestCase
     protected function setUp(): void
     {
         $this->event     = new TestEvent();
-        $this->listener  = new TestEventListener();
-        $this->provider  = new ListenerProvider();
         $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
+        $this->provider  = new ListenerProvider();
         $this->dispatcher = new Dispatcher();
+        /** @var callable(EventInterface):void $listener */
+        $listener  = new TestEventListener();
+        $this->listener  = $listener;
         $this->error = new ErrorEvent($this->event, $this->listener, $this->throwable);
     }
 
@@ -112,6 +114,7 @@ final class ErrorEventTest extends PHPUnitTestCase
     }
 
     /**
+     * @param class-string<EventInterface> $interface
      * @coversNothing
      * @dataProvider dataProviderImplementsInterface
      */

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher;
 
 use Closure;
+use Generator;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Contract\ContainerInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
@@ -19,7 +20,6 @@ use ReflectionType;
 use ReflectionUnionType;
 use RuntimeException;
 use Throwable;
-use Traversable;
 use const SORT_NUMERIC;
 use function array_key_exists;
 use function class_exists;
@@ -85,7 +85,7 @@ final class ListenerProvider implements ListenerProviderInterface
             array_key_exists($id, $this->listeners[$event][$priority])
         ) {
             throw new InvalidArgumentException(sprintf(
-                'Duplicate Listener with ID "%s" detected for Event with ID "%s".',
+                'Duplicate Listener "%s" detected for "%s" Event.',
                 $id,
                 $event
             ));
@@ -224,7 +224,7 @@ final class ListenerProvider implements ListenerProviderInterface
         $this->addSubscriber($this->container->build($subscriber));
     }
 
-    public function getListenersForEvent(EventInterface $event): Traversable
+    public function getListenersForEvent(EventInterface $event): Generator
     {
         foreach ($this->listeners as $type => $priorities) {
             if ('object' !== $type && ! $event instanceof $type) {
@@ -249,7 +249,6 @@ final class ListenerProvider implements ListenerProviderInterface
             foreach ($listeners as $priority => $listener) {
                 if (array_key_exists($listenerId, $listener)) {
                     unset($this->listeners[$event][$priority][$listenerId]);
-
                     return;
                 }
             }
@@ -340,23 +339,23 @@ final class ListenerProvider implements ListenerProviderInterface
             return $listener;
         }
 
-        if (is_array($listener)) {
-            /**
-             * @var object|string $class
-             * @var string        $method
-             */
-            [$class, $method] = $listener;
-
-            if (is_object($class)) {
-                // Object callable represents a method on an object.
-                return sprintf('%s::%s', $class::class, $method);
-            }
-
-            // Class callable represents a static class method.
-            return sprintf('%s::%s', $class, $method);
+        if (is_object($listener)) {
+            /** @var object $listener */
+            return sprintf('listener.%s', md5(spl_object_hash($listener)));
         }
 
-        // Closure we use spl object hash to generate an id.
-        return sprintf('%s\%s', md5(spl_object_hash((object) $listener)), Closure::class);
+        /**
+         * @var object|string $class
+         * @var string        $method
+         */
+        [$class, $method] = $listener;
+
+        if (is_object($class)) {
+            // Object callable represents a method on an object.
+            return sprintf('%s::%s', $class::class, $method);
+        }
+
+        // Class callable represents a static class method.
+        return sprintf('%s::%s', $class, $method);
     }
 }
