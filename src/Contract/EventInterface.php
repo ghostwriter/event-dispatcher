@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Contract;
 
+use DateTimeImmutable;
+
 /**
  * An Event that can stop propagation to any further Listeners.
  *
@@ -12,14 +14,17 @@ namespace Ghostwriter\EventDispatcher\Contract;
 interface EventInterface
 {
     /**
+     * When the event propagation stopped or null if the event has not halted.
+     */
+    public function getDateTimePropagationStopped(): ?DateTimeImmutable;
+
+    /**
      * Determine if the previous listener halted propagation.
-     *
-     * @impure
      */
     public function isPropagationStopped(): bool;
 
     /**
      * Stop event propagation.
      */
-    public function stopPropagation(bool $bool = true): void;
+    public function stopPropagation(): void;
 }
