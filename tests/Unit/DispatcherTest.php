@@ -135,17 +135,17 @@ final class DispatcherTest extends PHPUnitTestCase
 
             self::assertSame($event, $this->dispatcher->dispatch($event));
         } catch (Throwable $throwable) {
-//            if (! $throws) {
-//                self::fail('[Unexpected]' . $throwable->getMessage());
-//            }
+            //            if (! $throws) {
+            //                self::fail('[Unexpected]' . $throwable->getMessage());
+            //            }
 
             $this->expectException($throwable::class);
             $this->expectExceptionMessage($throwable->getMessage());
             $this->expectExceptionCode($throwable->getMessage());
 
-//             if($error){
-//                self::assertSame($event,'');
-//             }
+            //             if($error){
+            //                self::assertSame($event,'');
+            //             }
         }
     }
 //
