@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5557694ffd0bf6307d16f7251ccd67a4",
+    "content-hash": "8a15d1e5570695fc3ab3a0c736e540e1",
     "packages": [
         {
             "name": "ghostwriter/container",
@@ -1677,16 +1677,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.2",
+            "version": "1.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c53312ecc575caf07b0e90dee43883fdf90ca67c"
+                "reference": "5583623b61caafebd62bc78a99533aa9d769d097"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c53312ecc575caf07b0e90dee43883fdf90ca67c",
-                "reference": "c53312ecc575caf07b0e90dee43883fdf90ca67c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5583623b61caafebd62bc78a99533aa9d769d097",
+                "reference": "5583623b61caafebd62bc78a99533aa9d769d097",
                 "shasum": ""
             },
             "require": {
@@ -1710,9 +1710,13 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.2"
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.3"
             },
             "funding": [
                 {
@@ -1724,15 +1728,11 @@
                     "type": "github"
                 },
                 {
-                    "url": "https://www.patreon.com/phpstan",
-                    "type": "patreon"
-                },
-                {
                     "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-20T09:57:31+00:00"
+            "time": "2022-09-01T15:27:34+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4458,16 +4458,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "11.1.6",
+            "version": "11.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "a7ac8d7e0e06b8aec868e9c4184b3e9ba3f5d22b"
+                "reference": "d5c73d2a8b80f119031337fb15c2fc0586436e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/a7ac8d7e0e06b8aec868e9c4184b3e9ba3f5d22b",
-                "reference": "a7ac8d7e0e06b8aec868e9c4184b3e9ba3f5d22b",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/d5c73d2a8b80f119031337fb15c2fc0586436e99",
+                "reference": "d5c73d2a8b80f119031337fb15c2fc0586436e99",
                 "shasum": ""
             },
             "require": {
@@ -4497,7 +4497,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/11.1.6"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/11.1.7"
             },
             "funding": [
                 {
@@ -4509,7 +4509,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-31T08:15:38+00:00"
+            "time": "2022-09-01T19:28:27+00:00"
         },
         {
             "name": "thecodingmachine/safe",
@@ -4701,16 +4701,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "4.26.0",
+            "version": "4.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "6998fabb2bf528b65777bf9941920888d23c03ac"
+                "reference": "faf106e717c37b8c81721845dba9de3d8deed8ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/6998fabb2bf528b65777bf9941920888d23c03ac",
-                "reference": "6998fabb2bf528b65777bf9941920888d23c03ac",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/faf106e717c37b8c81721845dba9de3d8deed8ff",
+                "reference": "faf106e717c37b8c81721845dba9de3d8deed8ff",
                 "shasum": ""
             },
             "require": {
@@ -4802,9 +4802,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vimeo/psalm/issues",
-                "source": "https://github.com/vimeo/psalm/tree/4.26.0"
+                "source": "https://github.com/vimeo/psalm/tree/4.27.0"
             },
-            "time": "2022-07-31T13:10:26+00:00"
+            "time": "2022-08-31T13:47:09+00:00"
         },
         {
             "name": "webmozart/assert",
