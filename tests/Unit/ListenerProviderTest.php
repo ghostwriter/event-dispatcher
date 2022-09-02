@@ -88,6 +88,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::removeListener
      *
      * @param callable(EventInterface):void $listener
+     *
      * @dataProvider supportedListenersDataProvider
      */
     public function testProviderDetectsEventType(
