@@ -115,7 +115,9 @@ final class ErrorEventTest extends PHPUnitTestCase
 
     /**
      * @param class-string<EventInterface> $interface
+     *
      * @coversNothing
+     *
      * @dataProvider dataProviderImplementsInterface
      */
     public function testErrorEventImplements(string $interface): void
