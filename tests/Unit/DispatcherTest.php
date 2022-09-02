@@ -181,6 +181,7 @@ final class DispatcherTest extends PHPUnitTestCase
 
     /**
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
+     *
      * @dataProvider eventDataProvider
      *
      * @throws Throwable
@@ -198,6 +199,7 @@ final class DispatcherTest extends PHPUnitTestCase
 
     /**
      * @covers       \Ghostwriter\EventDispatcher\ListenerProvider::__construct
+     *
      * @dataProvider eventDataProvider
      *
      * @throws Throwable
