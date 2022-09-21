@@ -27,7 +27,7 @@ final class EventDispatcherServiceProvider implements ServiceProviderInterface
         $container->set(Dispatcher::class, static fn (ContainerInterface $container): object => $container->build(
             Dispatcher::class,
             [
-                'listenerProvider'=> $container->get(ListenerProviderInterface::class),
+                'listenerProvider' => $container->get(ListenerProviderInterface::class),
             ]
         ));
         $container->alias(DispatcherInterface::class, Dispatcher::class);
