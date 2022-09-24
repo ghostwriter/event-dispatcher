@@ -34,10 +34,10 @@
         "ghostwriter/container": "^0.7.0"
     },
     "require-dev": {
-        "infection/infection": "^0.26.14",
+        "infection/infection": "^0.26.15",
         "phpunit/phpunit": "^9.5.24",
         "psalm/plugin-phpunit": "^0.17.0",
-        "rector/rector": "^0.14.2",
+        "rector/rector": "^0.14.3",
         "symplify/easy-coding-standard": "^11.1.9",
         "vimeo/psalm": "^4.27"
     },
