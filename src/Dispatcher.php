@@ -7,14 +7,14 @@ namespace Ghostwriter\EventDispatcher;
 use Generator;
 use Ghostwriter\EventDispatcher\Contract\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
-use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
+use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
 use Throwable;
 
 final class Dispatcher implements DispatcherInterface
 {
     public function __construct(
-        private ?PsrListenerProviderInterface $listenerProvider = null
+        private ?ListenerProviderInterface $listenerProvider = null
     ) {
         $this->listenerProvider ??= new ListenerProvider();
     }
