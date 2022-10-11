@@ -41,8 +41,7 @@ final class Dispatcher implements DispatcherInterface
         }
 
         /** @var Generator<callable(TEvent):void> $listeners */
-        $listeners = $this->getListenerProvider()
-            ->getListenersForEvent($event);
+        $listeners = $this->listenerProvider?->getListenersForEvent($event);
         foreach ($listeners as $listener) {
             try {
                 $listener($event);
@@ -67,6 +66,7 @@ final class Dispatcher implements DispatcherInterface
             if ($event->isPropagationStopped()) {
                 // Tell the $listeners \Generator to stop yielding Listeners for $event.
                 $listeners->send($stoppable);
+                break;
             }
         }
 
