@@ -81,6 +81,8 @@ interface ListenerProviderInterface extends PsrListenerProviderInterface
     /**
      * Return relevant/type-compatible Listeners for the Event.
      *
+     * @psalm-suppress MoreSpecificImplementedParamType
+     *
      * @param TEvent $event an event for which to return the relevant listeners
      *
      * @return iterable<callable(TEvent):void> an iterable of callables type-compatible with $event
