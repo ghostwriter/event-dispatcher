@@ -12,9 +12,9 @@ use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
 use RuntimeException;
 use Throwable;
-use Traversable;
 
 /**
  * @coversDefaultClass \Ghostwriter\EventDispatcher\ErrorEvent
@@ -42,7 +42,7 @@ final class ErrorEventTest extends PHPUnitTestCase
     private TestEvent $event;
 
     /**
-     * @var callable(EventInterface):void
+     * @var callable(object):void
      */
     private $listener;
 
@@ -56,20 +56,21 @@ final class ErrorEventTest extends PHPUnitTestCase
         $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
         $this->provider  = new ListenerProvider();
         $this->dispatcher = new Dispatcher();
-        /** @var callable(EventInterface):void $listener */
+        /** @var callable(object):void $listener */
         $listener  = new TestEventListener();
         $this->listener  = $listener;
+
         $this->error = new ErrorEvent($this->event, $this->listener, $this->throwable);
     }
 
     /**
      * @coversNothing
      *
-     * @return Traversable<string,list<class-string<EventInterface>>>
+     * @return iterable<string,array<array-key,class-string>>
      */
-    public function dataProviderImplementsInterface(): Traversable
+    public function dataProviderImplementsInterface(): iterable
     {
-        foreach ([EventInterface::class, ErrorEventInterface::class] as $interface) {
+        foreach ([EventInterface::class, PsrStoppableEventInterface::class, ErrorEventInterface::class] as $interface) {
             yield $interface => [$interface];
         }
     }
@@ -114,7 +115,7 @@ final class ErrorEventTest extends PHPUnitTestCase
     }
 
     /**
-     * @param class-string<EventInterface> $interface
+     * @param class-string $interface
      *
      * @coversNothing
      *
