@@ -6,6 +6,7 @@ namespace Ghostwriter\EventDispatcher;
 
 use Closure;
 use Ghostwriter\Container\Container;
+use Ghostwriter\Container\Contract\ContainerInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
 use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
@@ -14,7 +15,6 @@ use Ghostwriter\Option\Contract\SomeInterface;
 use Ghostwriter\Option\Some;
 use InvalidArgumentException;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface as PsrContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
 use ReflectionException;
@@ -65,9 +65,9 @@ final class ListenerProvider implements ListenerProviderInterface
     private array $data = [[], [], []];
 
     public function __construct(
-        private ?PsrContainerInterface $psrContainer = null
+        private ?ContainerInterface $container = null
     ) {
-        $this->psrContainer ??= Container::getInstance();
+        $this->container ??= Container::getInstance();
     }
 
     /**
@@ -162,7 +162,7 @@ final class ListenerProvider implements ListenerProviderInterface
         return $this->addListener(
             function (object $event) use ($listener): void {
                 /** @var callable(object):void $callable */
-                $callable = $this->psrContainer?->get($listener);
+                $callable = $this->container?->get($listener);
                 $callable($event);
             },
             $priority,
@@ -233,7 +233,7 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         /** @var SubscriberInterface $subscribe */
-        $subscribe = $this->psrContainer?->get($subscriber);
+        $subscribe = $this->container?->get($subscriber);
 
         $this->addSubscriber($subscribe);
     }
@@ -366,6 +366,7 @@ final class ListenerProvider implements ListenerProviderInterface
         return match (true) {
             // Function callables are strings, so use that directly.
             is_string($listener) => $listener,
+            /** @var object $listener */
             is_object($listener) => sprintf('listener.%s', md5(spl_object_hash($listener))),
             // Object callable represents a method on an object.
             is_object($listener[0]) => sprintf('%s::%s', $listener[0]::class, $listener[1]),
