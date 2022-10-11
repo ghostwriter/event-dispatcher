@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Contract;
 
-use Generator;
 use Ghostwriter\Container\Contract\ContainerExceptionInterface;
+use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 
 /**
  * Maps registered Listeners, Providers and Subscribers.
+ *
+ * @template TEvent of object
  */
-interface ListenerProviderInterface
+interface ListenerProviderInterface extends PsrListenerProviderInterface
 {
     /**
-     * @param callable(EventInterface):void $listener
+     * @param callable(TEvent):void $listener
      */
     public function addListener(
         callable $listener,
@@ -23,7 +25,7 @@ interface ListenerProviderInterface
     ): string;
 
     /**
-     * @param callable(EventInterface):void $listener
+     * @param callable(TEvent):void $listener
      */
     public function addListenerAfter(
         string $listenerId,
@@ -33,7 +35,7 @@ interface ListenerProviderInterface
     ): string;
 
     /**
-     * @param callable(EventInterface):void $listener
+     * @param callable(TEvent):void $listener
      */
     public function addListenerBefore(
         string $listenerId,
@@ -79,9 +81,13 @@ interface ListenerProviderInterface
     /**
      * Return relevant/type-compatible Listeners for the Event.
      *
-     * @return Generator<callable(EventInterface):void>
+     * @psalm-suppress MoreSpecificImplementedParamType
+     *
+     * @param TEvent $event an event for which to return the relevant listeners
+     *
+     * @return iterable<callable(TEvent):void> an iterable of callables type-compatible with $event
      */
-    public function getListenersForEvent(EventInterface $event): Generator;
+    public function getListenersForEvent(object $event): iterable;
 
     public function removeListener(string $listenerId): void;
 

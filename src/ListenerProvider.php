@@ -5,21 +5,23 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher;
 
 use Closure;
-use Generator;
 use Ghostwriter\Container\Container;
-use Ghostwriter\Container\Contract\ContainerInterface;
-use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
+use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
+use Ghostwriter\EventDispatcher\Exception\ListenerNotFoundException;
+use Ghostwriter\Option\Contract\SomeInterface;
+use Ghostwriter\Option\Some;
 use InvalidArgumentException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface as PsrContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionNamedType;
 use ReflectionType;
 use ReflectionUnionType;
-use RuntimeException;
-use Throwable;
 use const SORT_NUMERIC;
 use function array_key_exists;
 use function class_exists;
@@ -35,37 +37,42 @@ use function sprintf;
 
 /**
  * Maps registered Listeners, Providers and Subscribers.
+ *
+ * @template TEvent of object
  */
 final class ListenerProvider implements ListenerProviderInterface
 {
-    private ContainerInterface $container;
+    /**
+     * @var int
+     */
+    private const LISTENERS = 0;
 
     /**
-     * Map of registered Listeners.
-     *
-     * @var array<string,array<int,array<string,callable(EventInterface):void>>>
+     * @var int
      */
-    private array $listeners = [];
+    private const PROVIDERS = 1;
 
     /**
-     * Map of registered Providers.
-     *
-     * @var array<class-string<ListenerProviderInterface>,ListenerProviderInterface>
+     * @var int
      */
-    private array $providers = [];
+    private const SUBSCRIBERS = 2;
 
     /**
-     * Map of registered Subscribers.
+     * Map of registered Listeners, Providers and Subscribers.
      *
-     * @var array<class-string<SubscriberInterface>,SubscriberInterface>
+     * @var array{0:array<string,array<int,array<string,SomeInterface>>>,1:array<class-string<ListenerProviderInterface>,ListenerProviderInterface>,2:array<class-string<SubscriberInterface>,SubscriberInterface>}
      */
-    private array $subscribers = [];
+    private array $data = [[], [], []];
 
-    public function __construct(?ContainerInterface $container = null)
-    {
-        $this->container = $container ?? Container::getInstance();
+    public function __construct(
+        private ?PsrContainerInterface $psrContainer = null
+    ) {
+        $this->psrContainer ??= Container::getInstance();
     }
 
+    /**
+     * @param callable(TEvent):void $listener
+     */
     public function addListener(
         callable $listener,
         int $priority = 0,
@@ -80,9 +87,9 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         if (
-            array_key_exists($event, $this->listeners) &&
-            array_key_exists($priority, $this->listeners[$event]) &&
-            array_key_exists($id, $this->listeners[$event][$priority])
+            array_key_exists($event, $this->data[self::LISTENERS]) &&
+            array_key_exists($priority, $this->data[self::LISTENERS][$event]) &&
+            array_key_exists($id, $this->data[self::LISTENERS][$event][$priority])
         ) {
             throw new InvalidArgumentException(sprintf(
                 'Duplicate Listener "%s" detected for "%s" Event.',
@@ -91,9 +98,9 @@ final class ListenerProvider implements ListenerProviderInterface
             ));
         }
 
-        $this->listeners[$event][$priority][$id] = $listener;
+        $this->data[self::LISTENERS][$event][$priority][$id] = Some::create($listener);
 
-        krsort($this->listeners[$event], SORT_NUMERIC);
+        krsort($this->data[self::LISTENERS][$event], SORT_NUMERIC);
 
         return $id;
     }
@@ -108,7 +115,7 @@ final class ListenerProvider implements ListenerProviderInterface
         $event ??= $this->getEventType($listener);
         $id ??= $this->getListenerId($listener);
 
-        foreach ($this->listeners[$event] as $listenerPriority => $listenerKey) {
+        foreach ($this->data[self::LISTENERS][$event] as $listenerPriority => $listenerKey) {
             if (array_key_exists($id, $listenerKey)) {
                 $priority = $listenerPriority;
 
@@ -117,12 +124,15 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         if (null === $priority) {
-            throw new InvalidArgumentException(sprintf('Listener "%s" cannot be found.', $listenerId));
+            throw new ListenerNotFoundException($listenerId);
         }
 
         return $this->addListener($listener, $priority - 1, $event, $id);
     }
 
+    /**
+     * @param callable(TEvent):void $listener
+     */
     public function addListenerBefore(
         string $listenerId,
         callable $listener,
@@ -133,10 +143,9 @@ final class ListenerProvider implements ListenerProviderInterface
         $id ??= $this->getListenerId($listener);
         $priority = null;
 
-        foreach ($this->listeners[$event] as $listenerPriority => $listenerKey) {
+        foreach ($this->data[self::LISTENERS][$event] as $listenerPriority => $listenerKey) {
             if (array_key_exists($id, $listenerKey)) {
                 $priority = $listenerPriority;
-
                 break;
             }
         }
@@ -151,9 +160,9 @@ final class ListenerProvider implements ListenerProviderInterface
     public function addListenerService(string $event, string $listener, int $priority = 0, ?string $id = null): string
     {
         return $this->addListener(
-            function (EventInterface $event) use ($listener): void {
-                /** @var callable(EventInterface):void $callable */
-                $callable = $this->container->get($listener);
+            function (object $event) use ($listener): void {
+                /** @var callable(object):void $callable */
+                $callable = $this->psrContainer?->get($listener);
                 $callable($event);
             },
             $priority,
@@ -185,20 +194,19 @@ final class ListenerProvider implements ListenerProviderInterface
     public function addProvider(ListenerProviderInterface $psrListenerProvider): void
     {
         $id = $psrListenerProvider::class;
-
-        if (array_key_exists($id, $this->providers)) {
+        if (array_key_exists($id, $this->data[self::PROVIDERS])) {
             throw new InvalidArgumentException(sprintf(
                 'ListenerProvider with ID "%s" has already been registered',
                 $id
             ));
         }
 
-        $this->providers[$id] = $psrListenerProvider;
+        $this->data[self::PROVIDERS][$id] = $psrListenerProvider;
     }
 
     public function addSubscriber(SubscriberInterface $subscriber): void
     {
-        if (array_key_exists($subscriber::class, $this->subscribers)) {
+        if (array_key_exists($subscriber::class, $this->data[self::SUBSCRIBERS])) {
             throw new InvalidArgumentException(sprintf(
                 'Subscriber with ID "%s" has already been registered',
                 $subscriber::class
@@ -207,10 +215,13 @@ final class ListenerProvider implements ListenerProviderInterface
 
         $subscriber($this);
 
-        $this->subscribers[$subscriber::class] = $subscriber;
+        $this->data[self::SUBSCRIBERS][$subscriber::class] = $subscriber;
     }
 
-    /** @throws Throwable */
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function addSubscriberService(string $subscriber): void
     {
         if (! is_subclass_of($subscriber, SubscriberInterface::class)) {
@@ -221,34 +232,53 @@ final class ListenerProvider implements ListenerProviderInterface
             ));
         }
 
-        $this->addSubscriber($this->container->build($subscriber));
+        /** @var SubscriberInterface $subscribe */
+        $subscribe = $this->psrContainer?->get($subscriber);
+
+        $this->addSubscriber($subscribe);
     }
 
-    public function getListenersForEvent(EventInterface $event): Generator
+    /**
+     * Return relevant/type-compatible Listeners for the Event.
+     *
+     * @param TEvent $event an event for which to return the relevant listeners
+     *
+     * @psalm-suppress ImplementedReturnTypeMismatch
+     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-suppress MoreSpecificImplementedParamType
+     *
+     * @return iterable<callable(TEvent):void> an iterable of callables type-compatible with $event
+     */
+    public function getListenersForEvent(object $event): iterable
     {
-        foreach ($this->listeners as $type => $priorities) {
+        foreach ($this->data[self::LISTENERS] as $type => $priorities) {
             if ('object' !== $type && ! $event instanceof $type) {
                 continue;
             }
-
+            /** @var array<int, int> $priorities */
             foreach ($priorities as $priority) {
+                /** @var array<int, Some<callable(TEvent):void>> $priority */
                 foreach ($priority as $listener) {
-                    yield $listener;
+                    /** @var bool $stop */
+                    $stop = yield $listener->unwrap();
+                    if ($stop) {
+                        return;
+                    }
                 }
             }
         }
 
-        foreach ($this->providers as $provider) {
+        foreach ($this->data[self::PROVIDERS] as $provider) {
             yield from $provider->getListenersForEvent($event);
         }
     }
 
     public function removeListener(string $listenerId): void
     {
-        foreach ($this->listeners as $event => $listeners) {
+        foreach ($this->data[self::LISTENERS] as $event => $listeners) {
             foreach ($listeners as $priority => $listener) {
                 if (array_key_exists($listenerId, $listener)) {
-                    unset($this->listeners[$event][$priority][$listenerId]);
+                    unset($this->data[self::LISTENERS][$event][$priority][$listenerId]);
                     return;
                 }
             }
@@ -259,9 +289,8 @@ final class ListenerProvider implements ListenerProviderInterface
 
     public function removeProvider(string $providerId): void
     {
-        if (array_key_exists($providerId, $this->providers)) {
-            unset($this->providers[$providerId]);
-
+        if (array_key_exists($providerId, $this->data[self::PROVIDERS])) {
+            unset($this->data[self::PROVIDERS][$providerId]);
             return;
         }
 
@@ -270,9 +299,8 @@ final class ListenerProvider implements ListenerProviderInterface
 
     public function removeSubscriber(string $subscriberId): void
     {
-        if (array_key_exists($subscriberId, $this->subscribers)) {
-            unset($this->subscribers[$subscriberId]);
-
+        if (array_key_exists($subscriberId, $this->data[self::SUBSCRIBERS])) {
+            unset($this->data[self::SUBSCRIBERS][$subscriberId]);
             return;
         }
 
@@ -282,10 +310,10 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * Resolves the class type of the first argument on a callable.
      *
-     * @param callable(EventInterface):void $listener
+     * @param callable(TEvent):void $listener
      *
-     * @throws InvalidArgumentException if $listener does not define a valid Event argument with type declarations
-     * @throws RuntimeException         if $listener does not exist
+     * @throws FailedToDetermineTypeDeclarationsException if $listener is missing type-declarations
+     * @throws FailedToDetermineTypeDeclarationsException if $listener class does not exist
      */
     private function getEventType(callable $listener): string
     {
@@ -294,21 +322,21 @@ final class ListenerProvider implements ListenerProviderInterface
                 (new ReflectionClass($listener[0]))->getMethod($listener[1])->getParameters() :
                 (new ReflectionFunction(Closure::fromCallable($listener)))->getParameters();
         } catch (ReflectionException $reflectionException) {
-            throw new RuntimeException(
-                sprintf('Unable to determine type declarations; %s', $reflectionException->getMessage()),
+            throw new FailedToDetermineTypeDeclarationsException(
+                $reflectionException->getMessage(),
                 $reflectionException->getCode(),
                 $reflectionException
             );
         }
 
         if ([] === $parameters) {
-            throw new InvalidArgumentException('Missing first parameter "$event" and type declarations.');
+            throw new FailedToDetermineTypeDeclarationsException('Missing first parameter, "$event".');
         }
 
         $parameter = $parameters[0]->getType();
 
         if (! $parameter instanceof ReflectionType) {
-            throw new InvalidArgumentException(
+            throw new FailedToDetermineTypeDeclarationsException(
                 sprintf('Missing type declarations for "$%s" parameter.', $parameters[0]->getName())
             );
         }
@@ -318,7 +346,7 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         $reflectionType = $parameter instanceof ReflectionUnionType;
-        throw new InvalidArgumentException(
+        throw new FailedToDetermineTypeDeclarationsException(
             sprintf(
                 'Invalid type declarations for "$%s" parameter; %s given.',
                 $parameters[0]->getName(),
@@ -330,32 +358,19 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * Derives a unique ID from the listener.
      *
-     * @param callable(EventInterface):void $listener
+     * @param callable(TEvent):void $listener
      */
     private function getListenerId(callable $listener): string
     {
-        if (is_string($listener)) {
+        /** @var array{0:object|string,1:string}|object|string $listener */
+        return match (true) {
             // Function callables are strings, so use that directly.
-            return $listener;
-        }
-
-        if (is_object($listener)) {
-            /** @var object $listener */
-            return sprintf('listener.%s', md5(spl_object_hash($listener)));
-        }
-
-        /**
-         * @var object|string $class
-         * @var string        $method
-         */
-        [$class, $method] = $listener;
-
-        if (is_object($class)) {
+            is_string($listener) => $listener,
+            is_object($listener) => sprintf('listener.%s', md5(spl_object_hash($listener))),
             // Object callable represents a method on an object.
-            return sprintf('%s::%s', $class::class, $method);
-        }
-
-        // Class callable represents a static class method.
-        return sprintf('%s::%s', $class, $method);
+            is_object($listener[0]) => sprintf('%s::%s', $listener[0]::class, $listener[1]),
+            // Class callable represents a static class method.
+            default => sprintf('%s::%s', $listener[0], $listener[1])
+        };
     }
 }

@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
-use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Generator;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
+use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use Traversable;
-use function iterator_to_array;
+use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 
 /**
  * @coversDefaultClass \Ghostwriter\EventDispatcher\ListenerProvider
@@ -23,6 +22,11 @@ use function iterator_to_array;
  */
 final class ListenerProviderTest extends PHPUnitTestCase
 {
+    /**
+     * @var int
+     */
+    private const PRIORITY = 0;
+
     public ListenerProviderInterface $provider;
 
     protected function setUp(): void
@@ -33,22 +37,20 @@ final class ListenerProviderTest extends PHPUnitTestCase
     /**
      * @coversNothing
      *
-     * @return Traversable<string,array<callable|int|string>>
+     * @return iterable<string,array{0:array{0:object|string,1:string}|callable,1?:int,2?:string}>
      */
-    public function supportedListenersDataProvider(): Traversable
+    public function supportedListenersDataProvider(): iterable
     {
-        $priority = 0;
-
         yield 'AnonymousFunctionListenerMissingClosureParamType' => [
             /** @psalm-suppress MissingClosureParamType */
             static fn ($event) => self::assertIsObject($event),
-            $priority,
+            self::PRIORITY,
             TestEvent::class,
         ];
 
         yield 'AnonymousFunctionListener' => [
-            static function (TestEvent $event): void {
-                $event->write($event::class);
+            static function (TestEvent $testEvent): void {
+                $testEvent->write($testEvent::class);
             },
         ];
 
@@ -76,7 +78,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
             }
         };
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(FailedToDetermineTypeDeclarationsException::class);
         $this->expectExceptionMessage('Missing type declarations for "$testEvent" parameter.');
         $this->provider->addListener($listener);
     }
@@ -87,19 +89,28 @@ final class ListenerProviderTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::removeListener
      *
-     * @param callable(EventInterface):void $listener
-     *
      * @dataProvider supportedListenersDataProvider
+     *
+     * @param array{0:object|string,1:string}|callable $listener
      */
     public function testProviderDetectsEventType(
         callable $listener,
         int $priority = 0,
         ?string $event = null
     ): void {
+        self::assertInstanceOf(PsrListenerProviderInterface::class, $this->provider);
+        self::assertInstanceOf(ListenerProviderInterface::class, $this->provider);
+
+        /** @var callable(object):void $listener */
         $listenerId = $this->provider->addListener($listener, $priority, $event);
 
-        self::assertSame([$listener], iterator_to_array($this->provider->getListenersForEvent(new TestEvent())));
+        /** @var Generator<callable> $listeners */
+        $listeners = $this->provider->getListenersForEvent(new TestEvent());
+
+        self::assertSame($listener, $listeners->current());
 
         $this->provider->removeListener($listenerId);
+
+        self::assertCount(0, $this->provider->getListenersForEvent(new TestEvent()));
     }
 }
