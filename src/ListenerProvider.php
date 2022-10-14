@@ -255,13 +255,15 @@ final class ListenerProvider implements ListenerProviderInterface
             if ('object' !== $type && ! $event instanceof $type) {
                 continue;
             }
+
             /** @var array<int, int> $priorities */
             foreach ($priorities as $priority) {
                 /** @var array<int, Some<callable(TEvent):void>> $priority */
                 foreach ($priority as $listener) {
-                    /** @var bool $stop */
+                    /** @var null|bool $stop */
                     $stop = yield $listener->unwrap();
                     if ($stop) {
+                        // event propagation has stopped
                         return;
                     }
                 }
@@ -330,28 +332,22 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         if ([] === $parameters) {
-            throw new FailedToDetermineTypeDeclarationsException('Missing first parameter, "$event".');
+            throw FailedToDetermineTypeDeclarationsException::missingFirstParameter();
         }
 
-        $parameter = $parameters[0]->getType();
+        $reflectionType = $parameters[0]->getType();
 
-        if (! $parameter instanceof ReflectionType) {
-            throw new FailedToDetermineTypeDeclarationsException(
-                sprintf('Missing type declarations for "$%s" parameter.', $parameters[0]->getName())
-            );
+        if (! $reflectionType instanceof ReflectionType) {
+            throw FailedToDetermineTypeDeclarationsException::missingTypeDeclarations($parameters[0]->getName());
         }
 
-        if ($parameter instanceof ReflectionNamedType) {
-            return $parameter->getName();
+        if ($reflectionType instanceof ReflectionNamedType) {
+            return $reflectionType->getName();
         }
 
-        $reflectionType = $parameter instanceof ReflectionUnionType;
-        throw new FailedToDetermineTypeDeclarationsException(
-            sprintf(
-                'Invalid type declarations for "$%s" parameter; %s given.',
-                $parameters[0]->getName(),
-                $reflectionType ? 'UnionType' : 'IntersectionType'
-            )
+        throw FailedToDetermineTypeDeclarationsException::invalidTypeDeclarations(
+            $parameters[0]->getName(),
+            $reflectionType instanceof ReflectionUnionType ? 'UnionType' : 'IntersectionType'
         );
     }
 
