@@ -66,7 +66,6 @@ final class Dispatcher implements DispatcherInterface
             if ($event->isPropagationStopped()) {
                 // Tell the $listeners \Generator to stop yielding Listeners for $event.
                 $listeners->send($stoppable);
-                break;
             }
         }
 
