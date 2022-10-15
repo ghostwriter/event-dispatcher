@@ -1,2 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.28.0@52e96bea381e6cb07a672aefec791a5817694a26"/>
+<files psalm-version="4.29.0@7ec5ffbd5f68ae03782d7fd33fff0c45a69f95b3">
+  <file src="src/Dispatcher.php">
+    <MixedMethodCall occurrences="2">
+      <code>isPropagationStopped</code>
+      <code>isPropagationStopped</code>
+    </MixedMethodCall>
+    <PossiblyNullReference occurrences="1">
+      <code>getListenersForEvent</code>
+    </PossiblyNullReference>
+  </file>
+  <file src="src/ListenerProvider.php">
+    <ImplementedReturnTypeMismatch occurrences="1">
+      <code>iterable&lt;callable(TEvent):void&gt;</code>
+    </ImplementedReturnTypeMismatch>
+    <MixedReturnTypeCoercion occurrences="1">
+      <code>iterable&lt;callable(TEvent):void&gt;</code>
+    </MixedReturnTypeCoercion>
+    <MoreSpecificImplementedParamType occurrences="1">
+      <code>$event</code>
+    </MoreSpecificImplementedParamType>
+    <PossiblyNullReference occurrences="2">
+      <code>get</code>
+      <code>get</code>
+    </PossiblyNullReference>
+  </file>
+</files>
