@@ -28,8 +28,6 @@ final class Dispatcher implements DispatcherInterface
      *
      * @throws Throwable
      *
-     * @psalm-suppress MixedMethodCall
-     *
      * @return TEvent the Event that was passed, now modified by listeners
      */
     public function dispatch(object $event): object
@@ -41,7 +39,7 @@ final class Dispatcher implements DispatcherInterface
         }
 
         /** @var Generator<callable(TEvent):void> $listeners */
-        $listeners = $this->listenerProvider?->getListenersForEvent($event);
+        $listeners = $this->listenerProvider->getListenersForEvent($event);
         foreach ($listeners as $listener) {
             try {
                 $listener($event);
