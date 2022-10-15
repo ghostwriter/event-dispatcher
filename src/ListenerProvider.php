@@ -162,7 +162,7 @@ final class ListenerProvider implements ListenerProviderInterface
         return $this->addListener(
             function (object $event) use ($listener): void {
                 /** @var callable(object):void $callable */
-                $callable = $this->container?->get($listener);
+                $callable = $this->container->get($listener);
                 $callable($event);
             },
             $priority,
@@ -232,20 +232,13 @@ final class ListenerProvider implements ListenerProviderInterface
             ));
         }
 
-        /** @var SubscriberInterface $subscribe */
-        $subscribe = $this->container?->get($subscriber);
-
-        $this->addSubscriber($subscribe);
+        $this->addSubscriber($this->container->get($subscriber));
     }
 
     /**
      * Return relevant/type-compatible Listeners for the Event.
      *
      * @param TEvent $event an event for which to return the relevant listeners
-     *
-     * @psalm-suppress ImplementedReturnTypeMismatch
-     * @psalm-suppress MixedReturnTypeCoercion
-     * @psalm-suppress MoreSpecificImplementedParamType
      *
      * @return iterable<callable(TEvent):void> an iterable of callables type-compatible with $event
      */
@@ -262,7 +255,7 @@ final class ListenerProvider implements ListenerProviderInterface
                 foreach ($priority as $listener) {
                     /** @var null|bool $stop */
                     $stop = yield $listener->unwrap();
-                    if ($stop) {
+                    if (true === $stop) {
                         // event propagation has stopped
                         return;
                     }
