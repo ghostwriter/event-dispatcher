@@ -8,22 +8,18 @@ use Throwable;
 
 /**
  * An object that contains information about an error triggered by Event handling.
- *
- * @template TEvent of object
  */
 interface ErrorEventInterface extends EventInterface
 {
     /**
      * Returns the event that triggered this error condition.
-     *
-     * @return TEvent
      */
-    public function getEvent(): object;
+    public function getEvent(): EventInterface;
 
     /**
      * Returns the callable from which the exception or error was generated.
      *
-     * @return callable(TEvent):void
+     * @return callable(EventInterface):void
      */
     public function getListener(): callable;
 
