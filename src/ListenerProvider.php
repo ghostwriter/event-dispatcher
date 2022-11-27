@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher;
 
 use Closure;
+use Generator;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Contract\ContainerInterface;
+use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
 use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
@@ -37,8 +39,6 @@ use function sprintf;
 
 /**
  * Maps registered Listeners, Providers and Subscribers.
- *
- * @template TEvent of object
  */
 final class ListenerProvider implements ListenerProviderInterface
 {
@@ -71,7 +71,8 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param callable(TEvent):void $listener
+     * @param callable(EventInterface):void            $listener
+     * @param null|class-string<EventInterface>|string $event
      */
     public function addListener(
         callable $listener,
@@ -131,7 +132,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param callable(TEvent):void $listener
+     * @param callable(EventInterface):void $listener
      */
     public function addListenerBefore(
         string $listenerId,
@@ -191,9 +192,9 @@ final class ListenerProvider implements ListenerProviderInterface
         return $this->addListenerService($event, $listener, $priority, $id);
     }
 
-    public function addProvider(ListenerProviderInterface $psrListenerProvider): void
+    public function addProvider(ListenerProviderInterface $listenerProvider): void
     {
-        $id = $psrListenerProvider::class;
+        $id = $listenerProvider::class;
         if (array_key_exists($id, $this->data[self::PROVIDERS])) {
             throw new InvalidArgumentException(sprintf(
                 'ListenerProvider with ID "%s" has already been registered',
@@ -201,7 +202,7 @@ final class ListenerProvider implements ListenerProviderInterface
             ));
         }
 
-        $this->data[self::PROVIDERS][$id] = $psrListenerProvider;
+        $this->data[self::PROVIDERS][$id] = $listenerProvider;
     }
 
     public function addSubscriber(SubscriberInterface $subscriber): void
@@ -236,13 +237,9 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * Return relevant/type-compatible Listeners for the Event.
-     *
-     * @param TEvent $event an event for which to return the relevant listeners
-     *
-     * @return iterable<callable(TEvent):void> an iterable of callables type-compatible with $event
+     * @psalm-suppress MixedReturnTypeCoercion
      */
-    public function getListenersForEvent(object $event): iterable
+    public function getListenersForEvent(EventInterface $event): Generator
     {
         foreach ($this->data[self::LISTENERS] as $type => $priorities) {
             if ('object' !== $type && ! $event instanceof $type) {
@@ -251,11 +248,11 @@ final class ListenerProvider implements ListenerProviderInterface
 
             /** @var array<int, int> $priorities */
             foreach ($priorities as $priority) {
-                /** @var array<int, Some<callable(TEvent):void>> $priority */
+                /** @var array<int, Some<callable(EventInterface):void>> $priority */
                 foreach ($priority as $listener) {
-                    /** @var null|bool $stop */
+                    /** @var null|string $stop */
                     $stop = yield $listener->unwrap();
-                    if (true === $stop) {
+                    if (PHP_EOL === $stop) {
                         // event propagation has stopped
                         return;
                     }
@@ -305,7 +302,7 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * Resolves the class type of the first argument on a callable.
      *
-     * @param callable(TEvent):void $listener
+     * @param callable(EventInterface):void $listener
      *
      * @throws FailedToDetermineTypeDeclarationsException if $listener is missing type-declarations
      * @throws FailedToDetermineTypeDeclarationsException if $listener class does not exist
@@ -347,7 +344,7 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * Derives a unique ID from the listener.
      *
-     * @param callable(TEvent):void $listener
+     * @param callable(EventInterface):void $listener
      */
     private function getListenerId(callable $listener): string
     {
