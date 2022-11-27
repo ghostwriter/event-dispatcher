@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Contract;
 
-use DateTimeImmutable;
-
-use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
-
 /**
  * An Event that can stop propagation to any further Listeners.
  *
@@ -15,13 +11,8 @@ use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
  *
  * @template TPropagationStopped of bool
  */
-interface EventInterface extends PsrStoppableEventInterface
+interface EventInterface
 {
-    /**
-     * When the event propagation stopped or null if the event has not halted.
-     */
-    public function getDateTimePropagationStopped(): ?DateTimeImmutable;
-
     /**
      * Determine if the previous listener halted propagation.
      *
