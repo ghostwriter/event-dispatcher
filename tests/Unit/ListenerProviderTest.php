@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
 use Generator;
+use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 
 /**
  * @coversDefaultClass \Ghostwriter\EventDispatcher\ListenerProvider
@@ -42,8 +42,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
     public function supportedListenersDataProvider(): iterable
     {
         yield 'AnonymousFunctionListenerMissingClosureParamType' => [
-            /** @psalm-suppress MissingClosureParamType */
-            static fn ($event) => self::assertIsObject($event),
+            static fn (EventInterface $event) => self::assertSame(TestEvent::class, $event::class),
             self::PRIORITY,
             TestEvent::class,
         ];
@@ -66,8 +65,10 @@ final class ListenerProviderTest extends PHPUnitTestCase
     }
 
     /**
+     * @covers \Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException::missingTypeDeclarations
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      */
     public function testListenRaisesExceptionIfUnableToDetermineEventType(): void
     {
@@ -86,6 +87,8 @@ final class ListenerProviderTest extends PHPUnitTestCase
     /**
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::removeListener
      *
@@ -98,7 +101,6 @@ final class ListenerProviderTest extends PHPUnitTestCase
         int $priority = 0,
         ?string $event = null
     ): void {
-        self::assertInstanceOf(PsrListenerProviderInterface::class, $this->provider);
         self::assertInstanceOf(ListenerProviderInterface::class, $this->provider);
 
         /** @var callable(object):void $listener */
