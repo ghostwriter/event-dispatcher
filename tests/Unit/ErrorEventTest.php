@@ -12,7 +12,6 @@ use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
 use RuntimeException;
 use Throwable;
 
@@ -70,7 +69,7 @@ final class ErrorEventTest extends PHPUnitTestCase
      */
     public function dataProviderImplementsInterface(): iterable
     {
-        foreach ([EventInterface::class, PsrStoppableEventInterface::class, ErrorEventInterface::class] as $interface) {
+        foreach ([EventInterface::class, ErrorEventInterface::class] as $interface) {
             yield $interface => [$interface];
         }
     }
@@ -80,6 +79,9 @@ final class ErrorEventTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
      * @covers \Ghostwriter\EventDispatcher\ErrorEvent::__construct
+     * @covers \Ghostwriter\EventDispatcher\ErrorEvent::getEvent
+     * @covers \Ghostwriter\EventDispatcher\ErrorEvent::getListener
+     * @covers \Ghostwriter\EventDispatcher\ErrorEvent::getThrowable
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
