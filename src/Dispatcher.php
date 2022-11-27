@@ -4,43 +4,35 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
-use Generator;
 use Ghostwriter\EventDispatcher\Contract\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
-use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
 use Throwable;
 
 final class Dispatcher implements DispatcherInterface
 {
-    public function __construct(
-        private ?ListenerProviderInterface $listenerProvider = null
-    ) {
-        $this->listenerProvider ??= new ListenerProvider();
+    private ListenerProviderInterface $listenerProvider;
+
+    public function __construct(?ListenerProviderInterface $listenerProvider = null)
+    {
+        $this->listenerProvider = $listenerProvider ?? new ListenerProvider();
     }
 
     /**
      * Provide all relevant listeners an event to process.
      *
-     * @template TEvent of object
-     *
-     * @param TEvent $event the object to process
-     *
      * @throws Throwable
-     *
-     * @return TEvent the Event that was passed, now modified by listeners
      */
-    public function dispatch(object $event): object
+    public function dispatch(EventInterface $event): EventInterface
     {
-        $stoppable = $event instanceof PsrStoppableEventInterface;
         // If event propagation has stopped, return the event object passed.
-        if ($stoppable && $event->isPropagationStopped()) {
+        if ($event->isPropagationStopped()) {
             return $event;
         }
 
-        /** @var Generator<callable(TEvent):void> $listeners */
-        $listeners = $this->listenerProvider->getListenersForEvent($event);
-        foreach ($listeners as $listener) {
+        $generator = $this->listenerProvider->getListenersForEvent($event);
+        foreach ($generator as $listener) {
             try {
                 $listener($event);
             } catch (Throwable $throwable) {
@@ -57,13 +49,9 @@ final class Dispatcher implements DispatcherInterface
                 throw $throwable;
             }
 
-            if (! $stoppable) {
-                continue;
-            }
-
             if ($event->isPropagationStopped()) {
                 // Tell the $listeners \Generator to stop yielding Listeners for $event.
-                $listeners->send($stoppable);
+                $generator->send(PHP_EOL);
             }
         }
 
