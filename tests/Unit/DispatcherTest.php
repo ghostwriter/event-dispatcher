@@ -16,8 +16,6 @@ use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventInterface;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventSubscriber;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
-use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
-use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
 use RuntimeException;
 use Throwable;
 use Traversable;
@@ -74,6 +72,7 @@ final class DispatcherTest extends PHPUnitTestCase
 
     /**
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
      * @covers \Ghostwriter\EventDispatcher\AbstractEvent::isPropagationStopped
      * @covers \Ghostwriter\EventDispatcher\AbstractEvent::stopPropagation
      * @covers \Ghostwriter\EventDispatcher\ErrorEvent::__construct
@@ -118,25 +117,27 @@ final class DispatcherTest extends PHPUnitTestCase
      * @throws throwable
      *
      */
-    public function testConstruct(?PsrEventDispatcherInterface $psrListenerProvider = null): void
+    public function testConstruct(?ListenerProviderInterface $listenerProvider = null): void
     {
-        $dispatcher = new Dispatcher($psrListenerProvider);
+        $dispatcher = new Dispatcher($listenerProvider);
         self::assertInstanceOf(DispatcherInterface::class, $dispatcher);
-        self::assertInstanceOf(PsrEventDispatcherInterface::class, $dispatcher);
     }
 
     /**
+     * @covers \Ghostwriter\EventDispatcher\AbstractEvent::isPropagationStopped
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      *
      * @dataProvider eventDataProvider
      *
      * @throws Throwable
      */
-    public function testDispatch(object $event): void
+    public function testDispatch(EventInterface $event): void
     {
         try {
             self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
-            self::assertInstanceOf(PsrEventDispatcherInterface::class, $this->dispatcher);
 
             self::assertSame($event, $this->dispatcher->dispatch($event));
         } catch (Throwable $throwable) {
@@ -147,6 +148,7 @@ final class DispatcherTest extends PHPUnitTestCase
     }
 
     /**
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      */
     public function testImplementsDispatcherInterfaceAndPsrEventDispatcherInterface(): void
@@ -155,7 +157,16 @@ final class DispatcherTest extends PHPUnitTestCase
     }
 
     /**
+     * @covers \Ghostwriter\EventDispatcher\AbstractEvent::isPropagationStopped
+     * @covers \Ghostwriter\EventDispatcher\AbstractEvent::stopPropagation
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListenerService
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriber
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriberService
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      *
      * @throws Throwable
      */
@@ -174,7 +185,16 @@ final class DispatcherTest extends PHPUnitTestCase
     }
 
     /**
+     * @covers \Ghostwriter\EventDispatcher\AbstractEvent::isPropagationStopped
+     * @covers \Ghostwriter\EventDispatcher\AbstractEvent::stopPropagation
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListenerService
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriber
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriberService
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      *
      * @throws Throwable
      */
@@ -199,7 +219,14 @@ final class DispatcherTest extends PHPUnitTestCase
     }
 
     /**
+     * @covers \Ghostwriter\EventDispatcher\AbstractEvent::isPropagationStopped
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      *
      * @dataProvider eventDataProvider
      *
@@ -217,6 +244,8 @@ final class DispatcherTest extends PHPUnitTestCase
     }
 
     /**
+     * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
+     * @covers \Ghostwriter\EventDispatcher\ErrorEvent::getThrowable
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      *
      * @dataProvider eventDataProvider
@@ -228,8 +257,6 @@ final class DispatcherTest extends PHPUnitTestCase
         if ($event instanceof ErrorEventInterface) {
             $throwable = $event->getThrowable();
 
-            self::assertInstanceOf(PsrStoppableEventInterface::class, $event);
-
             $this->expectException($throwable::class);
             $this->expectExceptionMessage($throwable->getMessage());
             $this->expectExceptionCode($throwable->getCode());
@@ -238,6 +265,5 @@ final class DispatcherTest extends PHPUnitTestCase
         }
 
         self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
-        self::assertInstanceOf(PsrEventDispatcherInterface::class, $this->dispatcher);
     }
 }
