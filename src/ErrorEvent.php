@@ -5,33 +5,28 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher;
 
 use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Throwable;
 
-/**
- * @template TEvent of object
- *
- * @implements ErrorEventInterface<TEvent>
- */
 final class ErrorEvent extends AbstractEvent implements ErrorEventInterface
 {
     /**
-     * @var callable(TEvent):void
+     * @var callable(EventInterface):void
      */
     private $listener;
 
     /**
-     * @param TEvent                $event
-     * @param callable(TEvent):void $listener
+     * @param callable(EventInterface):void $listener
      */
     public function __construct(
-        private object $event,
+        private EventInterface $event,
         callable $listener,
         private Throwable $throwable
     ) {
         $this->listener = $listener;
     }
 
-    public function getEvent(): object
+    public function getEvent(): EventInterface
     {
         return $this->event;
     }
