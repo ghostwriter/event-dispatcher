@@ -33,7 +33,6 @@ use function is_object;
 use function is_string;
 use function is_subclass_of;
 use function krsort;
-use function md5;
 use function spl_object_hash;
 use function sprintf;
 
@@ -353,7 +352,7 @@ final class ListenerProvider implements ListenerProviderInterface
             // Function callables are strings, so use that directly.
             is_string($listener) => $listener,
             /** @var object $listener */
-            is_object($listener) => sprintf('listener.%s', md5(spl_object_hash($listener))),
+            is_object($listener) => sprintf('listener.%s', spl_object_hash($listener)),
             // Object callable represents a method on an object.
             is_object($listener[0]) => sprintf('%s::%s', $listener[0]::class, $listener[1]),
             // Class callable represents a static class method.
