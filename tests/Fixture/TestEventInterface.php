@@ -6,6 +6,12 @@ namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 
+
+/**
+ * @template TPropagationStopped of bool
+ *
+ * @extends EventInterface<TPropagationStopped>
+ */
 interface TestEventInterface extends EventInterface
 {
     public function write(string $event): void;
