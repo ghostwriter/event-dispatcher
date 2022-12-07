@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\AbstractEvent;
+use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Ghostwriter\EventDispatcher\Traits\EventTrait;
 
-final class TestEvent extends AbstractEvent implements TestEventInterface
+
+/**
+ * @template TPropagationStopped of bool
+ *
+ * @implements TestEventInterface<TPropagationStopped>
+ */
+final class TestEvent implements TestEventInterface
 {
+    use EventTrait;
+
     /** @var array<array-key,string> */
     private array $events = [];
 
