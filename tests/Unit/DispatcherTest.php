@@ -167,6 +167,7 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListenerService
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriber
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriberService
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      *
      * @throws Throwable
@@ -195,6 +196,7 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListenerService
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriber
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriberService
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      *
      * @throws Throwable
