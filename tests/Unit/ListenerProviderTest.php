@@ -69,6 +69,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
      */
     public function testListenRaisesExceptionIfUnableToDetermineEventType(): void
     {
