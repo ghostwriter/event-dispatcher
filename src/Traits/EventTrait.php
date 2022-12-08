@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher;
+namespace Ghostwriter\EventDispatcher\Traits;
 
 use DateTimeImmutable;
-use Ghostwriter\EventDispatcher\Contract\EventInterface;
 
-abstract class AbstractEvent implements EventInterface
+trait EventTrait
 {
     private ?DateTimeImmutable $dateTimePropagationStopped = null;
 

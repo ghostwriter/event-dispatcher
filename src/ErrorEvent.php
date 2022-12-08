@@ -6,10 +6,18 @@ namespace Ghostwriter\EventDispatcher;
 
 use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Ghostwriter\EventDispatcher\Traits\EventTrait;
 use Throwable;
 
-final class ErrorEvent extends AbstractEvent implements ErrorEventInterface
+/**
+ * @template TPropagationStopped of bool
+ *
+ * @implements ErrorEventInterface<TPropagationStopped>
+ */
+final class ErrorEvent implements ErrorEventInterface
 {
+    use EventTrait;
+
     /**
      * @var callable(EventInterface):void
      */

@@ -75,7 +75,7 @@ final class ErrorEventTest extends PHPUnitTestCase
     }
 
     /**
-     * @covers \Ghostwriter\EventDispatcher\AbstractEvent::isPropagationStopped
+     * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::isPropagationStopped
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
      * @covers \Ghostwriter\EventDispatcher\ErrorEvent::__construct

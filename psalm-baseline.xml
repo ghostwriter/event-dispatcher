@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.29.0@7ec5ffbd5f68ae03782d7fd33fff0c45a69f95b3">
-  <file src="src/Dispatcher.php">
-    <MixedMethodCall occurrences="2">
-      <code>isPropagationStopped</code>
-      <code>isPropagationStopped</code>
-    </MixedMethodCall>
-    <PossiblyNullReference occurrences="1">
-      <code>getListenersForEvent</code>
-    </PossiblyNullReference>
-  </file>
+<files psalm-version="5.1.0@4defa177c89397c5e14737a80fe4896584130674">
   <file src="src/ListenerProvider.php">
-    <ImplementedReturnTypeMismatch occurrences="1">
-      <code>iterable&lt;callable(TEvent):void&gt;</code>
-    </ImplementedReturnTypeMismatch>
+    <InvalidFunctionCall occurrences="1">
+      <code>$this-&gt;container-&gt;get($listener)($eventInterface)</code>
+    </InvalidFunctionCall>
     <MixedReturnTypeCoercion occurrences="1">
-      <code>iterable&lt;callable(TEvent):void&gt;</code>
+      <code>Generator</code>
     </MixedReturnTypeCoercion>
-    <MoreSpecificImplementedParamType occurrences="1">
-      <code>$event</code>
-    </MoreSpecificImplementedParamType>
+    <PossiblyNullOperand occurrences="2">
+      <code>$priority</code>
+      <code>$priority</code>
+    </PossiblyNullOperand>
     <PossiblyNullReference occurrences="2">
       <code>get</code>
       <code>get</code>
     </PossiblyNullReference>
+    <UndefinedMethod occurrences="1">
+      <code>getTypes</code>
+    </UndefinedMethod>
   </file>
 </files>
