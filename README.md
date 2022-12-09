@@ -21,12 +21,14 @@ composer require ghostwriter/event-dispatcher
 Registering and dispatching an Event Listener.
 
 ```php
-use Ghostwriter\EventDispatcher\AbstractEvent;
+use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Dispatcher;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use Ghostwriter\EventDispatcher\Traits\EventTrait;
 
-class ExampleEvent extends AbstractEvent
+class ExampleEvent implements EventInterface
 {
+    use EventTrait;
 }
 
 $listener = function (ExampleEvent $event) : void {
