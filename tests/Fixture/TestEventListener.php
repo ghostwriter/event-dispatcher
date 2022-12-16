@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-final class TestEventListener
+use Ghostwriter\EventDispatcher\Contract\ListenerInterface;
+
+final class TestEventListener implements ListenerInterface
 {
     public function __invoke(TestEvent $testEvent): void
     {
