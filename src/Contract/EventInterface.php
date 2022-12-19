@@ -16,12 +16,14 @@ interface EventInterface
     /**
      * Determine if the previous listener halted propagation.
      *
-     * @return (TPropagationStopped is true ? true : false)
+     * @return TPropagationStopped is true ? true : false
      */
     public function isPropagationStopped(): bool;
 
     /**
      * Stop event propagation.
+     *
+     * @psalm-this-out self<true>
      */
     public function stopPropagation(): void;
 }
