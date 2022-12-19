@@ -19,9 +19,11 @@ use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
+use ReflectionIntersectionType;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionType;
+use ReflectionUnionType;
 use const SORT_NUMERIC;
 use function array_key_exists;
 use function class_exists;
@@ -297,7 +299,7 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * Resolves the class type of the first argument on a callable.
      *
-     * @param callable(EventInterface):void $listener
+     * @param callable(EventInterface<bool>):void $listener
      *
      * @throws FailedToDetermineTypeDeclarationsException if $listener is missing type-declarations
      * @throws FailedToDetermineTypeDeclarationsException if $listener class does not exist
@@ -306,10 +308,13 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     private function getEventType(callable $listener, ?string $event = null): Generator
     {
+        if (null !== $event) {
+            yield $event;
+            return;
+        }
+
         try {
-            $parameters = is_array($listener) ?
-                (new ReflectionClass($listener[0]))->getMethod($listener[1])->getParameters() :
-                (new ReflectionFunction(Closure::fromCallable($listener)))->getParameters();
+            $parameters = (new ReflectionFunction(Closure::fromCallable($listener)))->getParameters();
         } catch (ReflectionException $reflectionException) {
             throw new FailedToDetermineTypeDeclarationsException(
                 $reflectionException->getMessage(),
@@ -322,16 +327,14 @@ final class ListenerProvider implements ListenerProviderInterface
             throw FailedToDetermineTypeDeclarationsException::missingFirstParameter();
         }
 
-        if (null !== $event) {
-            yield $event;
-            return;
-        }
-
-        yield from array_map(static function (ReflectionParameter $parameter): mixed {
-            $reflectionType = $parameter->getType();
+        yield from array_map(static function (ReflectionParameter $reflectionParameter): mixed {
+            /** @var null|ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType $reflectionType */
+            $reflectionType = $reflectionParameter->getType();
 
             if (! $reflectionType instanceof ReflectionType) {
-                throw FailedToDetermineTypeDeclarationsException::missingTypeDeclarations($parameter->getName());
+                throw FailedToDetermineTypeDeclarationsException::missingTypeDeclarations(
+                    $reflectionParameter->getName()
+                );
             }
 
             if ($reflectionType instanceof ReflectionNamedType) {
@@ -342,8 +345,8 @@ final class ListenerProvider implements ListenerProviderInterface
             $reflectionTypeTypes = $reflectionType->getTypes();
             return array_map(
                 static fn (
-                    ReflectionNamedType $reflectionTypes
-                ): string => $reflectionTypes->getName(),
+                    ReflectionNamedType $reflectionNamedType
+                ): string => $reflectionNamedType->getName(),
                 $reflectionTypeTypes
             );
         }, $parameters);
@@ -352,7 +355,7 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * Derives a unique ID from the listener.
      *
-     * @param callable(EventInterface):void $listener
+     * @param callable(EventInterface<bool>):void $listener
      */
     private function getListenerId(callable $listener): string
     {
