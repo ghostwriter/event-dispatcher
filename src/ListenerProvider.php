@@ -276,26 +276,6 @@ final class ListenerProvider implements ListenerProviderInterface
         throw new InvalidArgumentException(sprintf('Listener "%s" cannot be found.', $listenerId));
     }
 
-    public function removeProvider(string $providerId): void
-    {
-        if (array_key_exists($providerId, $this->data[self::PROVIDERS])) {
-            unset($this->data[self::PROVIDERS][$providerId]);
-            return;
-        }
-
-        throw new InvalidArgumentException(sprintf('ListenerProvider "%s" cannot be found.', $providerId));
-    }
-
-    public function removeSubscriber(string $subscriberId): void
-    {
-        if (array_key_exists($subscriberId, $this->data[self::SUBSCRIBERS])) {
-            unset($this->data[self::SUBSCRIBERS][$subscriberId]);
-            return;
-        }
-
-        throw new InvalidArgumentException(sprintf('Subscriber "%s" cannot be found.', $subscriberId));
-    }
-
     /**
      * Resolves the class type of the first argument on a callable.
      *
