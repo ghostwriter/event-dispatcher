@@ -19,12 +19,12 @@ final class ErrorEvent implements ErrorEventInterface
     use EventTrait;
 
     /**
-     * @var callable(EventInterface):void
+     * @var callable(EventInterface<bool>):void
      */
     private $listener;
 
     /**
-     * @param callable(EventInterface):void $listener
+     * @param callable(EventInterface<bool>):void $listener
      */
     public function __construct(
         private EventInterface $event,
