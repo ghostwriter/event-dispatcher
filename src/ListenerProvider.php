@@ -47,16 +47,6 @@ final class ListenerProvider implements ListenerProviderInterface
     private const LISTENERS = 0;
 
     /**
-     * @var int
-     */
-    private const PROVIDERS = 1;
-
-    /**
-     * @var int
-     */
-    private const SUBSCRIBERS = 2;
-
-    /**
      * Map of registered Listeners, Providers and Subscribers.
      *
      * @var array{0:array<string,array<int,array<string,SomeInterface>>>,1:array<class-string<ListenerProviderInterface>,ListenerProviderInterface>,2:array<class-string<SubscriberInterface>,SubscriberInterface>}
