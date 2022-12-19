@@ -176,26 +176,6 @@ final class ListenerProvider implements ListenerProviderInterface
         );
     }
 
-    public function addListenerServiceAfter(
-        string $listenerId,
-        string $event,
-        string $listener,
-        int $priority = 0,
-        ?string $id = null
-    ): string {
-        return $this->addListenerService($event, $listener, $priority, $id);
-    }
-
-    public function addListenerServiceBefore(
-        string $listenerId,
-        string $event,
-        string $listener,
-        int $priority = 0,
-        ?string $id = null
-    ): string {
-        return $this->addListenerService($event, $listener, $priority, $id);
-    }
-
     public function addSubscriberService(string $subscriber): void
     {
         if (! is_subclass_of($subscriber, SubscriberInterface::class)) {
