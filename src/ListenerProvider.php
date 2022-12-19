@@ -196,19 +196,6 @@ final class ListenerProvider implements ListenerProviderInterface
         return $this->addListenerService($event, $listener, $priority, $id);
     }
 
-    public function addProvider(ListenerProviderInterface $listenerProvider): void
-    {
-        $id = $listenerProvider::class;
-        if (array_key_exists($id, $this->data[self::PROVIDERS])) {
-            throw new InvalidArgumentException(sprintf(
-                'ListenerProvider with ID "%s" has already been registered',
-                $id
-            ));
-        }
-
-        $this->data[self::PROVIDERS][$id] = $listenerProvider;
-    }
-
     public function addSubscriberService(string $subscriber): void
     {
         if (! is_subclass_of($subscriber, SubscriberInterface::class)) {
