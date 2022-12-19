@@ -209,20 +209,6 @@ final class ListenerProvider implements ListenerProviderInterface
         $this->data[self::PROVIDERS][$id] = $listenerProvider;
     }
 
-    public function addSubscriber(SubscriberInterface $subscriber): void
-    {
-        if (array_key_exists($subscriber::class, $this->data[self::SUBSCRIBERS])) {
-            throw new InvalidArgumentException(sprintf(
-                'Subscriber with ID "%s" has already been registered',
-                $subscriber::class
-            ));
-        }
-
-        $subscriber($this);
-
-        $this->data[self::SUBSCRIBERS][$subscriber::class] = $subscriber;
-    }
-
     public function addSubscriberService(string $subscriber): void
     {
         if (! is_subclass_of($subscriber, SubscriberInterface::class)) {
