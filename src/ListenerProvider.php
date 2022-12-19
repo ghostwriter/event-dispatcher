@@ -106,61 +106,6 @@ final class ListenerProvider implements ListenerProviderInterface
         return $id;
     }
 
-    public function addListenerAfter(
-        string $listenerId,
-        callable $listener,
-        ?string $event = null,
-        ?string $id = null
-    ): string {
-        $priority = null;
-        $id ??= $this->getListenerId($listener);
-        $events = $this->getEventType($listener, $event);
-        foreach ($events as $eventType) {
-            foreach ($this->data[self::LISTENERS][$eventType] as $listenerPriority => $listenerKey) {
-                if (array_key_exists($id, $listenerKey)) {
-                    $priority = $listenerPriority;
-
-                    break;
-                }
-            }
-
-            if (null === $priority) {
-                throw new ListenerNotFoundException($listenerId);
-            }
-
-            return $this->addListener($listener, $priority - 1, $eventType, $id);
-        }
-        return $this->addListener($listener, $priority - 1, $event, $id);
-    }
-
-    /**
-     * @param callable(EventInterface):void $listener
-     */
-    public function addListenerBefore(
-        string $listenerId,
-        callable $listener,
-        ?string $event = null,
-        ?string $id = null
-    ): string {
-        $priority = null;
-        $id ??= $this->getListenerId($listener);
-        $events = $this->getEventType($listener, $event);
-        foreach ($events as $eventType) {
-            foreach ($this->data[self::LISTENERS][$eventType] as $listenerPriority => $listenerKey) {
-                if (array_key_exists($id, $listenerKey)) {
-                    $priority = $listenerPriority;
-                    break;
-                }
-            }
-
-            if (null === $priority) {
-                throw new InvalidArgumentException(sprintf('Listener "%s" cannot be found.', $listenerId));
-            }
-
-            return $this->addListener($listener, $priority + 1, $eventType, $id);
-        }
-        return $this->addListener($listener, $priority + 1, $event, $id);
-    }
 
     public function addListenerService(
         string $event,
