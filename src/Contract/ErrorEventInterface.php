@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Contract;
 
+use Ghostwriter\EventDispatcher\Listener;
 use Throwable;
 
 /**
@@ -22,10 +23,8 @@ interface ErrorEventInterface extends EventInterface
 
     /**
      * Returns the callable from which the exception or error was generated.
-     *
-     * @return callable(EventInterface):void
      */
-    public function getListener(): callable;
+    public function getListener(): Listener;
 
     /**
      * Returns the throwable (Exception or Error) that triggered this error condition.
