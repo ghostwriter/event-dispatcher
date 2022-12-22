@@ -127,6 +127,9 @@ final class ListenerProvider implements ListenerProviderInterface
         return $this->container ??= Container::getInstance();
     }
 
+    /**
+     * @return Generator<Listener>
+     */
     public function getListenersForEvent(EventInterface $event): Generator
     {
         foreach ($this->listeners as $type => $priorities) {
