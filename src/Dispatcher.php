@@ -29,7 +29,7 @@ final class Dispatcher implements DispatcherInterface
         $generator = $this->listenerProvider->getListenersForEvent($event);
         foreach ($generator as $listener) {
             try {
-                $listener($event);
+                $listener->getListener()($event);
 
                 if ($event->isPropagationStopped()) {
                     // Tell the $listeners Generator to stop yielding Listeners for $event.
