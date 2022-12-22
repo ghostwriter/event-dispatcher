@@ -15,7 +15,7 @@ final class TestEventSubscriber implements SubscriberInterface
      */
     public function __invoke(ListenerProviderInterface $listenerProvider): void
     {
-        $listenerProvider->addListenerService(
+        $listenerProvider->bindListener(
             TestEvent::class,
             TestEventListener::class,
             0,
