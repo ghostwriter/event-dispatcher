@@ -8,6 +8,7 @@ use Generator;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
+use Ghostwriter\EventDispatcher\Listener;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
@@ -86,6 +87,8 @@ final class ListenerProviderTest extends PHPUnitTestCase
     }
 
     /**
+     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
+     * @covers \Ghostwriter\EventDispatcher\Listener::getListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
@@ -107,10 +110,10 @@ final class ListenerProviderTest extends PHPUnitTestCase
         /** @var callable(object):void $listener */
         $listenerId = $this->provider->addListener($listener, $priority, $event);
 
-        /** @var Generator<callable> $listeners */
+        /** @var Generator<Listener> $listeners */
         $listeners = $this->provider->getListenersForEvent(new TestEvent());
 
-        self::assertSame($listener, $listeners->current());
+        self::assertSame($listener, $listeners->current()->getListener());
 
         $this->provider->removeListener($listenerId);
 
