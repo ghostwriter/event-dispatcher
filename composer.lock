@@ -4,33 +4,33 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6541efdb6f74c6f44912a8c27e4a753f",
+    "content-hash": "371b0994e32629cc2e6d4e6293f2fbbc",
     "packages": [
         {
             "name": "ghostwriter/container",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/container.git",
-                "reference": "dff67ca920bcbffdf9246cfa809f62f8bc1534a9"
+                "reference": "d661b164e5e0ab222ea5ea5a05db5a67d2571fe5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/container/zipball/dff67ca920bcbffdf9246cfa809f62f8bc1534a9",
-                "reference": "dff67ca920bcbffdf9246cfa809f62f8bc1534a9",
+                "url": "https://api.github.com/repos/ghostwriter/container/zipball/d661b164e5e0ab222ea5ea5a05db5a67d2571fe5",
+                "reference": "d661b164e5e0ab222ea5ea5a05db5a67d2571fe5",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0,<8.3"
             },
             "require-dev": {
-                "infection/infection": "^0.26",
+                "infection/infection": "^0.26.16",
                 "phpunit/phpunit": "^9.5",
-                "psalm/plugin-phpunit": "^0.18",
-                "rector/rector": "^0.14",
-                "slevomat/coding-standard": "^8.6",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "rector/rector": "^0.15.1",
+                "slevomat/coding-standard": "^8.7",
                 "symplify/easy-coding-standard": "^11.1",
-                "vimeo/psalm": "^5.1"
+                "vimeo/psalm": "^5.4"
             },
             "type": "library",
             "autoload": {
@@ -59,7 +59,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ghostwriter/container/issues",
-                "source": "https://github.com/ghostwriter/container/tree/1.1.1"
+                "source": "https://github.com/ghostwriter/container/tree/1.2.0"
             },
             "funding": [
                 {
@@ -67,7 +67,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-12-10T03:53:14+00:00"
+            "time": "2022-12-21T14:06:05+00:00"
         },
         {
             "name": "ghostwriter/option",
@@ -2490,27 +2490,26 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.14.8",
+            "version": "0.15.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "46ee9a173a2b2645ca92a75ffc17460139fa226e"
+                "reference": "bf5297204f7d46b8a74c1cc01b54341cbf00b74c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/46ee9a173a2b2645ca92a75ffc17460139fa226e",
-                "reference": "46ee9a173a2b2645ca92a75ffc17460139fa226e",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/bf5297204f7d46b8a74c1cc01b54341cbf00b74c",
+                "reference": "bf5297204f7d46b8a74c1cc01b54341cbf00b74c",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.9.0"
+                "phpstan/phpstan": "^1.9.3"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
                 "rector/rector-downgrade-php": "*",
                 "rector/rector-php-parser": "*",
-                "rector/rector-phpoffice": "*",
                 "rector/rector-phpunit": "*",
                 "rector/rector-symfony": "*"
             },
@@ -2535,7 +2534,7 @@
             "description": "Instant Upgrade and Automated Refactoring of any PHP code",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.14.8"
+                "source": "https://github.com/rectorphp/rector/tree/0.15.1"
             },
             "funding": [
                 {
@@ -2543,7 +2542,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-11-14T14:09:49+00:00"
+            "time": "2022-12-14T15:53:50+00:00"
         },
         {
             "name": "sanmai/later",
@@ -5045,7 +5044,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.0,<8.3"
+        "php": ">=8.1,<8.3"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
