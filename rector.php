@@ -7,7 +7,6 @@ use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector;
 use Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector;
@@ -45,7 +44,6 @@ use Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector;
 use Rector\PHPUnit\Rector\StaticCall\GetMockRector;
 use Rector\PHPUnit\Set\PHPUnitLevelSetList;
 use Rector\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector;
-use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -55,9 +53,8 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importShortClasses();
     $rectorConfig->parallel();
     $rectorConfig->sets([
-        PHPUnitLevelSetList::UP_TO_PHPUNIT_100,
-        //        DowngradeLevelSetList::DOWN_TO_PHP_80,
-        DowngradeSetList::PHP_81,
+        PHPUnitLevelSetList::UP_TO_PHPUNIT_90,
+        DowngradeSetList::PHP_82,
         LevelSetList::UP_TO_PHP_81,
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
@@ -66,13 +63,13 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::PRIVATIZATION,
         SetList::PSR_4,
         SetList::TYPE_DECLARATION,
-        SetList::TYPE_DECLARATION_STRICT,
         SetList::EARLY_RETURN,
         SetList::PHP_81,
     ]);
     $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/ecs.php', __DIR__ . '/rector.php']);
     $rectorConfig->phpVersion(PhpVersion::PHP_80);
     $rectorConfig->skip([
+        __DIR__ . '*/tests/*',
         __DIR__ . '*/tests/Fixture/*',
         __DIR__ . '*/vendor/*',
         CallableThisArrayToAnonymousFunctionRector::class,
@@ -81,7 +78,6 @@ return static function (RectorConfig $rectorConfig): void {
         AddDoesNotPerformAssertionToNonAssertingTestRector::class,
     ]);
     // register single rule
-    $rectorConfig->rule(TypedPropertyRector::class);
     $rectorConfig->rule(RestoreDefaultNullToNullableTypePropertyRector::class);
     $rectorConfig->rule(AddSeeTestAnnotationRector::class);
     $rectorConfig->rule(AssertCompareToSpecificMethodRector::class);

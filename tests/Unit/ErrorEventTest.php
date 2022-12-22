@@ -8,6 +8,7 @@ use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Dispatcher;
 use Ghostwriter\EventDispatcher\ErrorEvent;
+use Ghostwriter\EventDispatcher\Listener;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
@@ -40,10 +41,7 @@ final class ErrorEventTest extends PHPUnitTestCase
 
     private TestEvent $event;
 
-    /**
-     * @var callable(object):void
-     */
-    private $listener;
+    private Listener $listener;
 
     private ListenerProvider $provider;
 
@@ -55,9 +53,7 @@ final class ErrorEventTest extends PHPUnitTestCase
         $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
         $this->provider  = new ListenerProvider();
         $this->dispatcher = new Dispatcher();
-        /** @var callable(object):void $listener */
-        $listener  = new TestEventListener();
-        $this->listener  = $listener;
+        $this->listener  = new Listener(new TestEventListener());
 
         $this->error = new ErrorEvent($this->event, $this->listener, $this->throwable);
     }
@@ -75,18 +71,20 @@ final class ErrorEventTest extends PHPUnitTestCase
     }
 
     /**
-     * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::isPropagationStopped
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
      * @covers \Ghostwriter\EventDispatcher\ErrorEvent::__construct
      * @covers \Ghostwriter\EventDispatcher\ErrorEvent::getEvent
      * @covers \Ghostwriter\EventDispatcher\ErrorEvent::getListener
      * @covers \Ghostwriter\EventDispatcher\ErrorEvent::getThrowable
+     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
+     * @covers \Ghostwriter\EventDispatcher\Listener::getListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
+     * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::isPropagationStopped
      *
      * @throws Throwable
      */

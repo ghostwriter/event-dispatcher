@@ -18,20 +18,11 @@ final class ErrorEvent implements ErrorEventInterface
 {
     use EventTrait;
 
-    /**
-     * @var callable(EventInterface):void
-     */
-    private $listener;
-
-    /**
-     * @param callable(EventInterface):void $listener
-     */
     public function __construct(
-        private EventInterface $event,
-        callable $listener,
-        private Throwable $throwable
+        private readonly EventInterface $event,
+        private readonly Listener $listener,
+        private readonly Throwable $throwable
     ) {
-        $this->listener = $listener;
     }
 
     public function getEvent(): EventInterface
@@ -39,7 +30,7 @@ final class ErrorEvent implements ErrorEventInterface
         return $this->event;
     }
 
-    public function getListener(): callable
+    public function getListener(): Listener
     {
         return $this->listener;
     }

@@ -10,6 +10,7 @@ use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Dispatcher;
 use Ghostwriter\EventDispatcher\ErrorEvent;
+use Ghostwriter\EventDispatcher\Listener;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventInterface;
@@ -63,8 +64,7 @@ final class DispatcherTest extends PHPUnitTestCase
 
         yield ErrorEventInterface::class => [new ErrorEvent(
             new TestEvent(),
-            static function (): void {
-            },
+            new Listener(static fn (): mixed => null),
             new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
         )];
 
@@ -77,6 +77,7 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::isPropagationStopped
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::stopPropagation
      * @covers \Ghostwriter\EventDispatcher\ErrorEvent::__construct
+     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
@@ -162,11 +163,13 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::stopPropagation
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
+     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
+     * @covers \Ghostwriter\EventDispatcher\Listener::getListener
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::bindListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListenerService
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriber
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriberService
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getContainer
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      *
@@ -174,7 +177,7 @@ final class DispatcherTest extends PHPUnitTestCase
      */
     public function testMustCallListenersSynchronouslyInTheOrderTheyAreReturnedFromAListenerProvider(): void
     {
-        $this->provider->addSubscriberService(TestEventSubscriber::class);
+        $this->provider->addSubscriber(TestEventSubscriber::class);
         $this->dispatcher = new Dispatcher($this->provider);
 
         $testEvent = new TestEvent();
@@ -191,11 +194,13 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::stopPropagation
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
+     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
+     * @covers \Ghostwriter\EventDispatcher\Listener::getListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListenerService
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriber
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriberService
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::bindListener
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getContainer
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      *
@@ -204,7 +209,7 @@ final class DispatcherTest extends PHPUnitTestCase
     public function testMustListeners(): void
     {
         $testEvent = new TestEvent();
-        $this->provider->addSubscriberService(TestEventSubscriber::class);
+        $this->provider->addSubscriber(TestEventSubscriber::class);
         $this->provider->addListener(
             static function (TestEventInterface $testEvent) {
                 $testEvent->write(sprintf('%s', count($testEvent->read())));
@@ -225,6 +230,7 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::isPropagationStopped
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
+     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType

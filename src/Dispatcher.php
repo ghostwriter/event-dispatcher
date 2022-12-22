@@ -19,11 +19,6 @@ final class Dispatcher implements DispatcherInterface
         $this->listenerProvider = $listenerProvider ?? new ListenerProvider();
     }
 
-    /**
-     * Provide all relevant listeners an event to process.
-     *
-     * @throws Throwable
-     */
     public function dispatch(EventInterface $event): EventInterface
     {
         // If event propagation has stopped, return the event object passed.
@@ -34,7 +29,12 @@ final class Dispatcher implements DispatcherInterface
         $generator = $this->listenerProvider->getListenersForEvent($event);
         foreach ($generator as $listener) {
             try {
-                $listener($event);
+                $listener->getListener()($event);
+
+                if ($event->isPropagationStopped()) {
+                    // Tell the $listeners Generator to stop yielding Listeners for $event.
+                    $generator->send(PHP_EOL);
+                }
             } catch (Throwable $throwable) {
                 // If an error is raised while processing an ErrorEvent,
                 // re-throw the original throwable to prevent recursion.
@@ -47,11 +47,6 @@ final class Dispatcher implements DispatcherInterface
 
                 // Rethrow the original throwable; per PSR-14 specification.
                 throw $throwable;
-            }
-
-            if ($event->isPropagationStopped()) {
-                // Tell the $listeners \Generator to stop yielding Listeners for $event.
-                $generator->send(PHP_EOL);
             }
         }
 
