@@ -7,16 +7,14 @@ namespace Ghostwriter\EventDispatcher;
 use Closure;
 use Generator;
 use Ghostwriter\Container\Container;
+use Ghostwriter\Container\Contract\ContainerExceptionInterface;
 use Ghostwriter\Container\Contract\ContainerInterface;
+use Ghostwriter\Container\Contract\Exception\NotFoundExceptionInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
 use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
-use Ghostwriter\EventDispatcher\Exception\ListenerNotFoundException;
-use Ghostwriter\Option\Contract\SomeInterface;
-use Ghostwriter\Option\Some;
 use InvalidArgumentException;
-use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionIntersectionType;
@@ -28,7 +26,6 @@ use const SORT_NUMERIC;
 use function array_key_exists;
 use function class_exists;
 use function interface_exists;
-use function is_array;
 use function is_object;
 use function is_string;
 use function is_subclass_of;
@@ -42,27 +39,17 @@ use function sprintf;
 final class ListenerProvider implements ListenerProviderInterface
 {
     /**
-     * @var int
-     */
-    private const LISTENERS = 0;
-
-    /**
      * Map of registered Listeners, Providers and Subscribers.
      *
-     * @var array{0:array<string,array<int,array<string,SomeInterface>>>,1:array<class-string<ListenerProviderInterface>,ListenerProviderInterface>,2:array<class-string<SubscriberInterface>,SubscriberInterface>}
+     * @var array<class-string<EventInterface<bool>>,array<int,array<string,Listener>>>
      */
-    private array $data = [[], [], []];
+    private array $listeners = [];
 
     public function __construct(
         private ?ContainerInterface $container = null
     ) {
-        $this->container ??= Container::getInstance();
     }
 
-    /**
-     * @param callable(EventInterface):void            $listener
-     * @param null|class-string<EventInterface>|string $event
-     */
     public function addListener(
         callable $listener,
         int $priority = 0,
@@ -71,47 +58,39 @@ final class ListenerProvider implements ListenerProviderInterface
     ): string {
         $id ??= $this->getListenerId($listener);
         $events = $this->getEventType($listener, $event);
-        foreach ($events as $eventType) {
-            if ('object' !== $eventType && ! class_exists($eventType) && ! interface_exists($eventType)) {
-                throw new InvalidArgumentException(sprintf('Event "%s" cannot be found.', $eventType));
+        foreach ($events as $event) {
+            if (! class_exists($event) && ! interface_exists($event)) {
+                throw new InvalidArgumentException(sprintf('Event "%s" cannot be found.', $event));
             }
 
             if (
-                array_key_exists($eventType, $this->data[self::LISTENERS]) &&
-                array_key_exists($priority, $this->data[self::LISTENERS][$eventType]) &&
-                array_key_exists($id, $this->data[self::LISTENERS][$eventType][$priority])
+                array_key_exists($event, $this->listeners) &&
+                array_key_exists($priority, $this->listeners[$event]) &&
+                array_key_exists($id, $this->listeners[$event][$priority])
             ) {
                 throw new InvalidArgumentException(sprintf(
                     'Duplicate Listener "%s" detected for "%s" Event.',
                     $id,
-                    $eventType
+                    $event
                 ));
             }
 
-            $this->data[self::LISTENERS][$eventType][$priority][$id] = Some::create($listener);
+            /** @var class-string<EventInterface<bool>> $event */
+            $this->listeners[$event][$priority][$id] = new Listener($listener);
 
-            krsort($this->data[self::LISTENERS][$eventType], SORT_NUMERIC);
+            krsort($this->listeners[$event], SORT_NUMERIC);
         }
 
         return $id;
     }
 
-
-    public function addListenerService(
-        string $event,
-        string $listener,
-        int $priority = 0,
-        ?string $id = null
-    ): string {
-        return $this->addListener(
-            fn (EventInterface $eventInterface): mixed => $this->container->get($listener)($eventInterface),
-            $priority,
-            $event,
-            $id
-        );
-    }
-
-    public function addSubscriberService(string $subscriber): void
+    /**
+     * @param class-string<SubscriberInterface> $subscriber
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function addSubscriber(string $subscriber): void
     {
         if (! is_subclass_of($subscriber, SubscriberInterface::class)) {
             throw new InvalidArgumentException(sprintf(
@@ -121,22 +100,46 @@ final class ListenerProvider implements ListenerProviderInterface
             ));
         }
 
-        $this->addSubscriber($this->container->get($subscriber));
+        ($this->getContainer()->get($subscriber))($this);
+    }
+
+    public function bindListener(string $event, string $listener, int $priority = 0, ?string $id = null): string
+    {
+        if (! is_subclass_of($event, EventInterface::class)) {
+            throw new InvalidArgumentException(sprintf(
+                'Event "%s" must implement %s.',
+                $event,
+                EventInterface::class
+            ));
+        }
+
+        return $this->addListener(
+            fn (EventInterface $event): mixed => $this->getContainer()
+                ->get($listener)($event),
+            $priority,
+            $event,
+            $id
+        );
+    }
+
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container ??= Container::getInstance();
     }
 
     public function getListenersForEvent(EventInterface $event): Generator
     {
-        foreach ($this->data[self::LISTENERS] as $type => $priorities) {
-            if ('object' !== $type && ! $event instanceof $type) {
+        foreach ($this->listeners as $type => $priorities) {
+            if (! $event instanceof $type) {
                 continue;
             }
 
             /** @var array<int, int> $priorities */
             foreach ($priorities as $priority) {
-                /** @var array<int, Some<callable(EventInterface):void>> $priority */
+                /** @var array<int, Listener> $priority */
                 foreach ($priority as $listener) {
                     /** @var null|string $stop */
-                    $stop = yield $listener->unwrap();
+                    $stop = yield $listener;
                     if (PHP_EOL === $stop) {
                         // event propagation has stopped
                         return;
@@ -144,18 +147,14 @@ final class ListenerProvider implements ListenerProviderInterface
                 }
             }
         }
-
-        foreach ($this->data[self::PROVIDERS] as $provider) {
-            yield from $provider->getListenersForEvent($event);
-        }
     }
 
     public function removeListener(string $listenerId): void
     {
-        foreach ($this->data[self::LISTENERS] as $event => $listeners) {
+        foreach ($this->listeners as $event => $listeners) {
             foreach ($listeners as $priority => $listener) {
                 if (array_key_exists($listenerId, $listener)) {
-                    unset($this->data[self::LISTENERS][$event][$priority][$listenerId]);
+                    unset($this->listeners[$event][$priority][$listenerId]);
                     return;
                 }
             }
@@ -172,7 +171,7 @@ final class ListenerProvider implements ListenerProviderInterface
      * @throws FailedToDetermineTypeDeclarationsException if $listener is missing type-declarations
      * @throws FailedToDetermineTypeDeclarationsException if $listener class does not exist
      *
-     * @return Generator<string>
+     * @return Generator<class-string<EventInterface<bool>>|string>
      */
     private function getEventType(callable $listener, ?string $event = null): Generator
     {
