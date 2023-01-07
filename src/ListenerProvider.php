@@ -11,9 +11,11 @@ use Ghostwriter\Container\Contract\ContainerExceptionInterface;
 use Ghostwriter\Container\Contract\ContainerInterface;
 use Ghostwriter\Container\Contract\Exception\NotFoundExceptionInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Ghostwriter\EventDispatcher\Contract\ListenerInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
 use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
+use Ghostwriter\EventDispatcher\Traits\ListenerTrait;
 use InvalidArgumentException;
 use ReflectionException;
 use ReflectionFunction;
@@ -41,7 +43,7 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * Map of registered Listeners, Providers and Subscribers.
      *
-     * @var array<class-string<EventInterface<bool>>,array<int,array<string,Listener>>>
+     * @var array<class-string<EventInterface<bool>>,array<int,array<string,ListenerInterface>>>
      */
     private array $listeners = [];
 
@@ -76,7 +78,10 @@ final class ListenerProvider implements ListenerProviderInterface
             }
 
             /** @var class-string<EventInterface<bool>> $event */
-            $this->listeners[$event][$priority][$id] = new Listener($listener);
+            $this->listeners[$event][$priority][$id]
+                = new class($listener) implements ListenerInterface {
+                    use ListenerTrait;
+                };
 
             krsort($this->listeners[$event], SORT_NUMERIC);
         }
@@ -128,7 +133,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @return Generator<Listener>
+     * @return Generator<ListenerInterface>
      */
     public function getListenersForEvent(EventInterface $event): Generator
     {
@@ -139,7 +144,7 @@ final class ListenerProvider implements ListenerProviderInterface
 
             /** @var array<int, int> $priorities */
             foreach ($priorities as $priority) {
-                /** @var array<int, Listener> $priority */
+                /** @var array<int, ListenerInterface> $priority */
                 foreach ($priority as $listener) {
                     /** @var null|string $stop */
                     $stop = yield $listener;

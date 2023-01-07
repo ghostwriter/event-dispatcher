@@ -7,15 +7,16 @@ namespace Ghostwriter\EventDispatcher\Tests\Unit;
 use Ghostwriter\EventDispatcher\Contract\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Ghostwriter\EventDispatcher\Contract\ListenerInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Dispatcher;
 use Ghostwriter\EventDispatcher\ErrorEvent;
-use Ghostwriter\EventDispatcher\Listener;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventInterface;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventSubscriber;
 use Ghostwriter\EventDispatcher\Traits\EventTrait;
+use Ghostwriter\EventDispatcher\Traits\ListenerTrait;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use RuntimeException;
 use Throwable;
@@ -64,7 +65,9 @@ final class DispatcherTest extends PHPUnitTestCase
 
         yield ErrorEventInterface::class => [new ErrorEvent(
             new TestEvent(),
-            new Listener(static fn (): mixed => null),
+            (new class(static fn (): mixed => null) implements ListenerInterface {
+                use ListenerTrait;
+            }),
             new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
         )];
 
@@ -77,11 +80,12 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::isPropagationStopped
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::stopPropagation
      * @covers \Ghostwriter\EventDispatcher\ErrorEvent::__construct
-     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__construct
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__invoke
      *
      * @dataProvider eventDataProvider
      *
@@ -163,8 +167,6 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::stopPropagation
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
-     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
-     * @covers \Ghostwriter\EventDispatcher\Listener::getListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::bindListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
@@ -172,6 +174,8 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getContainer
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__construct
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__invoke
      *
      * @throws Throwable
      */
@@ -194,8 +198,6 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::stopPropagation
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
-     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
-     * @covers \Ghostwriter\EventDispatcher\Listener::getListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addSubscriber
@@ -203,6 +205,8 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getContainer
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__construct
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__invoke
      *
      * @throws Throwable
      */
@@ -230,12 +234,13 @@ final class DispatcherTest extends PHPUnitTestCase
      * @covers \Ghostwriter\EventDispatcher\Traits\EventTrait::isPropagationStopped
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::__construct
      * @covers \Ghostwriter\EventDispatcher\Dispatcher::dispatch
-     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__construct
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__invoke
      *
      * @dataProvider eventDataProvider
      *

@@ -6,6 +6,7 @@ namespace Ghostwriter\EventDispatcher;
 
 use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Ghostwriter\EventDispatcher\Contract\ListenerInterface;
 use Ghostwriter\EventDispatcher\Traits\EventTrait;
 use Throwable;
 
@@ -20,7 +21,7 @@ final class ErrorEvent implements ErrorEventInterface
 
     public function __construct(
         private readonly EventInterface $event,
-        private readonly Listener $listener,
+        private readonly ListenerInterface $listener,
         private readonly Throwable $throwable
     ) {
     }
@@ -30,7 +31,7 @@ final class ErrorEvent implements ErrorEventInterface
         return $this->event;
     }
 
-    public function getListener(): Listener
+    public function getListener(): ListenerInterface
     {
         return $this->listener;
     }

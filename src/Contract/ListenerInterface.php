@@ -6,5 +6,5 @@ namespace Ghostwriter\EventDispatcher\Contract;
 
 interface ListenerInterface
 {
-    // public function __invoke(EventInterface $event): void;
+    public function __invoke(EventInterface $event): void;
 }
