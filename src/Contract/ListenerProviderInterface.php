@@ -6,7 +6,6 @@ namespace Ghostwriter\EventDispatcher\Contract;
 
 use Generator;
 use Ghostwriter\Container\Contract\ContainerExceptionInterface;
-use Ghostwriter\EventDispatcher\Listener;
 
 /**
  * Maps registered Listeners, Providers and Subscribers.
@@ -33,7 +32,7 @@ interface ListenerProviderInterface
     public function bindListener(string $event, string $listener, int $priority = 0, ?string $id = null): string;
 
     /**
-     * @return Generator<Listener> an iterable of callables type-compatible with $event
+     * @return Generator<ListenerInterface> an iterable of callables type-compatible with $event
      */
     public function getListenersForEvent(EventInterface $event): Generator;
 
