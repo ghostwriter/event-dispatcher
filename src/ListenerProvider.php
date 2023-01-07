@@ -10,11 +10,11 @@ use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Contract\ContainerExceptionInterface;
 use Ghostwriter\Container\Contract\ContainerInterface;
 use Ghostwriter\Container\Contract\Exception\NotFoundExceptionInterface;
+use Ghostwriter\EventDispatcher\Contract\EventDispatcherExceptionInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
-use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
 use Ghostwriter\EventDispatcher\Traits\ListenerTrait;
 use InvalidArgumentException;
 use ReflectionException;
@@ -62,7 +62,7 @@ final class ListenerProvider implements ListenerProviderInterface
         $events = $this->getEventType($listener, $event);
         foreach ($events as $event) {
             if (! class_exists($event) && ! interface_exists($event)) {
-                throw new InvalidArgumentException(sprintf('Event "%s" cannot be found.', $event));
+                $this->throwInvalidArgumentException('Event "%s" cannot be found.', $event);
             }
 
             if (
@@ -70,11 +70,11 @@ final class ListenerProvider implements ListenerProviderInterface
                 array_key_exists($priority, $this->listeners[$event]) &&
                 array_key_exists($id, $this->listeners[$event][$priority])
             ) {
-                throw new InvalidArgumentException(sprintf(
+                $this->throwInvalidArgumentException(
                     'Duplicate Listener "%s" detected for "%s" Event.',
                     $id,
                     $event
-                ));
+                );
             }
 
             /** @var class-string<EventInterface<bool>> $event */
@@ -98,11 +98,11 @@ final class ListenerProvider implements ListenerProviderInterface
     public function addSubscriber(string $subscriber): void
     {
         if (! is_subclass_of($subscriber, SubscriberInterface::class)) {
-            throw new InvalidArgumentException(sprintf(
+            $this->throwInvalidArgumentException(
                 'Subscriber with ID "%s" must implement %s.',
                 $subscriber,
                 SubscriberInterface::class
-            ));
+            );
         }
 
         ($this->getContainer()->get($subscriber))($this);
@@ -111,11 +111,7 @@ final class ListenerProvider implements ListenerProviderInterface
     public function bindListener(string $event, string $listener, int $priority = 0, ?string $id = null): string
     {
         if (! is_subclass_of($event, EventInterface::class)) {
-            throw new InvalidArgumentException(sprintf(
-                'Event "%s" must implement %s.',
-                $event,
-                EventInterface::class
-            ));
+            $this->throwInvalidArgumentException('Event "%s" must implement %s.', $event, EventInterface::class);
         }
 
         return $this->addListener(
@@ -142,7 +138,6 @@ final class ListenerProvider implements ListenerProviderInterface
                 continue;
             }
 
-            /** @var array<int, int> $priorities */
             foreach ($priorities as $priority) {
                 /** @var array<int, ListenerInterface> $priority */
                 foreach ($priority as $listener) {
@@ -176,8 +171,8 @@ final class ListenerProvider implements ListenerProviderInterface
      *
      * @param callable(EventInterface<bool>):void $listener
      *
-     * @throws FailedToDetermineTypeDeclarationsException if $listener is missing type-declarations
-     * @throws FailedToDetermineTypeDeclarationsException if $listener class does not exist
+     * @throws EventDispatcherExceptionInterface if $listener is missing type-declarations
+     * @throws EventDispatcherExceptionInterface if $listener class does not exist
      *
      * @return Generator<class-string<EventInterface<bool>>|string>
      */
@@ -191,23 +186,23 @@ final class ListenerProvider implements ListenerProviderInterface
         try {
             $parameters = (new ReflectionFunction(Closure::fromCallable($listener)))->getParameters();
         } catch (ReflectionException $reflectionException) {
-            throw new FailedToDetermineTypeDeclarationsException(
-                $reflectionException->getMessage(),
-                $reflectionException->getCode(),
-                $reflectionException
+            $this->throwInvalidArgumentException(
+                'Failed to determine the events type declaration; %s.',
+                $reflectionException->getMessage()
             );
         }
 
         if ([] === $parameters) {
-            throw FailedToDetermineTypeDeclarationsException::missingFirstParameter();
+            $this->throwInvalidArgumentException('Missing first parameter, "$event".');
         }
 
-        yield from array_map(static function (ReflectionParameter $reflectionParameter): mixed {
+        yield from array_map(function (ReflectionParameter $reflectionParameter): mixed {
             /** @var null|ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType $reflectionType */
             $reflectionType = $reflectionParameter->getType();
 
             if (! $reflectionType instanceof ReflectionType) {
-                throw FailedToDetermineTypeDeclarationsException::missingTypeDeclarations(
+                $this->throwInvalidArgumentException(
+                    'Missing type declarations for "$%s" parameter.',
                     $reflectionParameter->getName()
                 );
             }
@@ -244,6 +239,15 @@ final class ListenerProvider implements ListenerProviderInterface
             is_object($listener[0]) => sprintf('%s::%s', $listener[0]::class, $listener[1]),
             // Class callable represents a static class method.
             default => sprintf('%s::%s', $listener[0], $listener[1])
+        };
+    }
+
+    private function throwInvalidArgumentException(string $message, string ...$values): never
+    {
+        throw new class(sprintf(
+            $message,
+            ...$values
+        )) extends InvalidArgumentException implements EventDispatcherExceptionInterface {
         };
     }
 }
