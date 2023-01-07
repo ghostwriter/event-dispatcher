@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
 use Generator;
+use Ghostwriter\EventDispatcher\Contract\EventDispatcherExceptionInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
-use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
@@ -66,11 +66,11 @@ final class ListenerProviderTest extends PHPUnitTestCase
     }
 
     /**
-     * @covers \Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException::missingTypeDeclarations
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
+     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::throwInvalidArgumentException
      */
     public function testListenRaisesExceptionIfUnableToDetermineEventType(): void
     {
@@ -81,7 +81,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
             }
         };
 
-        $this->expectException(FailedToDetermineTypeDeclarationsException::class);
+        $this->expectException(EventDispatcherExceptionInterface::class);
         $this->expectExceptionMessage('Missing type declarations for "$testEvent" parameter.');
         $this->provider->addListener($listener);
     }
