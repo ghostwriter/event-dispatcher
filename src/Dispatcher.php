@@ -21,7 +21,7 @@ final class Dispatcher implements DispatcherInterface
 
     public function dispatch(EventInterface $event): EventInterface
     {
-        // If event propagation has stopped, return the event object passed.
+        // If event propagation has stopped, return the event.
         if ($event->isPropagationStopped()) {
             return $event;
         }
@@ -29,7 +29,7 @@ final class Dispatcher implements DispatcherInterface
         $generator = $this->listenerProvider->getListenersForEvent($event);
         foreach ($generator as $listener) {
             try {
-                $listener->getListener()($event);
+                $listener($event);
 
                 if ($event->isPropagationStopped()) {
                     // Tell the $listeners Generator to stop yielding Listeners for $event.
