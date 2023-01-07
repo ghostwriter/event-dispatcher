@@ -6,9 +6,9 @@ namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
 use Generator;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Ghostwriter\EventDispatcher\Contract\ListenerInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Exception\FailedToDetermineTypeDeclarationsException;
-use Ghostwriter\EventDispatcher\Listener;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
@@ -87,14 +87,14 @@ final class ListenerProviderTest extends PHPUnitTestCase
     }
 
     /**
-     * @covers \Ghostwriter\EventDispatcher\Listener::__construct
-     * @covers \Ghostwriter\EventDispatcher\Listener::getListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
      * @covers \Ghostwriter\EventDispatcher\ListenerProvider::removeListener
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__construct
+     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::getListener
      *
      * @dataProvider supportedListenersDataProvider
      *
@@ -110,7 +110,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
         /** @var callable(object):void $listener */
         $listenerId = $this->provider->addListener($listener, $priority, $event);
 
-        /** @var Generator<Listener> $listeners */
+        /** @var Generator<ListenerInterface> $listeners */
         $listeners = $this->provider->getListenersForEvent(new TestEvent());
 
         self::assertSame($listener, $listeners->current()->getListener());
