@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Traits;
 
-use Closure;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 
 trait ListenerTrait
