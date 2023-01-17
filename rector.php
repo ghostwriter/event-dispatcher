@@ -54,7 +54,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->parallel();
     $rectorConfig->sets([
         PHPUnitLevelSetList::UP_TO_PHPUNIT_90,
-        DowngradeSetList::PHP_82,
+        DowngradeSetList::PHP_81,
         LevelSetList::UP_TO_PHP_81,
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,

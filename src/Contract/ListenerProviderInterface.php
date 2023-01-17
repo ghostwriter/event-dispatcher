@@ -8,7 +8,7 @@ use Generator;
 use Ghostwriter\Container\Contract\ContainerExceptionInterface;
 
 /**
- * Maps registered Listeners, Providers and Subscribers.
+ * Maps registered Listeners.
  */
 interface ListenerProviderInterface
 {
