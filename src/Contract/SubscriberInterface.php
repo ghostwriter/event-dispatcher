@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Contract;
 
 /**
- * Subscribe to Listeners, Providers, and Subscribers.
+ * Subscribe Listeners to Events.
  */
 interface SubscriberInterface
 {
