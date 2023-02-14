@@ -8,7 +8,7 @@
         failOnRisky="true"
         failOnWarning="true"
         colors="true"
-        cacheDirectory=".phpunit.cache"
+        cacheDirectory=".cache/phpunit"
         requireCoverageMetadata="true"
         beStrictAboutCoverageMetadata="true"
         testdox="false"
