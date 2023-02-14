@@ -57,7 +57,7 @@ final class DispatcherTest extends PHPUnitTestCase
      *
      * @return Traversable<string,list<EventInterface>>
      */
-    public function eventDataProvider(): Traversable
+    public static function eventDataProvider(): Traversable
     {
         yield EventInterface::class => [new class() implements EventInterface {
             use EventTrait;
