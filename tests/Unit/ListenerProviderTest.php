@@ -40,7 +40,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
      *
      * @return iterable<string,array{0:array{0:object|string,1:string}|callable,1?:int,2?:string}>
      */
-    public function supportedListenersDataProvider(): iterable
+    public static function supportedListenersDataProvider(): iterable
     {
         yield 'AnonymousFunctionListenerMissingClosureParamType' => [
             static fn (EventInterface $event): mixed => self::assertSame(TestEvent::class, $event::class),
@@ -117,6 +117,6 @@ final class ListenerProviderTest extends PHPUnitTestCase
 
         $this->provider->removeListener($listenerId);
 
-        self::assertCount(0, $this->provider->getListenersForEvent(new TestEvent()));
+        self::assertCount(0, iterator_to_array($this->provider->getListenersForEvent(new TestEvent())));
     }
 }

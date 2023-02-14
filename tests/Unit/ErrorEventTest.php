@@ -67,7 +67,7 @@ final class ErrorEventTest extends PHPUnitTestCase
      *
      * @return iterable<string,array<array-key,class-string>>
      */
-    public function dataProviderImplementsInterface(): iterable
+    public static function dataProviderImplementsInterface(): iterable
     {
         foreach ([EventInterface::class, ErrorEventInterface::class] as $interface) {
             yield $interface => [$interface];
