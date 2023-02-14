@@ -117,6 +117,6 @@ final class ListenerProviderTest extends PHPUnitTestCase
 
         $this->provider->removeListener($listenerId);
 
-        self::assertCount(0, $this->provider->getListenersForEvent(new TestEvent()));
+        self::assertCount(0, iterator_to_array($this->provider->getListenersForEvent(new TestEvent())));
     }
 }

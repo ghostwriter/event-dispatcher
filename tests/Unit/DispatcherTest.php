@@ -190,7 +190,7 @@ final class DispatcherTest extends PHPUnitTestCase
         $testEventResult = $this->dispatcher->dispatch($testEvent);
 
         self::assertSame($testEvent, $testEventResult);
-        self::assertCount(count($testEvent->read()), $this->provider->getListenersForEvent($testEvent));
+        self::assertCount(count($testEvent->read()), iterator_to_array($this->provider->getListenersForEvent($testEvent)));
     }
 
     /**
