@@ -110,7 +110,7 @@ final class ListenerProvider implements ListenerProviderInterface
 
     public function bindListener(string $event, string $listener, int $priority = 0, ?string $id = null): string
     {
-        if (! is_subclass_of($event, EventInterface::class) && $event !== EventInterface::class) {
+        if (! is_subclass_of($event, EventInterface::class) && EventInterface::class !== $event) {
             self::throwInvalidArgumentException('Event "%s" must implement %s.', $event, EventInterface::class);
         }
 
