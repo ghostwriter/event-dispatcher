@@ -110,7 +110,7 @@ final class ListenerProvider implements ListenerProviderInterface
 
     public function bindListener(string $event, string $listener, int $priority = 0, ?string $id = null): string
     {
-        if (! is_subclass_of($event, EventInterface::class) && EventInterface::class !== $event) {
+        if (! is_subclass_of($event, EventInterface::class) && $event !== EventInterface::class) {
             self::throwInvalidArgumentException('Event "%s" must implement %s.', $event, EventInterface::class);
         }
 
@@ -142,7 +142,7 @@ final class ListenerProvider implements ListenerProviderInterface
                 foreach ($priority as $listener) {
                     /** @var null|string $stop */
                     $stop = yield $listener;
-                    if (PHP_EOL === $stop) {
+                    if ($stop === PHP_EOL) {
                         // event propagation has stopped
                         return;
                     }
@@ -177,7 +177,7 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     private function getEventType(callable $listener, ?string $event = null): Generator
     {
-        if (null !== $event) {
+        if ($event !== null) {
             yield $event;
             return;
         }
@@ -191,7 +191,7 @@ final class ListenerProvider implements ListenerProviderInterface
             );
         }
 
-        if ([] === $parameters) {
+        if ($parameters === []) {
             self::throwInvalidArgumentException('Missing first parameter, "$event".');
         }
 
