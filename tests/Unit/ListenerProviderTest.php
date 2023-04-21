@@ -12,15 +12,16 @@ use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
+use Ghostwriter\EventDispatcher\Traits\ListenerTrait;
+use Iterator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
-/**
- * @coversDefaultClass \Ghostwriter\EventDispatcher\ListenerProvider
- *
- * @internal
- *
- * @small
- */
+#[CoversClass(ListenerProvider::class)]
+#[CoversClass(ListenerTrait::class)]
+#[Small]
 final class ListenerProviderTest extends PHPUnitTestCase
 {
     /**
@@ -36,11 +37,9 @@ final class ListenerProviderTest extends PHPUnitTestCase
     }
 
     /**
-     * @coversNothing
-     *
      * @return iterable<string,array{0:array{0:object|string,1:string}|callable,1?:int,2?:string}>
      */
-    public static function supportedListenersDataProvider(): iterable
+    public static function supportedListenersDataProvider(): Iterator
     {
         yield 'AnonymousFunctionListenerMissingClosureParamType' => [
             static fn (EventInterface $event): mixed => self::assertSame(TestEvent::class, $event::class),
@@ -65,13 +64,6 @@ final class ListenerProviderTest extends PHPUnitTestCase
         yield 'InvokableListener' => [new TestEventListener()];
     }
 
-    /**
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::throwInvalidArgumentException
-     */
     public function testListenRaisesExceptionIfUnableToDetermineEventType(): void
     {
         /** @psalm-suppress MissingClosureParamType */
@@ -87,21 +79,11 @@ final class ListenerProviderTest extends PHPUnitTestCase
     }
 
     /**
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::__construct
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::addListener
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getEventType
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenerId
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::getListenersForEvent
-     * @covers \Ghostwriter\EventDispatcher\ListenerProvider::removeListener
-     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::__construct
-     * @covers \Ghostwriter\EventDispatcher\Traits\ListenerTrait::getListener
-     *
-     * @dataProvider supportedListenersDataProvider
-     *
      * @param array{0:object|string,1:string}|callable $listener
      */
+    #[DataProvider('supportedListenersDataProvider')]
     public function testProviderDetectsEventType(
-        callable $listener,
+        array|callable $listener,
         int $priority = 0,
         ?string $event = null
     ): void {
