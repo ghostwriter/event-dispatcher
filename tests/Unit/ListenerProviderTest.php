@@ -17,12 +17,11 @@ use Iterator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 #[CoversClass(ListenerProvider::class)]
+#[CoversClass(ListenerTrait::class)]
 #[Small]
-#[UsesClass(ListenerTrait::class)]
 final class ListenerProviderTest extends PHPUnitTestCase
 {
     /**

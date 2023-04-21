@@ -17,16 +17,15 @@ use Ghostwriter\EventDispatcher\Traits\ListenerTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use RuntimeException;
 use Throwable;
 
+#[CoversClass(Dispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
+#[CoversClass(ListenerProvider::class)]
+#[CoversClass(ListenerTrait::class)]
 #[Small]
-#[UsesClass(Dispatcher::class)]
-#[UsesClass(ListenerProvider::class)]
-#[UsesClass(ListenerTrait::class)]
 final class ErrorEventTest extends PHPUnitTestCase
 {
     /**
