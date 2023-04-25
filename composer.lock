@@ -65,20 +65,20 @@
         },
         {
             "name": "ghostwriter/option",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/option.git",
-                "reference": "e8a0044c88501ba198e4e616c0e906d8fd85fdf7"
+                "reference": "f6ab1c1ba18c14669fd2a2c64a9d4e6e4490aae0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/option/zipball/e8a0044c88501ba198e4e616c0e906d8fd85fdf7",
-                "reference": "e8a0044c88501ba198e4e616c0e906d8fd85fdf7",
+                "url": "https://api.github.com/repos/ghostwriter/option/zipball/f6ab1c1ba18c14669fd2a2c64a9d4e6e4490aae0",
+                "reference": "f6ab1c1ba18c14669fd2a2c64a9d4e6e4490aae0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1,<8.3"
+                "php": ">=8.1 <8.3"
             },
             "require-dev": {
                 "ghostwriter/coding-standard": "dev-main"
@@ -120,7 +120,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-21T18:31:36+00:00"
+            "time": "2023-04-25T17:38:32+00:00"
         }
     ],
     "packages-dev": [
