@@ -5,8 +5,7 @@
             "src"
         ],
         "excludes": [
-            "tests",
-            "tests/Fixture/*",
+            "tests/Fixture",
             "vendor"
         ]
     },
@@ -15,9 +14,12 @@
     },
     "timeout": 10,
     "logs": {
+        "stryker": {
+            "report": "/.*?/"
+        },
         "text": "php:\/\/stderr",
         "github": true
     },
-    "minMsi": 0,
-    "minCoveredMsi": 0
+    "minMsi": 100,
+    "minCoveredMsi": 100
 }
