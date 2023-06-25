@@ -1,37 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
-  <file src="src/Contract/DispatcherInterface.php">
-    <PossiblyUnusedMethod>
-      <code>dispatch</code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Contract/ErrorEventInterface.php">
-    <PossiblyUnusedMethod>
-      <code>getEvent</code>
-      <code>getListener</code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Contract/EventInterface.php">
-    <PossiblyUnusedMethod>
-      <code>stopPropagation</code>
-    </PossiblyUnusedMethod>
-  </file>
+<files psalm-version="5.12.0@f90118cdeacd0088e7215e64c0c99ceca819e176">
   <file src="src/Contract/ListenerProviderInterface.php">
     <PossiblyUnusedMethod>
       <code>bindListener</code>
-      <code>removeListener</code>
     </PossiblyUnusedMethod>
   </file>
   <file src="src/Dispatcher.php">
-    <UnusedClass>
-      <code>Dispatcher</code>
-    </UnusedClass>
+    <MixedInferredReturnType>
+      <code>EventInterface</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement>
+      <code><![CDATA[$fiber->getReturn()]]></code>
+    </MixedReturnStatement>
+    <UndefinedInterfaceMethod>
+      <code>getThrowable</code>
+    </UndefinedInterfaceMethod>
   </file>
   <file src="src/ListenerProvider.php">
     <InvalidFunctionCall>
-      <code>$this-&gt;getContainer()
-                -&gt;get($listener)($event)</code>
+      <code><![CDATA[$this->getContainer()
+                ->get($listener)($event)]]></code>
     </InvalidFunctionCall>
+    <MissingClosureParamType>
+      <code>$event</code>
+    </MissingClosureParamType>
+    <MixedAssignment>
+      <code>$listener</code>
+    </MixedAssignment>
     <PossiblyUnusedMethod>
       <code>addSubscriber</code>
     </PossiblyUnusedMethod>
@@ -40,5 +35,54 @@
     <ImplementedReturnTypeMismatch>
       <code>bool</code>
     </ImplementedReturnTypeMismatch>
+  </file>
+  <file src="tests/Unit/DispatcherTest.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[static function (TestEventInterface $testEvent): void {
+                $testEvent->write(sprintf('%s', is_countable($testEvent->read()) ? count($testEvent->read()) : 0));
+                $testEvent->stopPropagation();
+            }]]></code>
+    </ArgumentTypeCoercion>
+    <MissingTemplateParam>
+      <code>EventInterface</code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code>eventDataProvider</code>
+    </PossiblyUnusedMethod>
+    <RedundantConditionGivenDocblockType>
+      <code><![CDATA[is_countable($testEvent->read())]]></code>
+    </RedundantConditionGivenDocblockType>
+    <UndefinedInterfaceMethod>
+      <code>addSubscriber</code>
+      <code>addSubscriber</code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="tests/Unit/ErrorEventTest.php">
+    <ArgumentTypeCoercion>
+      <code>static function (ErrorEvent $errorEvent): never {
+            // Raise an exception
+            throw new RuntimeException($errorEvent::class);
+        }</code>
+    </ArgumentTypeCoercion>
+    <PossiblyUnusedMethod>
+      <code>dataProviderImplementsInterface</code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="tests/Unit/ListenerProviderTest.php">
+    <MismatchingDocblockReturnType>
+      <code><![CDATA[iterable<string,array{0:array{0:object|string,1:string}|callable,1?:int,2?:string}>]]></code>
+    </MismatchingDocblockReturnType>
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[iterable<string,array{0:array{0:object|string,1:string}|callable,1?:int,2?:string}>]]></code>
+    </MixedReturnTypeCoercion>
+    <PossiblyUnusedMethod>
+      <code>supportedListenersDataProvider</code>
+    </PossiblyUnusedMethod>
+    <UndefinedInterfaceMethod>
+      <code>getListener</code>
+    </UndefinedInterfaceMethod>
+    <UnnecessaryVarAnnotation>
+      <code><![CDATA[Generator<ListenerInterface>]]></code>
+    </UnnecessaryVarAnnotation>
   </file>
 </files>
