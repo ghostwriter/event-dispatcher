@@ -83,11 +83,11 @@ final class DispatcherTest extends PHPUnitTestCase
 
         self::assertTrue($event->isPropagationStopped());
 
-        $this->listenerProvider->addListener(
-            static function (EventInterface $event): never {
+        $this->dispatcher
+            ->getListenerProvider()
+            ->addListener(static function (EventInterface $event): never {
                 throw new RuntimeException(self::ERROR_MESSAGE . $event::class, self::ERROR_CODE);
-            }
-        );
+            });
 
         self::assertSame($event, $this->dispatcher->dispatch($event));
         self::assertTrue($event->isPropagationStopped());
