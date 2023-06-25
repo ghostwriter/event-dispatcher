@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher;
 
 use Closure;
+use Fiber;
 use Generator;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Contract\ContainerExceptionInterface;
@@ -65,8 +66,7 @@ final class ListenerProvider implements ListenerProviderInterface
                 self::throwInvalidArgumentException('Event "%s" cannot be found.', $event);
             }
 
-            if (
-                array_key_exists($event, $this->listeners) &&
+            if (array_key_exists($event, $this->listeners) &&
                 array_key_exists($priority, $this->listeners[$event]) &&
                 array_key_exists($id, $this->listeners[$event][$priority])
             ) {
@@ -133,22 +133,36 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     public function getListenersForEvent(EventInterface $event): Generator
     {
-        foreach ($this->listeners as $type => $priorities) {
-            if (! $event instanceof $type) {
-                continue;
-            }
+        /** @var Generator<ListenerInterface> $listeners */
+        $listeners = function ($event): Generator {
+            foreach ($this->listeners as $type => $priorities) {
+                if (! $event instanceof $type) {
+                    continue;
+                }
 
-            foreach ($priorities as $priority) {
-                foreach ($priority as $listener) {
-                    /** @var null|string $stop */
-                    $stop = yield $listener;
-                    if ($stop === PHP_EOL) {
-                        // event propagation has stopped
-                        return;
+                foreach ($priorities as $priority) {
+                    foreach ($priority as $listener) {
+                        yield $listener;
                     }
                 }
             }
-        }
+        };
+
+        $fiber = new Fiber(static function (object $event, Closure $listeners): void {
+            foreach ($listeners($event) as $listener) {
+                Fiber::suspend($listener);
+            }
+        });
+
+        do {
+            $listener = $fiber->isStarted() ? $fiber->resume($event) : $fiber->start($event, $listeners);
+
+            if (! $listener instanceof ListenerInterface) {
+                return;
+            }
+
+            yield $listener;
+        } while ($fiber->isSuspended());
     }
 
     public function removeListener(string $listenerId): void
