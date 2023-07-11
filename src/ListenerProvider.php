@@ -257,10 +257,7 @@ final class ListenerProvider implements ListenerProviderInterface
 
     private static function throwInvalidArgumentException(string $message, string ...$values): never
     {
-        throw new class(sprintf(
-            $message,
-            ...$values
-        )) extends InvalidArgumentException implements EventDispatcherExceptionInterface {
+        throw new class(sprintf($message, ...$values)) extends InvalidArgumentException implements EventDispatcherExceptionInterface {
         };
     }
 }
