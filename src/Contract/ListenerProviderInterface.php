@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Contract;
 
 use Generator;
-use Ghostwriter\Container\Contract\ContainerExceptionInterface;
+use Ghostwriter\Container\ExceptionInterface;
 
 /**
  * Maps registered Listeners.
@@ -27,7 +27,7 @@ interface ListenerProviderInterface
      * @param class-string<EventInterface<bool>> $event
      * @param callable-string                    $listener
      *
-     * @throws ContainerExceptionInterface
+     * @throws ExceptionInterface
      */
     public function bindListener(string $event, string $listener, int $priority = 0, ?string $id = null): string;
 
