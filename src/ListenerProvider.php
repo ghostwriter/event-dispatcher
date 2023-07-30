@@ -8,9 +8,9 @@ use Closure;
 use Fiber;
 use Generator;
 use Ghostwriter\Container\Container;
-use Ghostwriter\Container\Contract\ContainerExceptionInterface;
-use Ghostwriter\Container\Contract\ContainerInterface;
-use Ghostwriter\Container\Contract\Exception\NotFoundExceptionInterface;
+use Ghostwriter\Container\ContainerInterface;
+use Ghostwriter\Container\Exception\NotFoundExceptionInterface;
+use Ghostwriter\Container\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Contract\EventDispatcherExceptionInterface;
 use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Contract\ListenerInterface;
@@ -92,7 +92,7 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * @param class-string<SubscriberInterface> $subscriber
      *
-     * @throws ContainerExceptionInterface
+     * @throws ExceptionInterface
      * @throws NotFoundExceptionInterface
      */
     public function addSubscriber(string $subscriber): void
