@@ -30,7 +30,7 @@
         }
     ],
     "require": {
-        "php": ">=8.1 <8.4",
+        "php": ">=8.2",
         "ghostwriter/container": "^1.6",
         "ghostwriter/option": "^1.5.1"
     },
@@ -53,17 +53,16 @@
         ]
     },
     "config": {
-        "allow-plugins": {
-            "infection/extension-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        },
         "classmap-authoritative": true,
         "discard-changes": true,
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "prepend-autoloader": true,
         "process-timeout": 5000,
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2.999"
+        }
     },
     "scripts": {
         "cache:clear": [
@@ -71,8 +70,6 @@
         ],
         "check": [
             "@composer validate",
-            "@cs-check",
-            "@cs-fix",
             "@test",
             "@infection",
             "@psalm:security",
