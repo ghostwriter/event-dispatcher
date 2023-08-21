@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
-use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
-use Throwable;
+use Ghostwriter\EventDispatcher\ListenerProvider;
+use Ghostwriter\EventDispatcher\Subscriber;
 
-final class TestEventSubscriber implements SubscriberInterface
+final class TestEventSubscriber implements Subscriber
 {
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
-    public function __invoke(ListenerProviderInterface $listenerProvider): void
+    public function __invoke(ListenerProvider $listenerProvider): void
     {
         $listenerProvider->bindListener(
             TestEvent::class,
@@ -23,7 +22,7 @@ final class TestEventSubscriber implements SubscriberInterface
         );
 
         $listenerProvider->addListener(
-            [new TestEventListener, 'onTest'],
+            [new TestEventListener(), 'onTest'],
             0,
             TestEvent::class,
             'CallableArrayInstanceListener'
