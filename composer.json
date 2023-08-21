@@ -31,8 +31,7 @@
     ],
     "require": {
         "php": ">=8.2",
-        "ghostwriter/container": "^1.6",
-        "ghostwriter/option": "^1.5.1"
+        "ghostwriter/container": "^1.6"
     },
     "require-dev": {
         "ghostwriter/coding-standard": "dev-main"
