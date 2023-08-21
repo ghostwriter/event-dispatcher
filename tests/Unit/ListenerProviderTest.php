@@ -5,21 +5,26 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
 use Generator;
-use Ghostwriter\EventDispatcher\Contract\EventDispatcherExceptionInterface;
-use Ghostwriter\EventDispatcher\Contract\EventInterface;
-use Ghostwriter\EventDispatcher\Contract\ListenerInterface;
-use Ghostwriter\EventDispatcher\Contract\ListenerProviderInterface;
+use Ghostwriter\EventDispatcher\Event;
+use Ghostwriter\EventDispatcher\EventListenerProvider;
+use Ghostwriter\EventDispatcher\Exception;
+use Ghostwriter\EventDispatcher\Exception\EventMustImplementEventInterfaceException;
+use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
+use Ghostwriter\EventDispatcher\Exception\FailedToDetermineEventTypeException;
+use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
+use Ghostwriter\EventDispatcher\Exception\MissingEventParameterException;
+use Ghostwriter\EventDispatcher\Exception\MissingParameterTypeDeclarationException;
+use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
 use Ghostwriter\EventDispatcher\Traits\ListenerTrait;
-use Iterator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
-#[CoversClass(ListenerProvider::class)]
+#[CoversClass(EventListenerProvider::class)]
 #[CoversClass(ListenerTrait::class)]
 #[Small]
 final class ListenerProviderTest extends PHPUnitTestCase
@@ -29,20 +34,49 @@ final class ListenerProviderTest extends PHPUnitTestCase
      */
     private const PRIORITY = 0;
 
-    public ListenerProviderInterface $provider;
+    public ListenerProvider $provider;
 
     protected function setUp(): void
     {
-        $this->provider = new ListenerProvider();
+        $this->provider = new EventListenerProvider();
     }
 
     /**
-     * @return iterable<string,array{0:array{0:object|string,1:string}|callable,1?:int,2?:string}>
+     * @return \Generator<class-string<\Throwable>, array{class-string<\Throwable>}>
      */
-    public static function supportedListenersDataProvider(): Iterator
+    public static function exceptionsDataProvider(): \Generator
+    {
+        $exceptionClasses = [
+            EventMustImplementEventInterfaceException::class,
+            EventNotFoundException::class,
+            FailedToDetermineEventTypeException::class,
+            ListenerAlreadyExistsException::class,
+            MissingEventParameterException::class,
+            MissingParameterTypeDeclarationException::class,
+            SubscriberMustImplementSubscriberInterfaceException::class,
+        ];
+
+        foreach ($exceptionClasses as $exceptionClass) {
+            yield $exceptionClass => [$exceptionClass];
+        }
+    }
+
+    /**
+     * @param class-string<\Throwable> $class
+     */
+    #[DataProvider('exceptionsDataProvider')]
+    public function testExceptionsImplementExceptionInterface(string $class): void
+    {
+        self::assertTrue(is_a($class, Exception::class, true));
+        self::assertTrue(is_subclass_of($class, Exception::class, true));
+    }
+
+    /**
+     * @return Generator<string,array{Closure(Ghostwriter\EventDispatcher\Event): mixed,int,class-string<Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent>}|array{Closure(Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent): void}|array{string}|array{<missing>}|array{array<int,mixed>}|array{Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener}>*/
+    public static function supportedListenersDataProvider(): \Generator
     {
         yield 'AnonymousFunctionListenerMissingClosureParamType' => [
-            static fn (EventInterface $event): mixed => self::assertSame(TestEvent::class, $event::class),
+            static fn (Event $event): mixed => self::assertSame(TestEvent::class, $event::class),
             self::PRIORITY,
             TestEvent::class,
         ];
@@ -55,7 +89,7 @@ final class ListenerProviderTest extends PHPUnitTestCase
 
         yield 'FunctionListener' => ['Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction'];
 
-        yield 'StaticMethodListener' => [TestEventListener::class . '::onStatic'];
+        yield 'StaticMethodListener' => [TestEventListener::class.'::onStatic'];
 
         yield 'CallableArrayStaticMethodListener' => [[TestEventListener::class, 'onStaticCallableArray']];
 
@@ -73,8 +107,9 @@ final class ListenerProviderTest extends PHPUnitTestCase
             }
         };
 
-        $this->expectException(EventDispatcherExceptionInterface::class);
-        $this->expectExceptionMessage('Missing type declarations for "$testEvent" parameter.');
+        $this->expectException(Exception::class);
+        $this->expectException(MissingParameterTypeDeclarationException::class);
+        $this->expectExceptionMessage('testEvent');
         $this->provider->addListener($listener);
     }
 
@@ -85,14 +120,13 @@ final class ListenerProviderTest extends PHPUnitTestCase
     public function testProviderDetectsEventType(
         array|callable $listener,
         int $priority = 0,
-        ?string $event = null
+        string $event = null
     ): void {
-        self::assertInstanceOf(ListenerProviderInterface::class, $this->provider);
+        self::assertInstanceOf(ListenerProvider::class, $this->provider);
 
         /** @var callable(object):void $listener */
         $listenerId = $this->provider->addListener($listener, $priority, $event);
 
-        /** @var Generator<ListenerInterface> $listeners */
         $listeners = $this->provider->getListenersForEvent(new TestEvent());
 
         self::assertSame($listener, $listeners->current()->getListener());
