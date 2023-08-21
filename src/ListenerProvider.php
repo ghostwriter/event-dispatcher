@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
-use Closure;
-use Generator;
 use Ghostwriter\Container\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
 
@@ -16,9 +14,9 @@ interface ListenerProvider
 {
     /**
      * @param callable(Event<bool>):void            $listener
-     * @param null|class-string<Event<bool>>|string $event
+     * @param class-string<Event<bool>>|string|null $event
      */
-    public function addListener(callable $listener, int $priority = 0, ?string $event = null, ?string $id = null): string;
+    public function addListener(callable $listener, int $priority = 0, string $event = null, string $id = null): string;
 
     /**
      * @param class-string<Event<bool>> $event
@@ -26,13 +24,14 @@ interface ListenerProvider
      *
      * @throws ExceptionInterface
      */
-    public function bindListener(string $event, string $listener, int $priority = 0, ?string $id = null): string;
+    public function bindListener(string $event, string $listener, int $priority = 0, string $id = null): string;
 
     /**
-     * @param  Event<bool> $event
-     * @return Generator<Listener> an iterable of callables type-compatible with $event
+     * @param Event<bool> $event
+     *
+     * @return \Generator<Listener> an iterable of callables type-compatible with $event
      */
-    public function getListenersForEvent(Event $event): Generator;
+    public function getListenersForEvent(Event $event): \Generator;
 
     public function removeListener(string $listenerId): void;
 
