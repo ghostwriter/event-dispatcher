@@ -10,7 +10,7 @@ use Ghostwriter\Container\Exception\NotFoundExceptionInterface;
 use Ghostwriter\EventDispatcher\Exception\EventMustImplementEventInterfaceException;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
 use Ghostwriter\EventDispatcher\Exception\FailedToDetermineEventTypeException;
-use Ghostwriter\EventDispatcher\Exception\ListererAlreadyExistsException;
+use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\Exception\MissingEventParameterException;
 use Ghostwriter\EventDispatcher\Exception\MissingParameterTypeDeclarationException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
@@ -34,7 +34,7 @@ final class EventListenerProvider implements ListenerProvider
     }
 
     /**
-     * @throws ListererAlreadyExistsException
+     * @throws ListenerAlreadyExistsException
      */
     public function addListener(
         callable $listener,
@@ -53,14 +53,14 @@ final class EventListenerProvider implements ListenerProvider
                 && \array_key_exists($priority, $this->listeners[$event])
                 && \array_key_exists($id, $this->listeners[$event][$priority])
             ) {
-                throw new ListererAlreadyExistsException($id);
+                throw new ListenerAlreadyExistsException($id);
             }
 
             /*
              * @var class-string<Event<bool>> $event
              */
             $this->listeners[$event][$priority][$id]
-                = new class($listener) implements Listener {
+                = new class ($listener) implements Listener {
                     use ListenerTrait;
                 };
 
