@@ -18,11 +18,9 @@
             <directory name=".github"/>
             <directory name="tests/Fixture"/>
             <directory name="vendor"/>
-            <file name="ecs.php"/>
-            <file name="rector.php"/>
         </ignoreFiles>
     </projectFiles>
     <plugins>
-        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+        <pluginClass class="Ghostwriter\PsalmPlugin\Plugin"/>
     </plugins>
 </psalm>
