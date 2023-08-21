@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\Contract\ErrorEventInterface;
-use Ghostwriter\EventDispatcher\Contract\EventInterface;
 use Ghostwriter\EventDispatcher\Traits\EventTrait;
-
 
 /**
  * @template TPropagationStopped of bool
@@ -30,5 +27,10 @@ final class TestEvent implements TestEventInterface
     public function read(): array
     {
         return $this->events;
+    }
+
+    public function count(): int
+    {
+        return \count($this->events);
     }
 }
