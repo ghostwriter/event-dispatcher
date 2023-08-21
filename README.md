@@ -2,7 +2,7 @@
 
 [![Compliance](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml)
 [![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/event-dispatcher?color=8892bf)](https://www.php.net/supported-versions)
-[![Code Coverage](https://codecov.io/gh/ghostwriter/event-dispatcher/branch/main/graph/badge.svg?token=QCDEQRH88P)](https://codecov.io/gh/ghostwriter/event-dispatcher)
+[![Code Coverage](https://codecov.io/gh/ghostwriter/event-dispatcher/branch/main/graph/badge.svg)](https://codecov.io/gh/ghostwriter/event-dispatcher)
 [![Type Coverage](https://shepherd.dev/github/ghostwriter/event-dispatcher/coverage.svg)](https://shepherd.dev/github/ghostwriter/event-dispatcher)
 [![Latest Version on Packagist](https://badgen.net/packagist/v/ghostwriter/event-dispatcher)](https://packagist.org/packages/ghostwriter/event-dispatcher)
 [![Downloads](https://badgen.net/packagist/dt/ghostwriter/event-dispatcher?color=blue)](https://packagist.org/packages/ghostwriter/event-dispatcher)
@@ -22,12 +22,12 @@ composer require ghostwriter/event-dispatcher
 Registering and dispatching an Event Listener.
 
 ```php
-use Ghostwriter\EventDispatcher\Contract\EventInterface;
-use Ghostwriter\EventDispatcher\Dispatcher;
-use Ghostwriter\EventDispatcher\ListenerProvider;
+use Ghostwriter\EventDispatcher\Event;
+use Ghostwriter\EventDispatcher\EventDispatcher;
+use Ghostwriter\EventDispatcher\EventListenerProvider;
 use Ghostwriter\EventDispatcher\Traits\EventTrait;
 
-class ExampleEvent implements EventInterface
+class ExampleEvent implements Event
 {
     use EventTrait;
 }
@@ -36,10 +36,10 @@ $listener = function (ExampleEvent $event) : void {
     // do something
 };
 
-$listenerProvider = new ListenerProvider();
+$listenerProvider = new EventListenerProvider();
 $listenerProvider->addListener($listener)
 
-$dispatcher = new Dispatcher($listenerProvider);
+$dispatcher = new EventDispatcher($listenerProvider);
 $dispatcher->dispatch(new SomeEvent());
 ```
 
@@ -48,13 +48,13 @@ $dispatcher->dispatch(new SomeEvent());
 Registering an Event Subscriber.
 
 ```php
-use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
+use Ghostwriter\EventDispatcher\Subscriber;
 
-class Subscriber implements SubscriberInterface{
+class EventSubscriber implements Subscriber{
     /**
      * @throws Throwable
      */
-    public function __invoke(ListenerProviderInterface $listenerProvider): void
+    public function __invoke(ListenerProvider $listenerProvider): void
     {
         $priority = 0;
         $listenerProvider->addListenerService(
@@ -103,21 +103,15 @@ class Subscriber implements SubscriberInterface{
     }
 }
 
-$listenerProvider = new ListenerProvider();
+$listenerProvider = new EventListenerProvider();
 
-$subscriber = new Subscriber();
+$subscriber = new EventSubscriber();
 
 $listenerProvider->addSubscriber($subscriber);
 
-$dispatcher = new Dispatcher($listenerProvider);
+$dispatcher = new EventDispatcher($listenerProvider);
 
 $dispatcher->dispatch(new TestEvent());
-```
-
-### Testing
-
-``` bash
-composer test
 ```
 
 ### Changelog
@@ -126,18 +120,7 @@ Please see [CHANGELOG.md](./CHANGELOG.md) for more information what has changed 
 
 ### Security
 
-If you discover any security related issues, please email `nathanael.esayeas@protonmail.com` instead of using the issue tracker.
-
-## Thank you
-
-Thank you for freely sharing your knowledge and free time with me in [Laminas Chat](https://laminas.dev/chat).
-
-- [Matthew Weier O'Phinney](https://github.com/weierophinney)
-
-## Credits
-
-- [Nathanael Esayeas](https://github.com/ghostwriter)
-- [All Contributors](https://github.com/ghostwriter/event-dispatcher/contributors)
+If you discover any security related issues, please email `nathanael.esayeas@protonmail.com` or create a [Security Advisory](https://github.com/ghostwriter/event-dispatcher/security/advisories/new) instead of using the issue tracker.
 
 ## License
 
