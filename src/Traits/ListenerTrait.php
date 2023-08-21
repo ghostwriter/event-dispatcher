@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Traits;
 
-use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Ghostwriter\EventDispatcher\Event;
 
 trait ListenerTrait
 {
@@ -16,7 +16,10 @@ trait ListenerTrait
     ) {
     }
 
-    public function __invoke(EventInterface $event): void
+    /**
+     * @param Event<bool> $event
+     */
+    public function __invoke(Event $event): void
     {
         ($this->listener)($event);
     }
