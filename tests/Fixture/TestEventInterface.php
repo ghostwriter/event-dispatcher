@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\Event;
+use Ghostwriter\EventDispatcher\EventInterface;
 
 /**
  * @template TPropagationStopped of bool
  *
- * @extends Event<TPropagationStopped>
+ * @extends EventInterface<TPropagationStopped>
  */
-interface TestEventInterface extends Event
+interface TestEventInterface extends EventInterface
 {
     public function write(string $event): void;
 
-    /** @return array<array-key,string> */
-    public function read(): array;
+    public function read(): string;
 
     /**
      * @return int<0,max>
