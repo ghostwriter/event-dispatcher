@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Exception;
 
-use Ghostwriter\EventDispatcher\Exception;
+use Ghostwriter\EventDispatcher\ExceptionInterface;
 
-final class EventNotFoundException extends \InvalidArgumentException implements Exception
+final class EventNotFoundException extends \InvalidArgumentException implements ExceptionInterface
 {
 }
