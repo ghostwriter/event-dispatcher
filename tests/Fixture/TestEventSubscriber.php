@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Subscriber;
+use Ghostwriter\EventDispatcher\ListenerProviderInterface;
+use Ghostwriter\EventDispatcher\SubscriberInterface;
 
-final class TestEventSubscriber implements Subscriber
+final class TestEventSubscriber implements SubscriberInterface
 {
     /**
      * @throws \Throwable
      */
-    public function __invoke(ListenerProvider $listenerProvider): void
+    public function __invoke(ListenerProviderInterface $listenerProvider): void
     {
         $listenerProvider->bindListener(
             TestEvent::class,
