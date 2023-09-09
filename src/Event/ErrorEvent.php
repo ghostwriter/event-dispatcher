@@ -4,43 +4,44 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Event;
 
-use Ghostwriter\EventDispatcher\Event;
-use Ghostwriter\EventDispatcher\Listener;
+use Ghostwriter\EventDispatcher\EventInterface;
+use Ghostwriter\EventDispatcher\ListenerInterface;
 use Ghostwriter\EventDispatcher\Traits\EventTrait;
+use Throwable;
 
 /**
  * @template TPropagationStopped of bool
  *
- * @implements Error<TPropagationStopped>
+ * @implements ErrorInterface<TPropagationStopped>
  */
-final class ErrorEvent implements Error
+final class ErrorEvent implements ErrorInterface
 {
     use EventTrait;
 
     /**
-     * @param Event<bool> $event
+     * @param EventInterface<bool> $event
      */
     public function __construct(
-        private readonly Event $event,
-        private readonly Listener $listener,
-        private readonly \Throwable $throwable
+        private readonly EventInterface $event,
+        private readonly ListenerInterface       $listener,
+        private readonly Throwable      $throwable
     ) {
     }
 
     /**
-     * @return Event<bool>
+     * @return EventInterface<bool>
      */
-    public function getEvent(): Event
+    public function getEvent(): EventInterface
     {
         return $this->event;
     }
 
-    public function getListener(): Listener
+    public function getListener(): ListenerInterface
     {
         return $this->listener;
     }
 
-    public function getThrowable(): \Throwable
+    public function getThrowable(): Throwable
     {
         return $this->throwable;
     }
