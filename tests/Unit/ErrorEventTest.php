@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
+use Closure;
 use Ghostwriter\EventDispatcher\Dispatcher;
-use Ghostwriter\EventDispatcher\Event;
+use Ghostwriter\EventDispatcher\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
-use Ghostwriter\EventDispatcher\EventDispatcher;
-use Ghostwriter\EventDispatcher\EventListenerProvider;
+use Ghostwriter\EventDispatcher\EventInterface;
 use Ghostwriter\EventDispatcher\Listener;
+use Ghostwriter\EventDispatcher\ListenerInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use Ghostwriter\EventDispatcher\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
 use Ghostwriter\EventDispatcher\Traits\ListenerTrait;
@@ -18,11 +20,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use RuntimeException;
+use Throwable;
 
-#[CoversClass(EventDispatcher::class)]
+#[CoversClass(Dispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
-#[CoversClass(EventListenerProvider::class)]
-#[CoversClass(ListenerTrait::class)]
+#[CoversClass(ListenerProvider::class)]
+#[CoversClass(Listener::class)]
 #[Small]
 final class ErrorEventTest extends PHPUnitTestCase
 {
@@ -36,27 +40,25 @@ final class ErrorEventTest extends PHPUnitTestCase
      */
     public const ERROR_MESSAGE = 'Could not handle the event!';
 
-    private Dispatcher $dispatcher;
+    private DispatcherInterface $dispatcher;
 
     private ErrorEvent $errorEvent;
 
-    private Listener $listener;
+    private ListenerInterface $listener;
 
-    private ListenerProvider $listenerProvider;
+    private ListenerProviderInterface $listenerProvider;
 
     private TestEvent $testEvent;
 
-    private \Throwable $throwable;
+    private Throwable $throwable;
 
     protected function setUp(): void
     {
         $this->testEvent = new TestEvent();
-        $this->throwable = new \RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
-        $this->listenerProvider = new EventListenerProvider();
-        $this->dispatcher = new EventDispatcher();
-        $this->listener = (new class(\Closure::fromCallable(new TestEventListener())) implements Listener {
-            use ListenerTrait;
-        });
+        $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
+        $this->listenerProvider = new ListenerProvider();
+        $this->dispatcher = new Dispatcher();
+        $this->listener = new Listener(Closure::fromCallable(new TestEventListener()));
 
         $this->errorEvent = new ErrorEvent($this->testEvent, $this->listener, $this->throwable);
     }
@@ -66,7 +68,7 @@ final class ErrorEventTest extends PHPUnitTestCase
      */
     public static function dataProviderImplementsInterface(): iterable
     {
-        foreach ([Event::class, ErrorEvent::class] as $interface) {
+        foreach ([EventInterface::class, ErrorEvent::class] as $interface) {
             yield $interface => [$interface];
         }
     }
@@ -94,7 +96,7 @@ final class ErrorEventTest extends PHPUnitTestCase
 
         $this->listenerProvider->addListener($errorEventListener);
 
-        $this->dispatcher = new EventDispatcher($this->listenerProvider);
+        $this->dispatcher = new Dispatcher($this->listenerProvider);
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage(self::ERROR_MESSAGE);
