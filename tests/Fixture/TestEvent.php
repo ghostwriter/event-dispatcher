@@ -23,10 +23,9 @@ final class TestEvent implements TestEventInterface
         $this->events[] = $event;
     }
 
-    /** @return array<array-key,string> */
-    public function read(): array
+    public function read(): string
     {
-        return $this->events;
+        return json_encode($this->events);
     }
 
     public function count(): int
