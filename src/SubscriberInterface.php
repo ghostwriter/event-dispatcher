@@ -10,7 +10,7 @@ namespace Ghostwriter\EventDispatcher;
 interface SubscriberInterface
 {
     /**
-     * Registers listeners on the given ListenerProviderInterface.
+     * Registers listeners on the given ProviderInterface.
      */
-    public function __invoke(ListenerProviderInterface $listenerProvider): void;
+    public function __invoke(ProviderInterface $listenerProvider): void;
 }
