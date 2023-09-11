@@ -6,18 +6,17 @@ namespace Ghostwriter\EventDispatcher\Event;
 
 use Ghostwriter\EventDispatcher\EventInterface;
 use Ghostwriter\EventDispatcher\ListenerInterface;
-use Ghostwriter\EventDispatcher\Traits\EventTrait;
+use Ghostwriter\EventDispatcher\AbstractEvent;
 use Throwable;
 
 /**
- * @template TPropagationStopped of bool
+ * @template TStopped of bool
  *
- * @implements ErrorInterface<TPropagationStopped>
+ * @extends AbstractEvent<TStopped>
+ * @implements ErrorInterface<TStopped>
  */
-final class ErrorEvent implements ErrorInterface
+final class ErrorEvent extends AbstractEvent implements ErrorInterface
 {
-    use EventTrait;
-
     /**
      * @param EventInterface<bool> $event
      */
