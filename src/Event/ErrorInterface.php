@@ -11,9 +11,9 @@ use Throwable;
 /**
  * An object that contains information about an error triggered by EventInterface handling.
  *
- * @template TPropagationStopped of bool
+ * @template TStopped of bool
  *
- * @extends EventInterface<TPropagationStopped>
+ * @extends EventInterface<TStopped>
  */
 interface ErrorInterface extends EventInterface
 {
@@ -30,5 +30,5 @@ interface ErrorInterface extends EventInterface
     /**
      * Returns the throwable (ExceptionInterface or ErrorInterface) that triggered this error condition.
      */
-    public function getThrowable(): \Throwable;
+    public function getThrowable(): Throwable;
 }
