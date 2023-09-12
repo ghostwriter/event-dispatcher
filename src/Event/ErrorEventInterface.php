@@ -30,5 +30,5 @@ interface ErrorEventInterface extends EventInterface
     /**
      * Returns the throwable (ExceptionInterface or ErrorInterface) that triggered this error condition.
      */
-    public function getThrowable(): Throwable;
+    public function getThrowable(): \Throwable;
 }
