@@ -16,7 +16,7 @@ interface EventInterface
     /**
      * Determine if the previous listener halted propagation.
      *
-     * @return TStopped is true ? true : false
+     * @return (TStopped is true ? true : false)
      */
     public function isStopped(): bool;
 
