@@ -12,5 +12,5 @@ interface SubscriberInterface
     /**
      * Registers listeners on the given ProviderInterface.
      */
-    public function __invoke(ProviderInterface $listenerProvider): void;
+    public function __invoke(ProviderInterface $provider): void;
 }
