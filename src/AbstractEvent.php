@@ -13,9 +13,6 @@ use Ghostwriter\EventDispatcher\EventInterface;
  */
 abstract class AbstractEvent implements EventInterface
 {
-    /**
-     * @var TStopped
-     */
     private bool $stopped = false;
 
     public function isStopped(): bool
