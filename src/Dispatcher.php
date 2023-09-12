@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
-use Ghostwriter\EventDispatcher\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
-use Ghostwriter\EventDispatcher\Event\ErrorInterface;
-use Ghostwriter\EventDispatcher\EventInterface;
-use Ghostwriter\EventDispatcher\Provider;
-use Ghostwriter\EventDispatcher\ProviderInterface;
+use Ghostwriter\EventDispatcher\Event\ErrorEventInterface;
 use Throwable;
 
 final readonly class Dispatcher implements DispatcherInterface
 {
     public function __construct(
-        private readonly ProviderInterface $listenerProvider = new Provider()
+        private ProviderInterface $provider = new Provider()
     ) {
     }
 
@@ -23,6 +19,8 @@ final readonly class Dispatcher implements DispatcherInterface
      * @param EventInterface<bool> $event
      *
      * @return EventInterface<bool>
+     *
+     * @throws Throwable
      */
     public function dispatch(EventInterface $event): EventInterface
     {
@@ -31,9 +29,9 @@ final readonly class Dispatcher implements DispatcherInterface
             return $event;
         }
 
-        $isErrorEvent = $event instanceof ErrorInterface;
+        $isErrorEvent = $event instanceof ErrorEventInterface;
 
-        foreach ($this->listenerProvider->listeners($event) as $listener) {
+        foreach ($this->provider->listeners($event) as $listener) {
             try {
                 $listener($event);
 
@@ -60,10 +58,5 @@ final readonly class Dispatcher implements DispatcherInterface
         }
 
         return $event;
-    }
-
-    public function listenerProvider(): ProviderInterface
-    {
-        return $this->listenerProvider;
     }
 }
