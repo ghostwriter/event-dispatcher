@@ -15,7 +15,7 @@ use Throwable;
  *
  * @extends EventInterface<TStopped>
  */
-interface ErrorInterface extends EventInterface
+interface ErrorEventInterface extends EventInterface
 {
     /**
      * Returns the event that triggered this error condition.
