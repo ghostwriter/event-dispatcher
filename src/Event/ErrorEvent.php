@@ -13,17 +13,17 @@ use Throwable;
  * @template TStopped of bool
  *
  * @extends AbstractEvent<TStopped>
- * @implements ErrorInterface<TStopped>
+ * @implements ErrorEventInterface<TStopped>
  */
-final class ErrorEvent extends AbstractEvent implements ErrorInterface
+final class ErrorEvent extends AbstractEvent implements ErrorEventInterface
 {
     /**
      * @param EventInterface<bool> $event
      */
     public function __construct(
         private readonly EventInterface $event,
-        private readonly ListenerInterface       $listener,
-        private readonly Throwable      $throwable
+        private readonly ListenerInterface $listener,
+        private readonly Throwable $throwable
     ) {
     }
 
