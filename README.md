@@ -2,6 +2,7 @@
 
 [![Compliance](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml)
 [![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/event-dispatcher?color=8892bf)](https://www.php.net/supported-versions)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/event-dispatcher&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
 [![Code Coverage](https://codecov.io/gh/ghostwriter/event-dispatcher/branch/main/graph/badge.svg)](https://codecov.io/gh/ghostwriter/event-dispatcher)
 [![Type Coverage](https://shepherd.dev/github/ghostwriter/event-dispatcher/coverage.svg)](https://shepherd.dev/github/ghostwriter/event-dispatcher)
 [![Latest Version on Packagist](https://badgen.net/packagist/v/ghostwriter/event-dispatcher)](https://packagist.org/packages/ghostwriter/event-dispatcher)
@@ -22,25 +23,23 @@ composer require ghostwriter/event-dispatcher
 Registering and dispatching an Event Listener.
 
 ```php
-use Ghostwriter\EventDispatcher\Event;
-use Ghostwriter\EventDispatcher\EventDispatcher;
-use Ghostwriter\EventDispatcher\EventListenerProvider;
-use Ghostwriter\EventDispatcher\Traits\EventTrait;
+use Ghostwriter\EventDispatcher\AbstractEvent;
+use Ghostwriter\EventDispatcher\Dispatcher;
+use Ghostwriter\EventDispatcher\Provider;
 
-class ExampleEvent implements Event
+final class ExampleEvent extends AbstractEvent
 {
-    use EventTrait;
 }
 
 $listener = function (ExampleEvent $event) : void {
     // do something
 };
 
-$listenerProvider = new EventListenerProvider();
-$listenerProvider->addListener($listener)
+$listenerProvider = new Provider();
+$listenerProvider->listen($listener)
 
-$dispatcher = new EventDispatcher($listenerProvider);
-$dispatcher->dispatch(new SomeEvent());
+$dispatcher = new Dispatcher($listenerProvider);
+$dispatcher->dispatch(new ExampleEvent());
 ```
 
 ### Event Subscriber
@@ -48,30 +47,30 @@ $dispatcher->dispatch(new SomeEvent());
 Registering an Event Subscriber.
 
 ```php
-use Ghostwriter\EventDispatcher\Subscriber;
+use Ghostwriter\EventDispatcher\SubscriberInterface;
 
-class EventSubscriber implements Subscriber{
+final class EventSubscriber implements SubscriberInterface {
     /**
      * @throws Throwable
      */
-    public function __invoke(ListenerProvider $listenerProvider): void
+    public function __invoke(Provider $listenerProvider): void
     {
         $priority = 0;
-        $listenerProvider->addListenerService(
+        $listenerProvider->listenService(
             TestEvent::class,
             TestEventListener::class,
             $priority,
             'InvokableListener'
         );
 
-        $listenerProvider->addListener(
+        $listenerProvider->listen(
             [new TestEventListener, 'onTest'],
             $priority,
             TestEvent::class,
             'CallableArrayInstanceListener'
         );
 
-        $listenerProvider->addListener(
+        $listenerProvider->listen(
             static function (TestEventInterface $testEvent): void {
                 $testEvent->write(__METHOD__);
             },
@@ -80,21 +79,21 @@ class EventSubscriber implements Subscriber{
             'AnonymousFunctionListener'
         );
 
-        $listenerProvider->addListener(
+        $listenerProvider->listen(
             'Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction',
             $priority,
             TestEvent::class,
             'FunctionListener'
         );
 
-        $listenerProvider->addListener(
+        $listenerProvider->listen(
             TestEventListener::class.'::onStatic',
             $priority,
             TestEvent::class,
             'StaticMethodListener'
         );
 
-        $listenerProvider->addListener(
+        $listenerProvider->listen(
             [TestEventListener::class, 'onStaticCallableArray'],
             $priority,
             TestEvent::class,
@@ -103,11 +102,11 @@ class EventSubscriber implements Subscriber{
     }
 }
 
-$listenerProvider = new EventListenerProvider();
+$listenerProvider = new Provider();
 
 $subscriber = new EventSubscriber();
 
-$listenerProvider->addSubscriber($subscriber);
+$listenerProvider->subscribe($subscriber);
 
 $dispatcher = new EventDispatcher($listenerProvider);
 
