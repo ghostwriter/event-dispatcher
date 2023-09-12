@@ -21,6 +21,4 @@ interface DispatcherInterface
      * @throws Throwable
      */
     public function dispatch(EventInterface $event): EventInterface;
-
-    public function listenerProvider(): ProviderInterface;
 }
