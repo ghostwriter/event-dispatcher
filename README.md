@@ -2,7 +2,8 @@
 
 [![Compliance](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml)
 [![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/event-dispatcher?color=8892bf)](https://www.php.net/supported-versions)
-[![Code Coverage](https://codecov.io/gh/ghostwriter/event-dispatcher/branch/main/graph/badge.svg?token=QCDEQRH88P)](https://codecov.io/gh/ghostwriter/event-dispatcher)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/event-dispatcher&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
+[![Code Coverage](https://codecov.io/gh/ghostwriter/event-dispatcher/branch/main/graph/badge.svg)](https://codecov.io/gh/ghostwriter/event-dispatcher)
 [![Type Coverage](https://shepherd.dev/github/ghostwriter/event-dispatcher/coverage.svg)](https://shepherd.dev/github/ghostwriter/event-dispatcher)
 [![Latest Version on Packagist](https://badgen.net/packagist/v/ghostwriter/event-dispatcher)](https://packagist.org/packages/ghostwriter/event-dispatcher)
 [![Downloads](https://badgen.net/packagist/dt/ghostwriter/event-dispatcher?color=blue)](https://packagist.org/packages/ghostwriter/event-dispatcher)
@@ -22,25 +23,23 @@ composer require ghostwriter/event-dispatcher
 Registering and dispatching an Event Listener.
 
 ```php
-use Ghostwriter\EventDispatcher\Contract\EventInterface;
+use Ghostwriter\EventDispatcher\AbstractEvent;
 use Ghostwriter\EventDispatcher\Dispatcher;
-use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Traits\EventTrait;
+use Ghostwriter\EventDispatcher\Provider;
 
-class ExampleEvent implements EventInterface
+final class ExampleEvent extends AbstractEvent
 {
-    use EventTrait;
 }
 
 $listener = function (ExampleEvent $event) : void {
     // do something
 };
 
-$listenerProvider = new ListenerProvider();
-$listenerProvider->addListener($listener)
+$provider = new Provider();
+$provider->listen($listener)
 
-$dispatcher = new Dispatcher($listenerProvider);
-$dispatcher->dispatch(new SomeEvent());
+$dispatcher = new Dispatcher($provider);
+$dispatcher->dispatch(new ExampleEvent());
 ```
 
 ### Event Subscriber
@@ -48,30 +47,31 @@ $dispatcher->dispatch(new SomeEvent());
 Registering an Event Subscriber.
 
 ```php
-use Ghostwriter\EventDispatcher\Contract\SubscriberInterface;
+use Ghostwriter\EventDispatcher\SubscriberInterface;
 
-class Subscriber implements SubscriberInterface{
+final class EventSubscriber implements SubscriberInterface {
     /**
      * @throws Throwable
      */
-    public function __invoke(ListenerProviderInterface $listenerProvider): void
+    public function __invoke(ProviderInterface $provider): void
     {
         $priority = 0;
-        $listenerProvider->addListenerService(
+
+        $provider->bind(
             TestEvent::class,
             TestEventListener::class,
             $priority,
             'InvokableListener'
         );
 
-        $listenerProvider->addListener(
+        $provider->listen(
             [new TestEventListener, 'onTest'],
             $priority,
             TestEvent::class,
             'CallableArrayInstanceListener'
         );
 
-        $listenerProvider->addListener(
+        $provider->listen(
             static function (TestEventInterface $testEvent): void {
                 $testEvent->write(__METHOD__);
             },
@@ -80,21 +80,21 @@ class Subscriber implements SubscriberInterface{
             'AnonymousFunctionListener'
         );
 
-        $listenerProvider->addListener(
+        $provider->listen(
             'Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction',
             $priority,
             TestEvent::class,
             'FunctionListener'
         );
 
-        $listenerProvider->addListener(
+        $provider->listen(
             TestEventListener::class.'::onStatic',
             $priority,
             TestEvent::class,
             'StaticMethodListener'
         );
 
-        $listenerProvider->addListener(
+        $provider->listen(
             [TestEventListener::class, 'onStaticCallableArray'],
             $priority,
             TestEvent::class,
@@ -103,21 +103,15 @@ class Subscriber implements SubscriberInterface{
     }
 }
 
-$listenerProvider = new ListenerProvider();
+$subscriber = new EventSubscriber();
 
-$subscriber = new Subscriber();
+$provider = new Provider();
 
-$listenerProvider->addSubscriber($subscriber);
+$provider->subscribe($subscriber);
 
-$dispatcher = new Dispatcher($listenerProvider);
+$dispatcher = new EventDispatcher($provider);
 
 $dispatcher->dispatch(new TestEvent());
-```
-
-### Testing
-
-``` bash
-composer test
 ```
 
 ### Changelog
@@ -126,18 +120,7 @@ Please see [CHANGELOG.md](./CHANGELOG.md) for more information what has changed 
 
 ### Security
 
-If you discover any security related issues, please email `nathanael.esayeas@protonmail.com` instead of using the issue tracker.
-
-## Thank you
-
-Thank you for freely sharing your knowledge and free time with me in [Laminas Chat](https://laminas.dev/chat).
-
-- [Matthew Weier O'Phinney](https://github.com/weierophinney)
-
-## Credits
-
-- [Nathanael Esayeas](https://github.com/ghostwriter)
-- [All Contributors](https://github.com/ghostwriter/event-dispatcher/contributors)
+If you discover any security related issues, please email `nathanael.esayeas@protonmail.com` or create a [Security Advisory](https://github.com/ghostwriter/event-dispatcher/security/advisories/new) instead of using the issue tracker.
 
 ## License
 

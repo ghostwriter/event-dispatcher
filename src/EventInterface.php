@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Contract;
+namespace Ghostwriter\EventDispatcher;
 
 /**
- * An Event that can stop propagation to any further Listeners.
+ * An EventInterface that can stop propagation to any further Listeners.
  *
  * MUST be implemented to provide type-safety to both listeners and listener providers.
  *
- * @template TPropagationStopped of bool
+ * @template TStopped of bool
  */
 interface EventInterface
 {
     /**
      * Determine if the previous listener halted propagation.
      *
-     * @return TPropagationStopped is true ? true : false
+     * @return (TStopped is true ? true : false)
      */
-    public function isPropagationStopped(): bool;
+    public function isStopped(): bool;
 
     /**
      * Stop event propagation.
      *
      * @psalm-this-out self<true>
      */
-    public function stopPropagation(): void;
+    public function stop(): void;
 }

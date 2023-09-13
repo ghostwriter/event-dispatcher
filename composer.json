@@ -30,82 +30,66 @@
         }
     ],
     "require": {
-        "php": ">=8.1 <8.4",
-        "ghostwriter/container": "^1.6",
-        "ghostwriter/option": "^1.5.1"
+        "php": ">=8.2",
+        "ghostwriter/container": "^1.6"
     },
     "require-dev": {
-        "ghostwriter/coding-standard": "dev-main"
+        "ghostwriter/coding-standard": "dev-main",
+        "ghostwriter/psalm-plugin": "^0 || ^1.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Ghostwriter\\EventDispatcher\\": "src/"
+            "Ghostwriter\\EventDispatcher\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Ghostwriter\\EventDispatcher\\Tests\\": "tests/"
+            "Ghostwriter\\EventDispatcher\\Tests\\": "tests"
         },
         "files": [
             "tests/Fixture/functions.php"
         ]
     },
     "config": {
-        "allow-plugins": {
-            "infection/extension-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        },
         "classmap-authoritative": true,
         "discard-changes": true,
         "optimize-autoloader": true,
+        "platform": {
+            "php": "8.2.999"
+        },
         "preferred-install": "dist",
         "prepend-autoloader": true,
         "process-timeout": 5000,
         "sort-packages": true
     },
     "scripts": {
-        "cache:clear": [
-            "rm -fr ./.cache"
-        ],
+        "cache:clear": "rm -fr ./.cache",
         "check": [
             "@composer validate",
-            "@cs-check",
-            "@cs-fix",
             "@test",
             "@infection",
-            "@psalm:security",
-            "@rector:dry-run",
-            "@psalm:dry-run"
+            "@psalm:security"
         ],
-        "cs-check": "vendor/bin/ecs check --clear-cache || true",
-        "cs-fix": "vendor/bin/ecs check --fix --clear-cache",
+        "fix": "tools/php-cs-fixer fix --diff --allow-risky=yes --using-cache=no --verbose",
         "infection": [
             "@xdebug",
-            "@php vendor/bin/infection --verbose"
+            "vendor/bin/infection --verbose"
         ],
-        "missing-returntypes": "@php vendor/bin/psalm --alter --issues=MissingReturnType",
-        "normalizer": "composer normalize --no-check-lock",
-        "phpunit": "@php vendor/bin/phpunit --colors=always --testdox --stop-on-failure",
-        "phpunit:migrate": "@php vendor/bin/phpunit --migrate-configuration",
+        "phpunit": "vendor/bin/phpunit --colors=always",
+        "phpunit:migrate": "vendor/bin/phpunit --colors=always --migrate-configuration",
         "psalm": "@psalm:shepherd",
-        "psalm:baseline": "@php vendor/bin/psalm --set-baseline=psalm-baseline.xml",
-        "psalm:dry-run": "@php vendor/bin/psalm --alter --issues=all --dry-run",
-        "psalm:missing": "@php vendor/bin/psalm --alter --issues=MissingReturnType",
-        "psalm:security": "@php vendor/bin/psalm --taint-analysis",
-        "psalm:shepherd": "@php vendor/bin/psalm --shepherd --stats --no-diff --no-cache",
-        "rector": "@php vendor/bin/rector process",
-        "rector:dry-run": "@php vendor/bin/rector process --dry-run || true",
+        "psalm:alter": "vendor/bin/psalm --allow-backwards-incompatible-changes=false --alter --no-cache --safe-types",
+        "psalm:baseline": "@psalm:shepherd --set-baseline=psalm-baseline.xml",
+        "psalm:dry-run": "@psalm:alter --issues=all --dry-run",
+        "psalm:missing": "@psalm:alter --issues=MissingReturnType",
+        "psalm:security": "@psalm:shepherd --taint-analysis",
+        "psalm:shepherd": "vendor/bin/psalm --shepherd --stats --no-diff --no-cache",
         "test": [
             "@xdebug",
             "@phpunit",
             "@psalm"
-        ],
-        "test:coverage": [
-            "@cache:clear",
-            "@xdebug",
-            "@phpunit"
         ],
         "xdebug": [
             "@putenv XDEBUG_MODE=coverage"

@@ -1,15 +1,26 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="1"
-    findUnusedPsalmSuppress="true"
-    findUnusedCode="true"
-    findUnusedVariablesAndParams="true"
-    findUnusedBaselineEntry="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    errorBaseline="psalm-baseline.xml"
+    xsi:schemaLocation="https://getpsalm.org/schema/config https://getpsalm.org/schema/config"
+    allowStringToStandInForClass="false"
     cacheDirectory=".cache/psalm"
+    checkForThrowsDocblock="true"
+    checkForThrowsInGlobalScope="true"
+    disableSuppressAll="true"
+    ensureArrayIntOffsetsExist="true"
+    ensureArrayStringOffsetsExist="true"
+    errorBaseline="psalm-baseline.xml"
+    errorLevel="1"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+    findUnusedPsalmSuppress="true"
+    findUnusedVariablesAndParams="true"
+    sealAllMethods="true"
+    sealAllProperties="true"
+    strictBinaryOperands="true"
+    reportMixedIssues="true"
+    restrictReturnTypes="true"
 >
     <projectFiles>
         <directory name="src"/>
@@ -18,8 +29,6 @@
             <directory name=".github"/>
             <directory name="tests/Fixture"/>
             <directory name="vendor"/>
-            <file name="ecs.php"/>
-            <file name="rector.php"/>
         </ignoreFiles>
     </projectFiles>
     <plugins>
