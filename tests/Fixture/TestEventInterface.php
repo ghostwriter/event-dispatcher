@@ -7,18 +7,18 @@ namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 use Ghostwriter\EventDispatcher\EventInterface;
 
 /**
- * @template TPropagationStopped of bool
+ * @template TStopped of bool
  *
- * @extends EventInterface<TPropagationStopped>
+ * @extends EventInterface<TStopped>
  */
 interface TestEventInterface extends EventInterface
 {
-    public function write(string $event): void;
-
-    public function read(): string;
-
     /**
      * @return int<0,max>
      */
     public function count(): int;
+
+    public function read(): string;
+
+    public function write(string $event): void;
 }
