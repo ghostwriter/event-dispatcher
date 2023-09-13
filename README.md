@@ -35,10 +35,10 @@ $listener = function (ExampleEvent $event) : void {
     // do something
 };
 
-$listenerProvider = new Provider();
-$listenerProvider->listen($listener)
+$provider = new Provider();
+$provider->listen($listener)
 
-$dispatcher = new Dispatcher($listenerProvider);
+$dispatcher = new Dispatcher($provider);
 $dispatcher->dispatch(new ExampleEvent());
 ```
 
@@ -53,24 +53,25 @@ final class EventSubscriber implements SubscriberInterface {
     /**
      * @throws Throwable
      */
-    public function __invoke(Provider $listenerProvider): void
+    public function __invoke(ProviderInterface $provider): void
     {
         $priority = 0;
-        $listenerProvider->listenService(
+
+        $provider->bind(
             TestEvent::class,
             TestEventListener::class,
             $priority,
             'InvokableListener'
         );
 
-        $listenerProvider->listen(
+        $provider->listen(
             [new TestEventListener, 'onTest'],
             $priority,
             TestEvent::class,
             'CallableArrayInstanceListener'
         );
 
-        $listenerProvider->listen(
+        $provider->listen(
             static function (TestEventInterface $testEvent): void {
                 $testEvent->write(__METHOD__);
             },
@@ -79,21 +80,21 @@ final class EventSubscriber implements SubscriberInterface {
             'AnonymousFunctionListener'
         );
 
-        $listenerProvider->listen(
+        $provider->listen(
             'Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction',
             $priority,
             TestEvent::class,
             'FunctionListener'
         );
 
-        $listenerProvider->listen(
+        $provider->listen(
             TestEventListener::class.'::onStatic',
             $priority,
             TestEvent::class,
             'StaticMethodListener'
         );
 
-        $listenerProvider->listen(
+        $provider->listen(
             [TestEventListener::class, 'onStaticCallableArray'],
             $priority,
             TestEvent::class,
@@ -102,13 +103,13 @@ final class EventSubscriber implements SubscriberInterface {
     }
 }
 
-$listenerProvider = new Provider();
-
 $subscriber = new EventSubscriber();
 
-$listenerProvider->subscribe($subscriber);
+$provider = new Provider();
 
-$dispatcher = new EventDispatcher($listenerProvider);
+$provider->subscribe($subscriber);
+
+$dispatcher = new EventDispatcher($provider);
 
 $dispatcher->dispatch(new TestEvent());
 ```
