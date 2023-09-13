@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
-use Ghostwriter\EventDispatcher\EventInterface;
-
 /**
  * @template TStopped of bool
  *
