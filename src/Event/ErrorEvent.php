@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Event;
 
+use Ghostwriter\EventDispatcher\AbstractEvent;
 use Ghostwriter\EventDispatcher\EventInterface;
 use Ghostwriter\EventDispatcher\ListenerInterface;
-use Ghostwriter\EventDispatcher\AbstractEvent;
-use Throwable;
 
 /**
  * @template TStopped of bool
  *
  * @extends AbstractEvent<TStopped>
+ *
  * @implements ErrorEventInterface<TStopped>
  */
 final class ErrorEvent extends AbstractEvent implements ErrorEventInterface
@@ -23,7 +23,7 @@ final class ErrorEvent extends AbstractEvent implements ErrorEventInterface
     public function __construct(
         private readonly EventInterface $event,
         private readonly ListenerInterface $listener,
-        private readonly Throwable $throwable
+        private readonly \Throwable $throwable
     ) {
     }
 
@@ -40,7 +40,7 @@ final class ErrorEvent extends AbstractEvent implements ErrorEventInterface
         return $this->listener;
     }
 
-    public function getThrowable(): Throwable
+    public function getThrowable(): \Throwable
     {
         return $this->throwable;
     }
