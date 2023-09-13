@@ -4,31 +4,30 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
+use Ghostwriter\Container\Container;
+use Ghostwriter\EventDispatcher\AbstractEvent;
 use Ghostwriter\EventDispatcher\Dispatcher;
 use Ghostwriter\EventDispatcher\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventInterface;
 use Ghostwriter\EventDispatcher\Listener;
-use Ghostwriter\EventDispatcher\ListenerInterface;
-use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\ListenerProviderInterface;
+use Ghostwriter\EventDispatcher\Provider;
+use Ghostwriter\EventDispatcher\ProviderInterface;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventInterface;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventSubscriber;
-use Ghostwriter\EventDispatcher\Traits\EventTrait;
-use Ghostwriter\EventDispatcher\Traits\ListenerTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use PHPUnit\Framework\TestCase;
 
+#[CoversClass(AbstractEvent::class)]
 #[CoversClass(Dispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
-#[CoversClass(EventTrait::class)]
-#[CoversClass(ListenerProvider::class)]
 #[CoversClass(Listener::class)]
+#[CoversClass(Provider::class)]
 #[Small]
-final class DispatcherTest extends PHPUnitTestCase
+final class DispatcherTest extends TestCase
 {
     /**
      * @var int
@@ -42,11 +41,11 @@ final class DispatcherTest extends PHPUnitTestCase
 
     private DispatcherInterface $dispatcher;
 
-    private ListenerProviderInterface $listenerProvider;
+    private ProviderInterface $provider;
 
     protected function setUp(): void
     {
-        $this->listenerProvider = new ListenerProvider();
+        $this->provider = new Provider();
         $this->dispatcher = new Dispatcher();
     }
 
@@ -56,47 +55,56 @@ final class DispatcherTest extends PHPUnitTestCase
     public static function eventDataProvider(): \Generator
     {
         yield EventInterface::class => [
-            /* @extends EventInterface<bool> */
-            new class () implements EventInterface {
-                use EventTrait;
-            },
+            new /** @extends AbstractEvent<bool> */ class() extends AbstractEvent {},
         ];
 
-        yield ErrorEvent::class => [new ErrorEvent(
-            new TestEvent(),
-            new Listener(static fn (): mixed => null),
-            new \RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
-        )];
+        yield ErrorEvent::class => [
+            new ErrorEvent(
+                new TestEvent(),
+                new Listener(static fn (): mixed => null),
+                new \RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
+            ),
+        ];
 
         yield TestEventInterface::class => [new TestEvent()];
     }
 
     /**
      * @param EventInterface<bool> $event
+     *
+     * @throws \Throwable
      */
     #[DataProvider('eventDataProvider')]
     public function testAlreadyStoppedEventCallsNoListeners(EventInterface $event): void
     {
-        self::assertFalse($event->isPropagationStopped());
+        static::assertFalse($event->isStopped());
 
-        $event->stopPropagation();
+        $event->stop();
 
-        self::assertTrue($event->isPropagationStopped());
+        static::assertTrue($event->isStopped());
 
-        $this->dispatcher
-            ->getListenerProvider()
-            ->addListener(static function (EventInterface $event): never {
-                throw new \RuntimeException(self::ERROR_MESSAGE.$event::class, self::ERROR_CODE);
-            });
+        $provider = new Provider();
 
-        self::assertSame($event, $this->dispatcher->dispatch($event));
-        self::assertTrue($event->isPropagationStopped());
+        $provider->listen(static function (EventInterface $event): never {
+            throw new \RuntimeException(self::ERROR_MESSAGE . $event::class, self::ERROR_CODE);
+        });
+
+        $dispatcher = new Dispatcher($provider);
+
+        static::assertSame($event, $dispatcher->dispatch($event));
+        static::assertTrue($event->isStopped());
     }
 
-    public function testConstruct(ListenerProviderInterface $listenerProvider = null): void
+    public function testConstruct(): void
     {
-        $dispatcher = new Dispatcher($listenerProvider ?? new ListenerProvider());
-        self::assertInstanceOf(DispatcherInterface::class, $dispatcher);
+        static::assertInstanceOf(
+            DispatcherInterface::class,
+            new Dispatcher(
+                new Provider(
+                    Container::getInstance()
+                )
+            )
+        );
     }
 
     /**
@@ -105,32 +113,32 @@ final class DispatcherTest extends PHPUnitTestCase
     #[DataProvider('eventDataProvider')]
     public function testDispatch(EventInterface $event): void
     {
-        self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
-        self::assertSame($event, $this->dispatcher->dispatch($event));
+        static::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
+        static::assertSame($event, $this->dispatcher->dispatch($event));
     }
 
     public function testImplementsDispatcherInterfaceAndPsrEventDispatcherInterface(): void
     {
-        self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
+        static::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
     }
 
     /**
      * @throws \Throwable
      */
-    public function testMustCallListenersSynchronouslyInTheOrderTheyAreReturnedFromAListenerProvider(): void
+    public function testMustCallListenersSynchronouslyInTheOrderTheyAreReturnedFromAProvider(): void
     {
-        $this->listenerProvider->addSubscriber(TestEventSubscriber::class);
-        $this->dispatcher = new Dispatcher($this->listenerProvider);
+        $this->provider->subscribe(TestEventSubscriber::class);
+        $this->dispatcher = new Dispatcher($this->provider);
 
         $testEvent = new TestEvent();
-        self::assertSame('[]', $testEvent->read());
+        static::assertSame('', $testEvent->read());
 
         $testEventResult = $this->dispatcher->dispatch($testEvent);
 
-        self::assertSame($testEvent, $testEventResult);
-        self::assertCount(
+        static::assertSame($testEvent, $testEventResult);
+        static::assertCount(
             $testEvent->count(),
-            iterator_to_array($this->listenerProvider->getListenersForEvent($testEvent))
+            iterator_to_array($this->provider->listeners($testEvent))
         );
     }
 
@@ -140,30 +148,31 @@ final class DispatcherTest extends PHPUnitTestCase
     public function testMustListeners(): void
     {
         $testEvent = new TestEvent();
-        $this->listenerProvider->addSubscriber(TestEventSubscriber::class);
+
+        $this->provider->subscribe(TestEventSubscriber::class);
 
         /**
-         * @var callable(EventInterface<bool>):void $listener
+         * @var \Closure(EventInterface<bool>):void $listener
+         *
+         * @param EventInterface<bool> $testEvent
          */
-        $listener = static function (
-            /*
-             * @param EventInterface<bool> $testEvent
-             */
-            TestEventInterface $testEvent
-        ): void {
+        $listener = static function (TestEventInterface $testEvent): void {
             $testEvent->write('#BlackLivesMatter');
-            $testEvent->stopPropagation();
+
+            $testEvent->stop();
         };
 
-        $this->listenerProvider->addListener($listener, 1, TestEvent::class, __METHOD__.'Listener');
+        $this->provider->listen($listener, 1, TestEvent::class, __METHOD__ . 'Listener');
 
-        $this->dispatcher = new Dispatcher($this->listenerProvider);
+        $this->dispatcher = new Dispatcher($this->provider);
 
-        // self::assertEmpty($testEvent->read());
-        self::assertSame('[]', $testEvent->read());
-        self::assertSame($testEvent, $this->dispatcher->dispatch($testEvent));
-        self::assertNotEmpty($testEvent->read());
-        self::assertSame('["#BlackLivesMatter"]', $testEvent->read());
+        static::assertSame('', $testEvent->read());
+
+        static::assertSame($testEvent, $this->dispatcher->dispatch($testEvent));
+
+        static::assertNotEmpty($testEvent->read());
+
+        static::assertSame('#BlackLivesMatter', $testEvent->read());
     }
 
     /**
@@ -174,11 +183,11 @@ final class DispatcherTest extends PHPUnitTestCase
     #[DataProvider('eventDataProvider')]
     public function testReturnsEventWithoutResolvingListenersIfPropagationIsStopped(EventInterface $event): void
     {
-        $this->listenerProvider->addListener(static function (EventInterface $event): never {
+        $this->provider->listen(static function (EventInterface $event): never {
             throw new \RuntimeException(sprintf('Simulate error raised while processing "%s"; PsrStoppableEventInterface!', $event::class));
         });
 
-        self::assertSame($event, $this->dispatcher->dispatch($event));
+        static::assertSame($event, $this->dispatcher->dispatch($event));
     }
 
     /**
@@ -197,6 +206,6 @@ final class DispatcherTest extends PHPUnitTestCase
             throw $throwable;
         }
 
-        self::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
+        static::assertInstanceOf(DispatcherInterface::class, $this->dispatcher);
     }
 }
