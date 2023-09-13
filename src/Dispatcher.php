@@ -20,7 +20,7 @@ final readonly class Dispatcher implements DispatcherInterface
      *
      * @return EventInterface<bool>
      *
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function dispatch(EventInterface $event): EventInterface
     {
@@ -35,12 +35,12 @@ final readonly class Dispatcher implements DispatcherInterface
             try {
                 $listener($event);
 
-                if (! $event->isStopped()) {
+                if (!$event->isStopped()) {
                     continue;
                 }
 
                 return $event;
-            } catch (Throwable $throwable) {
+            } catch (\Throwable $throwable) {
                 if ($isErrorEvent) {
                     /**
                      * If an error is raised while processing an ErrorEvent,
