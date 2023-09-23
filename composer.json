@@ -5,8 +5,7 @@
     "type": "library",
     "keywords": [
         "ghostwriter",
-        "event-dispatcher",
-        "psr-14"
+        "event-dispatcher"
     ],
     "authors": [
         {
@@ -53,15 +52,12 @@
         ]
     },
     "config": {
-        "classmap-authoritative": true,
         "discard-changes": true,
         "optimize-autoloader": true,
         "platform": {
             "php": "8.2.999"
         },
         "preferred-install": "dist",
-        "prepend-autoloader": true,
-        "process-timeout": 5000,
         "sort-packages": true
     },
     "scripts": {
