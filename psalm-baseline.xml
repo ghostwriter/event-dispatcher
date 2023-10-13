@@ -1,13 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
-  <file src="src/Listener.php">
-    <NoValue>
-      <code><![CDATA[Container::getInstance()->call($invokable, [$event])]]></code>
-    </NoValue>
-  </file>
-  <file src="src/Provider.php">
-    <PossiblyUnusedReturnValue>
-      <code>string</code>
-    </PossiblyUnusedReturnValue>
-  </file>
-</files>
+<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352"/>
