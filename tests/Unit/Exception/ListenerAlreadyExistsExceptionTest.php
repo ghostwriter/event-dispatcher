@@ -15,7 +15,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ListenerAlreadyExistsException::class)]
 final class ListenerAlreadyExistsExceptionTest extends TestCase
 {
-    public function testListenThrowsListenerAlreadyExistsException(): void {
+    public function testListenThrowsListenerAlreadyExistsException(): void
+    {
 
         $provider = new ListenerProvider();
 
@@ -25,13 +26,14 @@ final class ListenerAlreadyExistsExceptionTest extends TestCase
         $provider->listen(TestEventListener::class);
     }
 
-    public function testBindThrowsListenerAlreadyExistsException(): void {
+    public function testBindThrowsListenerAlreadyExistsException(): void
+    {
 
         $provider = new ListenerProvider();
 
         $this->expectException(ListenerAlreadyExistsException::class);
 
-        $provider->bind(TestEvent::class,TestEventListener::class);
+        $provider->bind(TestEvent::class, TestEventListener::class);
         $provider->bind(TestEvent::class, TestEventListener::class);
     }
 }
