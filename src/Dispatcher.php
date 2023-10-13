@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
-use Ghostwriter\EventDispatcher\Event\ErrorEvent;
-use Ghostwriter\EventDispatcher\Event\ErrorEventInterface;
+use Ghostwriter\Container\Container;
+use Ghostwriter\EventDispatcher\Interface\DispatcherInterface;
+use Ghostwriter\EventDispatcher\Interface\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Interface\EventInterface;
+use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Throwable;
 
 final readonly class Dispatcher implements DispatcherInterface
 {
     public function __construct(
-        private ProviderInterface $provider = new Provider()
+        private ListenerProviderInterface $provider = new ListenerProvider()
     ) {
     }
 
@@ -20,27 +23,31 @@ final readonly class Dispatcher implements DispatcherInterface
      *
      * @return EventInterface<bool>
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function dispatch(EventInterface $event): EventInterface
     {
-        // If event propagation has stopped, return the event.
-        if ($event->isStopped()) {
+        if ($event->isPropagationStopped()) {
             return $event;
         }
 
         $isErrorEvent = $event instanceof ErrorEventInterface;
 
-        foreach ($this->provider->listeners($event) as $listener) {
+        /**
+         * @template TListener of class-string|callable-string
+         *
+         * @var TListener $listener
+         */
+        foreach ($this->provider->getListenersForEvent($event) as $listener) {
             try {
-                $listener($event);
+                Container::getInstance()->call($listener, [$event]);
 
-                if (!$event->isStopped()) {
+                if (!$event->isPropagationStopped()) {
                     continue;
                 }
 
                 return $event;
-            } catch (\Throwable $throwable) {
+            } catch (Throwable $throwable) {
                 if ($isErrorEvent) {
                     /**
                      * If an error is raised while processing an ErrorEvent,
