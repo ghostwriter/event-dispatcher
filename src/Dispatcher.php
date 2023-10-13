@@ -34,9 +34,7 @@ final readonly class Dispatcher implements DispatcherInterface
         $isErrorEvent = $event instanceof ErrorEventInterface;
 
         /**
-         * @template TListener of class-string|callable-string
-         *
-         * @var TListener $listener
+         * @var callable(EventInterface<bool>):void $listener
          */
         foreach ($this->provider->getListenersForEvent($event) as $listener) {
             try {
