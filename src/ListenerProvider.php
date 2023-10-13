@@ -73,8 +73,7 @@ final class ListenerProvider implements ListenerProviderInterface
         string $event,
         string $listener,
         int    $priority = 0,
-    ): void
-    {
+    ): void {
         if (!class_exists($event) && !interface_exists($event)) {
             throw new EventNotFoundException($event);
         }
@@ -116,7 +115,7 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * @template TListenId of string
      *
-     * @param callable(EventInterface<bool>):void $listener
+     * @param callable(EventInterface<bool>):void     $listener
      * @param class-string<EventInterface<bool>>|null $event
      *
      * @throws ExceptionInterface
@@ -130,8 +129,7 @@ final class ListenerProvider implements ListenerProviderInterface
     public function listen(
         string $listener,
         int    $priority = 0,
-    ): void
-    {
+    ): void {
         if (class_exists($listener) && !method_exists($listener, '__invoke')) {
             throw new ListenerMissingInvokeMethodException($listener);
         }
@@ -214,8 +212,7 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     private function eventFromReflectionIntersectionOrUnionType(
         ReflectionIntersectionType|ReflectionUnionType $reflectionIntersectionOrUnionType
-    ): array
-    {
+    ): array {
 
         return array_reduce(
             $reflectionIntersectionOrUnionType->getTypes(),
