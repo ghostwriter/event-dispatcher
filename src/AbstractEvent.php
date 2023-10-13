@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
+use Ghostwriter\EventDispatcher\Interface\EventInterface;
+
 /**
- * @template TStopped of bool
+ * @template TStopPropagation of bool
  *
- * @implements EventInterface<TStopped>
+ * @implements EventInterface<TStopPropagation>
  */
 abstract class AbstractEvent implements EventInterface
 {
     private bool $stopped = false;
 
-    public function isStopped(): bool
+    public function isPropagationStopped(): bool
     {
         return $this->stopped;
     }
@@ -21,7 +23,7 @@ abstract class AbstractEvent implements EventInterface
     /**
      * @psalm-this-out self<true>
      */
-    public function stop(): void
+    public function stopPropagation(): void
     {
         $this->stopped = true;
     }
