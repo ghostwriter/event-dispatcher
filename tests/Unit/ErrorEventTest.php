@@ -4,26 +4,27 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
+use Closure;
 use Ghostwriter\EventDispatcher\AbstractEvent;
 use Ghostwriter\EventDispatcher\Dispatcher;
-use Ghostwriter\EventDispatcher\DispatcherInterface;
-use Ghostwriter\EventDispatcher\Event\ErrorEvent;
-use Ghostwriter\EventDispatcher\Event\ErrorEventInterface;
-use Ghostwriter\EventDispatcher\EventInterface;
-use Ghostwriter\EventDispatcher\Listener;
-use Ghostwriter\EventDispatcher\ListenerInterface;
-use Ghostwriter\EventDispatcher\Provider;
-use Ghostwriter\EventDispatcher\ProviderInterface;
+use Ghostwriter\EventDispatcher\ErrorEvent;
+use Ghostwriter\EventDispatcher\Interface\DispatcherInterface;
+use Ghostwriter\EventDispatcher\Interface\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Interface\EventInterface;
+use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
+use Ghostwriter\EventDispatcher\ListenerProvider;
+use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\ErrorEventListener;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use RuntimeException;
+use Throwable;
 
 #[CoversClass(AbstractEvent::class)]
 #[CoversClass(Dispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
-#[CoversClass(Provider::class)]
-#[CoversClass(Listener::class)]
+#[CoversClass(ListenerProvider::class)]
 final class ErrorEventTest extends PHPUnitTestCase
 {
     /**
@@ -40,60 +41,51 @@ final class ErrorEventTest extends PHPUnitTestCase
 
     private ErrorEventInterface $errorEvent;
 
-    private ListenerInterface $listener;
+    private Closure $listener;
 
-    private ProviderInterface $provider;
+    private ListenerProviderInterface $provider;
 
     private TestEvent $testEvent;
 
-    private \Throwable $throwable;
+    private Throwable $throwable;
 
     protected function setUp(): void
     {
         $this->testEvent = new TestEvent();
-        $this->throwable = new \RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
-        $this->provider = new Provider();
+        $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
+        $this->provider = new ListenerProvider();
         $this->dispatcher = new Dispatcher();
-        $this->listener = Listener::fromInvokableClass(TestEventListener::class);
+        $this->listener = ([new TestEventListener(), '__invoke'])(...);
 
         $this->errorEvent = new ErrorEvent($this->testEvent, $this->listener, $this->throwable);
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function testErrorEventComposesEventListenerAndThrowable(): void
     {
-        static::assertSame($this->testEvent, $this->errorEvent->getEvent());
-        static::assertSame($this->listener, $this->errorEvent->getListener());
-        static::assertSame($this->throwable, $this->errorEvent->getThrowable());
+        self::assertSame($this->testEvent, $this->errorEvent->getEvent());
+        self::assertSame($this->listener, $this->errorEvent->getListener());
+        self::assertSame($this->throwable, $this->errorEvent->getThrowable());
 
-        static::assertSame(self::ERROR_MESSAGE, $this->errorEvent->getThrowable()->getMessage());
-        static::assertSame(self::ERROR_CODE, $this->errorEvent->getThrowable()->getCode());
+        self::assertSame(self::ERROR_MESSAGE, $this->errorEvent->getThrowable()->getMessage());
+        self::assertSame(self::ERROR_CODE, $this->errorEvent->getThrowable()->getCode());
 
-        /** @var \Closure(EventInterface<bool>):never */
-        $errorEventListener = static function (ErrorEvent $event): never {
-            // Raise an exception
-            throw new \RuntimeException($event::class);
-        };
-
-        $this->provider->listen($errorEventListener);
+        $this->provider->listen(ErrorEventListener::class);
 
         $this->dispatcher = new Dispatcher($this->provider);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(self::ERROR_MESSAGE);
         $this->expectExceptionCode(self::ERROR_CODE);
 
-        static::assertSame($this->errorEvent, $this->dispatcher->dispatch($this->errorEvent));
-        static::assertSame($this->throwable, $this->errorEvent->getThrowable());
-        static::assertSame(self::ERROR_MESSAGE, $this->errorEvent->getThrowable()->getMessage());
-        static::assertSame(self::ERROR_CODE, $this->errorEvent->getThrowable()->getCode());
+        $this->dispatcher->dispatch($this->errorEvent);
     }
 
     public function testErrorEventImplementsErrorEventInterface(): void
     {
-        static::assertInstanceOf(ErrorEventInterface::class, $this->errorEvent);
-        static::assertInstanceOf(EventInterface::class, $this->errorEvent);
+        self::assertInstanceOf(ErrorEventInterface::class, $this->errorEvent);
+        self::assertInstanceOf(EventInterface::class, $this->errorEvent);
     }
 }
