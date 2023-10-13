@@ -7,15 +7,17 @@ namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 use Ghostwriter\EventDispatcher\AbstractEvent;
 
 /**
- * @template TStopped of bool
+ * @template TStopPropagation of bool
  *
- * @extends AbstractEvent<TStopped>
+ * @extends AbstractEvent<TStopPropagation>
  *
- * @implements TestEventInterface<TStopped>
+ * @implements TestEventInterface<TStopPropagation>
  */
 final class TestEvent extends AbstractEvent implements TestEventInterface
 {
-    /** @var array<array-key,string> */
+    /**
+     * @var array<array-key,string>
+     */
     private array $events = [];
 
     public function count(): int
