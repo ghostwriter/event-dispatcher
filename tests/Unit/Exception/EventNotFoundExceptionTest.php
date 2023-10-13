@@ -14,11 +14,12 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ListenerProvider::class)]
 final class EventNotFoundExceptionTest extends TestCase
 {
-    public function testThrowsEventNotFoundException(): void {
+    public function testThrowsEventNotFoundException(): void
+    {
         $provider = new ListenerProvider();
 
         $this->expectException(EventNotFoundException::class);
 
-        $provider->bind('does-not-exist',TestEventListener::class);
+        $provider->bind('does-not-exist', TestEventListener::class);
     }
 }
