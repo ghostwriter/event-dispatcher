@@ -9,32 +9,26 @@ use Generator;
 interface ListenerProviderInterface
 {
     /**
-     * @template TBind of class-string|callable-string
-     *
      * @param class-string<EventInterface<bool>> $event
-     * @param TBind $listener
-     *
-     * @return TBind
+     * @param class-string|callable-string       $listener
      *
      * @throws ExceptionInterface
      */
-    public function bind(string $event, string $listener, int $priority = 0): string;
+    public function bind(string $event, string $listener, int $priority = 0): void;
+
+    /**
+     * @param class-string|callable-string $listener
+     *
+     * @throws ExceptionInterface
+     */
+    public function listen(string $listener, int $priority = 0): void;
 
     /**
      * @template TListener of class-string|callable-string
      *
-     * @param TListener $listener
-
-     * @return TListener
-     *
-     * @throws ExceptionInterface
-     */
-    public function listen(string $listener, int $priority = 0): string;
-
-    /**
      * @param EventInterface<bool> $event
      *
-     * @return Generator<ListenerInterface>
+     * @return Generator<TListener):void>
      */
     public function getListenersForEvent(EventInterface $event): Generator;
 
