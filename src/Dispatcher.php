@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
-use Ghostwriter\Container\Container;
 use Ghostwriter\EventDispatcher\Interface\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
@@ -33,12 +32,9 @@ final readonly class Dispatcher implements DispatcherInterface
 
         $isErrorEvent = $event instanceof ErrorEventInterface;
 
-        /**
-         * @var callable(EventInterface<bool>):void $listener
-         */
         foreach ($this->provider->getListenersForEvent($event) as $listener) {
             try {
-                Container::getInstance()->call($listener, [$event]);
+                $listener($event);
 
                 if (!$event->isPropagationStopped()) {
                     continue;
