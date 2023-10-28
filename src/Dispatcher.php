@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
+use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\Interface\DispatcherInterface;
-use Ghostwriter\EventDispatcher\Interface\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Throwable;
