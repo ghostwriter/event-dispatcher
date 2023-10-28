@@ -5,23 +5,23 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
 use Closure;
-use Ghostwriter\EventDispatcher\AbstractEvent;
 use Ghostwriter\EventDispatcher\Dispatcher;
-use Ghostwriter\EventDispatcher\ErrorEvent;
+use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\Interface\DispatcherInterface;
-use Ghostwriter\EventDispatcher\Interface\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\ErrorEventListener;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
+use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use RuntimeException;
 use Throwable;
 
-#[CoversClass(AbstractEvent::class)]
+#[CoversClass(EventTrait::class)]
 #[CoversClass(Dispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
@@ -41,7 +41,10 @@ final class ErrorEventTest extends PHPUnitTestCase
 
     private ErrorEventInterface $errorEvent;
 
-    private Closure $listener;
+    /**
+     * @var callable(EventInterface<bool>):void $listener
+     */
+    private mixed $listener;
 
     private ListenerProviderInterface $provider;
 
@@ -56,7 +59,6 @@ final class ErrorEventTest extends PHPUnitTestCase
         $this->provider = new ListenerProvider();
         $this->dispatcher = new Dispatcher();
         $this->listener = ([new TestEventListener(), '__invoke'])(...);
-
         $this->errorEvent = new ErrorEvent($this->testEvent, $this->listener, $this->throwable);
     }
 

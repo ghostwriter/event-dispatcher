@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Tests\Unit;
 
 use Generator;
-use Ghostwriter\EventDispatcher\AbstractEvent;
 use Ghostwriter\EventDispatcher\Dispatcher;
-use Ghostwriter\EventDispatcher\ErrorEvent;
+use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\Interface\DispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\AlreadyStoppedEventCallsNoListener;
 use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\BlackLivesMatterListener;
-use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\ReturnsEventWithoutResolvingListenersIfPropagationIsStoppedListener;
 use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\LogTestEventRaiseAnExceptionListener;
+use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\ReturnsEventWithoutResolvingListenersIfPropagationIsStoppedListener;
 use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\TestEventRaiseAnExceptionListener;
 use Ghostwriter\EventDispatcher\Tests\Fixture\Subscriber\TestEventSubscriber;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventInterface;
+use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Small;
@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Throwable;
 
-#[CoversClass(AbstractEvent::class)]
+#[CoversClass(EventTrait::class)]
 #[CoversClass(Dispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
@@ -60,10 +60,15 @@ final class DispatcherTest extends TestCase
     public static function eventDataProvider(): Generator
     {
         yield EventInterface::class => [
-            new /**
- * @extends AbstractEvent<bool>
-*/ class() extends AbstractEvent {
-},
+
+            /**
+             * @template TStop of bool
+             * @implements EventInterface<TStop>
+             */
+            new class() implements EventInterface {
+                /** @use EventTrait<TStop> */
+                use EventTrait;
+            },
         ];
 
         yield ErrorEvent::class => [

@@ -26,7 +26,6 @@ use PHPUnit\Framework\TestCase;
 use Throwable;
 
 #[CoversClass(ListenerProvider::class)]
-#[IgnoreMethodForCodeCoverage(ListenerProvider::class, 'createReflectionFunction')]
 #[Small]
 final class ListenerProviderTest extends TestCase
 {
@@ -45,24 +44,11 @@ final class ListenerProviderTest extends TestCase
     /**
      * @return Generator<string,list{0:callable|callable-string|Closure,1?:0,2?:string}>
      */
-    public static function supportedListenersDataProvider(): iterable
+    public static function supportedListenersDataProvider(): Generator
     {
         yield from [
-        //            'AnonymousFunctionListenerMissingClosureParamType' => [
-        //                static fn (EventInterface $event) => \assert(TestEvent::class === $event::class),
-        //                self::PRIORITY,
-        //                TestEvent::class,
-        //            ],
-        //            'AnonymousFunctionListener' => [
-        //                static function (TestEvent $testEvent): void {
-        //                    $testEvent->write($testEvent::class);
-        //                },
-        //            ],
             'FunctionListener' => ['Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction'],
             'StaticMethodListener' => [TestEventListener::class . '::onStatic'],
-        //            'CallableArrayStaticMethodListener' => [[TestEventListener::class, 'onStaticCallableArray']],
-        //            'CallableArrayInstanceListener' => [[new TestEventListener(), 'onTest']],
-        //            'InvokableListener' => [new TestEventListener()],
             'InvokableClass' => [TestEventListener::class],
         ];
     }
@@ -93,7 +79,7 @@ final class ListenerProviderTest extends TestCase
         $listeners = $this->provider->getListenersForEvent($testEvent);
 
         foreach ($listeners as $listener) {
-            Container::getInstance()->call($listener, [$testEvent]);
+            $listener($testEvent);
         }
 
         self::assertSame(TestEventListener::class . '::__invoke', $testEvent->read());
@@ -104,7 +90,7 @@ final class ListenerProviderTest extends TestCase
     }
 
     /**
-     * @param class-string<EventInterface>|null $event
+     * @param callable-string|class-string $listener
      */
     #[DataProvider('supportedListenersDataProvider')]
     public function testProviderDetectsEventType(
