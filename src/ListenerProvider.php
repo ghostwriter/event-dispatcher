@@ -54,9 +54,8 @@ final class ListenerProvider implements ListenerProviderInterface
     ];
 
     /**
-     * @template TBind of class-string|callable-string
-     *
      * @param class-string<EventInterface<bool>> $event
+     * @param class-string|callable-string $listener
      *
      * @throws ExceptionInterface
      * @throws EventMustImplementEventInterfaceException
@@ -101,13 +100,10 @@ final class ListenerProvider implements ListenerProviderInterface
             throw new ListenerAlreadyExistsException($listener);
         }
 
-        //        /**
-        //         * @var callable(EventInterface<bool>):void $callable
-        //         */
-        //        $callable = is_callable($listener) ? $listener : Container::getInstance()->get($listener);
+        /** @var callable(EventInterface<bool>):void $callable */
+        $callable = Container::getInstance()->get($listener);
 
-        $map[self::LISTENERS][$event][$priority][$listener] = $listener;
-        //        $map[self::LISTENERS][$event][$priority][$listener] = $callable;
+        $map[self::LISTENERS][$event][$priority][$listener] = $callable;
 
         krsort($map[self::LISTENERS][$event], SORT_NUMERIC);
     }
@@ -115,8 +111,9 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * @template TListenId of string
      *
-     * @param callable(EventInterface<bool>):void     $listener
-     * @param class-string<EventInterface<bool>>|null $event
+     * class-string param can only target to named or callable objects in docblock, what about function/callables?
+     *
+     * @param class-string|callable-string $listener
      *
      * @throws ExceptionInterface
      * @throws EventNotFoundException
@@ -152,14 +149,14 @@ final class ListenerProvider implements ListenerProviderInterface
                 throw new ListenerAlreadyExistsException($listener);
             }
 
-            // $map[self::LISTENERS][$event][$priority][$listener] = $callable;
-            $map[self::LISTENERS][$event][$priority][$listener] = $listener;
+            $this->map[self::LISTENERS][$event][$priority][$listener] = $callable;
 
-            krsort($map[self::LISTENERS][$event], SORT_NUMERIC);
+            krsort($this->map[self::LISTENERS][$event], SORT_NUMERIC);
         }
     }
 
 
+    /** @throws FailedToDetermineEventTypeException */
     private function createReflectionFunction(Closure $closure): ReflectionFunction
     {
         try {
@@ -172,11 +169,13 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param Closure(EventInterface<bool>):void $listener
+     * @param Closure(EventInterface<bool>):void $closure
      *
-     * @return Generator<class-string<EventInterface<bool>>> events
+     * @return Generator<class-string<EventInterface<bool>>>
      *
-     * @throws Throwable
+     * @throws MissingEventParameterException
+     * @throws MissingParameterTypeDeclarationException
+     * @throws FailedToDetermineEventTypeException
      */
     private function resolveEvents(Closure $closure): Generator
     {
@@ -190,18 +189,30 @@ final class ListenerProvider implements ListenerProviderInterface
         foreach ($parameters as $parameter) {
             $reflectionType = $parameter->getType();
 
+            if ($reflectionType === null) {
+                throw new MissingParameterTypeDeclarationException($parameter->getName());
+            }
+
+            if ($reflectionType instanceof ReflectionNamedType)
+            {
+                /** @var class-string<EventInterface<bool>> $name */
+                $name = $reflectionType->getName();
+
+                yield $name;
+
+                break;
+            }
+
             /**
-             * @return Generator<class-string<EventInterface<bool>>>
+             * @var Generator<class-string<EventInterface<bool>>> $events
              */
-            yield from match (true) {
-                $reflectionType === null => throw new MissingParameterTypeDeclarationException($parameter->getName()),
-                default => match (true) {
-                    $reflectionType instanceof ReflectionIntersectionType,
-                        $reflectionType instanceof ReflectionUnionType => $this->eventFromReflectionIntersectionOrUnionType($reflectionType),
-                    $reflectionType instanceof ReflectionNamedType => [$reflectionType->getName()],
-                    default => throw new FailedToDetermineEventTypeException((string)$reflectionType),
-                },
+            $events = match (true) {
+                $reflectionType instanceof ReflectionIntersectionType,
+                    $reflectionType instanceof ReflectionUnionType => $this->eventFromReflectionIntersectionOrUnionType($reflectionType),
+                default => throw new FailedToDetermineEventTypeException((string)$reflectionType),
             };
+
+            yield from $events;
 
             break;
         }
@@ -218,14 +229,14 @@ final class ListenerProvider implements ListenerProviderInterface
             $reflectionIntersectionOrUnionType->getTypes(),
             /**
              * @param array<class-string<EventInterface<bool>>> $events
+             * @return array<class-string<EventInterface<bool>>>
              */
             static function (array $events, ReflectionType $reflectionType): array {
                 if ($reflectionType instanceof ReflectionNamedType) {
-                    $events[] =
-                        /**
-                         * @var class-string<EventInterface<bool>> $reflectionType- >getName()
-                         */
-                        $reflectionType->getName();
+                    /** @var class-string<EventInterface<bool>> $name */
+                    $name = $reflectionType->getName();
+
+                    $events[] = $name;
                 }
 
                 /**
@@ -240,7 +251,7 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * @param EventInterface<bool> $event
      *
-     * @return Generator<int,(callable(EventInterface<bool>):void),mixed,void>
+     * @return Generator<callable(EventInterface<bool>):void>
      */
     public function getListenersForEvent(EventInterface $event): Generator
     {
@@ -250,10 +261,6 @@ final class ListenerProvider implements ListenerProviderInterface
             }
 
             foreach ($priorities as $priority) {
-                /**
-                 * @template TListener of class-string|callable-string
-                 * @var      TListener $listener
-                 */
                 foreach ($priority as $listener) {
                     yield $listener;
                 }
@@ -262,9 +269,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @template TRemove of class-string|callable-string|non-empty-string
-     *
-     * @param TRemove $listenerId
+     * @param class-string|callable-string $listenerId
      *
      * @throws ListenerNotFoundException
      */
