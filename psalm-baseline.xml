@@ -1,2 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352" />
+<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
+  <file src="src/ListenerProvider.php">
+    <LessSpecificReturnType>
+      <code><![CDATA[Generator<class-string<EventInterface<bool>>>]]></code>
+    </LessSpecificReturnType>
+  </file>
+  <file src="tests/Unit/DispatcherTest.php">
+    <InvalidArgument>
+      <code><![CDATA[new ErrorEvent(
+                new TestEvent(),
+                static fn (EventInterface $event): mixed => $event,
+                new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
+            )]]></code>
+    </InvalidArgument>
+    <InvalidTemplateParam>
+      <code>EventTrait</code>
+    </InvalidTemplateParam>
+    <MissingTemplateParam>
+      <code>EventInterface</code>
+    </MissingTemplateParam>
+    <PossiblyUndefinedMethod>
+      <code>read</code>
+    </PossiblyUndefinedMethod>
+    <UndefinedDocblockClass>
+      <code>class() implements EventInterface {</code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="tests/Unit/ErrorEventTest.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$this->listener]]></code>
+    </ArgumentTypeCoercion>
+    <InvalidArgument>
+      <code><![CDATA[new ErrorEvent($this->testEvent, $this->listener, $this->throwable)]]></code>
+    </InvalidArgument>
+    <PropertyTypeCoercion>
+      <code><![CDATA[([new TestEventListener(), '__invoke'])(...)]]></code>
+    </PropertyTypeCoercion>
+  </file>
+  <file src="tests/Unit/Exception/EventMustImplementEventInterfaceExceptionTest.php">
+    <InvalidArgument>
+      <code>stdClass::class</code>
+    </InvalidArgument>
+  </file>
+  <file src="tests/Unit/Exception/EventNotFoundExceptionTest.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA['does-not-exist']]></code>
+    </ArgumentTypeCoercion>
+    <UndefinedClass>
+      <code><![CDATA['does-not-exist']]></code>
+    </UndefinedClass>
+  </file>
+  <file src="tests/Unit/Exception/ListenerNotFoundExceptionTest.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA['NonExistTestEventListener']]></code>
+    </ArgumentTypeCoercion>
+  </file>
+  <file src="tests/Unit/Exception/SubscriberMustImplementSubscriberInterfaceExceptionTest.php">
+    <InvalidArgument>
+      <code>InvalidTestEventSubscriber::class</code>
+    </InvalidArgument>
+  </file>
+</files>
