@@ -24,18 +24,16 @@ interface ListenerProviderInterface
     public function listen(string $listener, int $priority = 0): void;
 
     /**
-     * @template TListener of class-string|callable-string
-     *
      * @param EventInterface<bool> $event
      *
-     * @return Generator<TListener):void>
+     * @return Generator<callable(EventInterface<bool>):void>
      */
     public function getListenersForEvent(EventInterface $event): Generator;
 
     /**
-     * @template TRemove of class-string|callable-string|non-empty-string
+     * @param class-string|callable-string $listenerId
      *
-     * @param TRemove $listenerId
+     * @throws ExceptionInterface
      */
     public function remove(string $listenerId): void;
 
