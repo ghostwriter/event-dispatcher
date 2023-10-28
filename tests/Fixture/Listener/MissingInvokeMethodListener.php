@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture\Listener;
 
-use Ghostwriter\EventDispatcher\ErrorEvent;
+use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 
 final class MissingInvokeMethodListener
 {

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\AbstractEvent;
+use Ghostwriter\EventDispatcher\Trait\EventTrait;
 
 /**
  * @template TStopPropagation of bool
- *
- * @extends AbstractEvent<TStopPropagation>
- *
  * @implements TestEventInterface<TStopPropagation>
  */
-final class TestEvent extends AbstractEvent implements TestEventInterface
+final class TestEvent implements TestEventInterface
 {
+    /** @use EventTrait<TStopPropagation> */
+    use EventTrait;
+
     /**
      * @var array<array-key,string>
      */
