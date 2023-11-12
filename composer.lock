@@ -4,32 +4,33 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9957146af6248f82624a82ae90000591",
+    "content-hash": "63736044b49a400557bb84aa4da0fcc0",
     "packages": [
         {
             "name": "ghostwriter/container",
-            "version": "1.6.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/container.git",
-                "reference": "22e64b70e3163eeda2506c06144cad2bef86e36c"
+                "reference": "b456318e7b8b77245f8314d46fc87f7665e0b950"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/container/zipball/22e64b70e3163eeda2506c06144cad2bef86e36c",
-                "reference": "22e64b70e3163eeda2506c06144cad2bef86e36c",
+                "url": "https://api.github.com/repos/ghostwriter/container/zipball/b456318e7b8b77245f8314d46fc87f7665e0b950",
+                "reference": "b456318e7b8b77245f8314d46fc87f7665e0b950",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1,<8.4"
+                "php": ">=8.2"
             },
             "require-dev": {
-                "ghostwriter/coding-standard": "dev-main"
+                "ghostwriter/coding-standard": "dev-main",
+                "ghostwriter/psalm-plugin": "^0 || ^0.3 || ^1.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Ghostwriter\\Container\\": "src/"
+                    "Ghostwriter\\Container\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -44,7 +45,7 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Provides an extensible Dependency Injection Service Container.",
+            "description": "Provides an extensible Dependency Injection Service Container for Automated Object Composition, Interception, and Lifetime Management.",
             "homepage": "https://github.com/ghostwriter/container",
             "keywords": [
                 "container",
@@ -52,7 +53,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ghostwriter/container/issues",
-                "source": "https://github.com/ghostwriter/container/tree/1.6.0"
+                "source": "https://github.com/ghostwriter/container/tree/2.0.0"
             },
             "funding": [
                 {
@@ -60,7 +61,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-26T13:24:57+00:00"
+            "time": "2023-11-12T22:55:48+00:00"
         }
     ],
     "packages-dev": [
@@ -700,12 +701,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "9b51ddbb39be7c0229b7f76584dae04b48cdd8aa"
+                "reference": "4acc16da575a669f610cb53d8cc1cfb291457eb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/9b51ddbb39be7c0229b7f76584dae04b48cdd8aa",
-                "reference": "9b51ddbb39be7c0229b7f76584dae04b48cdd8aa",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/4acc16da575a669f610cb53d8cc1cfb291457eb7",
+                "reference": "4acc16da575a669f610cb53d8cc1cfb291457eb7",
                 "shasum": ""
             },
             "require": {
@@ -758,7 +759,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-10-12T13:26:12+00:00"
+            "time": "2023-11-10T15:19:49+00:00"
         },
         {
             "name": "ghostwriter/psalm-plugin",
@@ -2768,16 +2769,16 @@
         },
         {
             "name": "spatie/array-to-xml",
-            "version": "3.2.0",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/array-to-xml.git",
-                "reference": "f9ab39c808500c347d5a8b6b13310bd5221e39e7"
+                "reference": "84a404e5b67dd21466a0ff47d335129d67b94029"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/array-to-xml/zipball/f9ab39c808500c347d5a8b6b13310bd5221e39e7",
-                "reference": "f9ab39c808500c347d5a8b6b13310bd5221e39e7",
+                "url": "https://api.github.com/repos/spatie/array-to-xml/zipball/84a404e5b67dd21466a0ff47d335129d67b94029",
+                "reference": "84a404e5b67dd21466a0ff47d335129d67b94029",
                 "shasum": ""
             },
             "require": {
@@ -2815,7 +2816,7 @@
                 "xml"
             ],
             "support": {
-                "source": "https://github.com/spatie/array-to-xml/tree/3.2.0"
+                "source": "https://github.com/spatie/array-to-xml/tree/3.2.1"
             },
             "funding": [
                 {
@@ -2827,20 +2828,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-19T18:30:26+00:00"
+            "time": "2023-11-08T08:19:46+00:00"
         },
         {
             "name": "symfony/console",
-            "version": "v6.3.4",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "eca495f2ee845130855ddf1cf18460c38966c8b6"
+                "reference": "0d14a9f6d04d4ac38a8cea1171f4554e325dae92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/eca495f2ee845130855ddf1cf18460c38966c8b6",
-                "reference": "eca495f2ee845130855ddf1cf18460c38966c8b6",
+                "url": "https://api.github.com/repos/symfony/console/zipball/0d14a9f6d04d4ac38a8cea1171f4554e325dae92",
+                "reference": "0d14a9f6d04d4ac38a8cea1171f4554e325dae92",
                 "shasum": ""
             },
             "require": {
@@ -2901,7 +2902,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v6.3.4"
+                "source": "https://github.com/symfony/console/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -2917,7 +2918,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-16T10:10:12+00:00"
+            "time": "2023-10-31T08:09:35+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -3463,16 +3464,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v6.3.5",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "13d76d0fb049051ed12a04bef4f9de8715bea339"
+                "reference": "13880a87790c76ef994c91e87efb96134522577a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/13d76d0fb049051ed12a04bef4f9de8715bea339",
-                "reference": "13d76d0fb049051ed12a04bef4f9de8715bea339",
+                "url": "https://api.github.com/repos/symfony/string/zipball/13880a87790c76ef994c91e87efb96134522577a",
+                "reference": "13880a87790c76ef994c91e87efb96134522577a",
                 "shasum": ""
             },
             "require": {
@@ -3529,7 +3530,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v6.3.5"
+                "source": "https://github.com/symfony/string/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -3545,7 +3546,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-18T10:38:32+00:00"
+            "time": "2023-11-09T08:28:21+00:00"
         },
         {
             "name": "theseer/tokenizer",
