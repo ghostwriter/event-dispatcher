@@ -7,6 +7,7 @@ namespace Ghostwriter\EventDispatcher;
 use Closure;
 use Generator;
 use Ghostwriter\Container\Container;
+use Ghostwriter\Container\Exception\ReflectorException;
 use Ghostwriter\Container\Interface\Exception\NotFoundExceptionInterface as ContainerNotFoundExceptionInterface;
 use Ghostwriter\Container\Interface\ExceptionInterface as ContainerExceptionInterface;
 use Ghostwriter\Container\Reflector;
@@ -169,6 +170,7 @@ final class ListenerProvider implements ListenerProviderInterface
      * @throws MissingEventParameterException
      * @throws MissingParameterTypeDeclarationException
      * @throws FailedToDetermineEventTypeException
+     * @throws ReflectorException
      */
     private function resolveEvents(Closure $closure): Generator
     {
