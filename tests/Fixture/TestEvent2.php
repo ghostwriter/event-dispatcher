@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\AbstractEvent;
-use Ghostwriter\EventDispatcher\EventInterface;
+use Ghostwriter\EventDispatcher\Trait\EventTrait;
+use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventInterface;
+use Ghostwriter\EventDispatcher\Interface\EventInterface;
 
 /**
- * @template TStopped of bool
- *
- * @extends AbstractEvent<TStopped>
- *
- * @implements EventInterface<TStopped>
+ * @template TStopPropagation of bool
+ * @implements EventInterface<TStopPropagation>
  */
-final class TestEvent2 extends AbstractEvent implements EventInterface
+final class TestEvent2 implements EventInterface
 {
+    /** @use EventTrait<TStopPropagation> */
+    use EventTrait;
 }

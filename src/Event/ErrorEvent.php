@@ -4,43 +4,47 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Event;
 
-use Ghostwriter\EventDispatcher\AbstractEvent;
-use Ghostwriter\EventDispatcher\EventInterface;
-use Ghostwriter\EventDispatcher\ListenerInterface;
+use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Interface\EventInterface;
+use Ghostwriter\EventDispatcher\Trait\EventTrait;
+use Throwable;
 
 /**
- * @template TStopped of bool
- *
- * @extends AbstractEvent<TStopped>
- *
- * @implements ErrorEventInterface<TStopped>
+ * @template TStopPropagation of bool
+ * @implements ErrorEventInterface<TStopPropagation>
  */
-final class ErrorEvent extends AbstractEvent implements ErrorEventInterface
+final class ErrorEvent implements ErrorEventInterface
 {
+    /** @use EventTrait<TStopPropagation> */
+    use EventTrait;
     /**
-     * @param EventInterface<bool> $event
+     * @param EventInterface<TStopPropagation> $event
+     * @param callable(EventInterface<TStopPropagation>): void $listener
      */
     public function __construct(
         private readonly EventInterface $event,
-        private readonly ListenerInterface $listener,
-        private readonly \Throwable $throwable
+        private readonly mixed $listener,
+        private readonly Throwable $throwable
     ) {
     }
 
     /**
-     * @return EventInterface<bool>
+     * @return EventInterface<TStopPropagation>
      */
     public function getEvent(): EventInterface
     {
         return $this->event;
     }
 
-    public function getListener(): ListenerInterface
+    /**
+     * @return callable(EventInterface<TStopPropagation>): void
+     */
+    public function getListener(): mixed
     {
         return $this->listener;
     }
 
-    public function getThrowable(): \Throwable
+    public function getThrowable(): Throwable
     {
         return $this->throwable;
     }

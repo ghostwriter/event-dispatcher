@@ -14,9 +14,10 @@ use Ghostwriter\EventDispatcher\Exception\MissingEventParameterException;
 use Ghostwriter\EventDispatcher\Exception\MissingParameterTypeDeclarationException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberAlreadyRegisteredException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
-use Ghostwriter\EventDispatcher\ExceptionInterface;
+use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 #[CoversClass(EventMustImplementEventInterfaceException::class)]
 #[CoversClass(EventNotFoundException::class)]
@@ -31,7 +32,7 @@ use PHPUnit\Framework\TestCase;
 final class ExceptionsTest extends TestCase
 {
     /**
-     * @var array<class-string<\Throwable>>
+     * @var array<class-string<Throwable>>
      */
     public const EXCEPTIONS = [
         EventMustImplementEventInterfaceException::class,
@@ -49,7 +50,10 @@ final class ExceptionsTest extends TestCase
     public function testExceptionsImplementExceptionInterface(): void
     {
         foreach (self::EXCEPTIONS as $exception) {
-            static::assertTrue(is_a($exception, ExceptionInterface::class, true));
+            self::assertTrue(
+                is_a($exception, ExceptionInterface::class, true),
+                sprintf('Exception "%s" does not implement "%s"', $exception, ExceptionInterface::class)
+            );
         }
     }
 }

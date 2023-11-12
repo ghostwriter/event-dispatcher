@@ -26,20 +26,26 @@ Registering and dispatching an Event Listener.
 ```php
 use Ghostwriter\EventDispatcher\AbstractEvent;
 use Ghostwriter\EventDispatcher\Dispatcher;
-use Ghostwriter\EventDispatcher\Provider;
+use Ghostwriter\EventDispatcher\ListenerProvider;
 
 final class ExampleEvent extends AbstractEvent
 {
 }
 
-$listener = function (ExampleEvent $event) : void {
-    // do something
-};
+final class ExampleEventListener
+{
+    public function __invoke(ExampleEvent $event): void
+    {
+        // ... print $event::class;
+    }
+}
 
-$provider = new Provider();
-$provider->listen($listener)
+$provider = new ListenerProvider();
+
+$provider->listen(ExampleEventListener::class)
 
 $dispatcher = new Dispatcher($provider);
+
 $dispatcher->dispatch(new ExampleEvent());
 ```
 
@@ -48,67 +54,58 @@ $dispatcher->dispatch(new ExampleEvent());
 Registering an Event Subscriber.
 
 ```php
-use Ghostwriter\EventDispatcher\SubscriberInterface;
+use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
+use Ghostwriter\EventDispatcher\Interface\SubscriberInterface;
 
 final class EventSubscriber implements SubscriberInterface {
     /**
      * @throws Throwable
      */
-    public function __invoke(ProviderInterface $provider): void
+    public function __invoke(ListenerProviderInterface $provider): void
     {
         $priority = 0;
+        
+        // InvokableListener '::__invoke'
+        $provider->bind(
+            TestEvent::class, 
+            TestEventListener::class,
+            $priority
+        );
+        // or
+        $provider->listen(
+            TestEventListener::class,
+            $priority
+        );
 
+        // FunctionListener
+        $provider->bind(
+            TestEvent::class, 
+            'Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction',
+            $priority
+        );
+        // or
+        $provider->listen(
+            'Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction', 
+            $priority
+        );
+
+        // StaticMethodListener
         $provider->bind(
             TestEvent::class,
-            TestEventListener::class,
-            $priority,
-            'InvokableListener'
+            TestEventListener::class . '::onStatic',
+            $priority
         );
-
+        // or
         $provider->listen(
-            [new TestEventListener, 'onTest'],
-            $priority,
-            TestEvent::class,
-            'CallableArrayInstanceListener'
-        );
-
-        $provider->listen(
-            static function (TestEventInterface $testEvent): void {
-                $testEvent->write(__METHOD__);
-            },
-            $priority,
-            TestEvent::class,
-            'AnonymousFunctionListener'
-        );
-
-        $provider->listen(
-            'Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction',
-            $priority,
-            TestEvent::class,
-            'FunctionListener'
-        );
-
-        $provider->listen(
-            TestEventListener::class.'::onStatic',
-            $priority,
-            TestEvent::class,
-            'StaticMethodListener'
-        );
-
-        $provider->listen(
-            [TestEventListener::class, 'onStaticCallableArray'],
-            $priority,
-            TestEvent::class,
-            'CallableArrayStaticMethodListener'
+            TestEventListener::class . '::onStatic',
+            $priority
         );
     }
 }
 
-$subscriber = new EventSubscriber();
+$provider = new ListenerProvider();
 
-$provider = new Provider();
-
-$provider->subscribe($subscriber);
+$provider->subscribe(EventSubscriber::class);
 
 $dispatcher = new EventDispatcher($provider);
 

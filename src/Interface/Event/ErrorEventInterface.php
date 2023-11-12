@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Event;
+namespace Ghostwriter\EventDispatcher\Interface\Event;
 
-use Ghostwriter\EventDispatcher\EventInterface;
-use Ghostwriter\EventDispatcher\ListenerInterface;
 use Throwable;
+use Ghostwriter\EventDispatcher\Interface\EventInterface;
 
 /**
  * An object that contains information about an error triggered by EventInterface handling.
  *
- * @template TStopped of bool
+ * @template TStopPropagation of bool
  *
- * @extends EventInterface<TStopped>
+ * @extends EventInterface<TStopPropagation>
  */
 interface ErrorEventInterface extends EventInterface
 {
@@ -24,11 +23,13 @@ interface ErrorEventInterface extends EventInterface
 
     /**
      * Returns the callable from which the exception or error was generated.
+     *
+     * @return callable(EventInterface<TStopPropagation>): void
      */
-    public function getListener(): ListenerInterface;
+    public function getListener(): mixed;
 
     /**
      * Returns the throwable (ExceptionInterface or ErrorInterface) that triggered this error condition.
      */
-    public function getThrowable(): \Throwable;
+    public function getThrowable(): Throwable;
 }

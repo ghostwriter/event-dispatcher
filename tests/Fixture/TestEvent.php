@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\AbstractEvent;
+use Ghostwriter\EventDispatcher\Trait\EventTrait;
 
 /**
- * @template TStopped of bool
- *
- * @extends AbstractEvent<TStopped>
- *
- * @implements TestEventInterface<TStopped>
+ * @template TStopPropagation of bool
+ * @implements TestEventInterface<TStopPropagation>
  */
-final class TestEvent extends AbstractEvent implements TestEventInterface
+final class TestEvent implements TestEventInterface
 {
-    /** @var array<array-key,string> */
+    /** @use EventTrait<TStopPropagation> */
+    use EventTrait;
+
+    /**
+     * @var array<array-key,string>
+     */
     private array $events = [];
 
     public function count(): int

@@ -30,11 +30,11 @@
     ],
     "require": {
         "php": ">=8.2",
-        "ghostwriter/container": "^1.6"
+        "ghostwriter/container": "^2.0"
     },
     "require-dev": {
         "ghostwriter/coding-standard": "dev-main",
-        "ghostwriter/psalm-plugin": "^0 || ^1.0"
+        "ghostwriter/psalm-plugin": "^0 || ^0.2 || ^1.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

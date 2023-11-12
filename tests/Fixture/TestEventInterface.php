@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\EventInterface;
+use Ghostwriter\EventDispatcher\Interface\EventInterface;
 
 /**
- * @template TStopped of bool
+ * @template TStopPropagation of bool
  *
- * @extends EventInterface<TStopped>
+ * @extends EventInterface<TStopPropagation>
  */
 interface TestEventInterface extends EventInterface
 {
