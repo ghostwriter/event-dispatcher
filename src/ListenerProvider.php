@@ -7,8 +7,9 @@ namespace Ghostwriter\EventDispatcher;
 use Closure;
 use Generator;
 use Ghostwriter\Container\Container;
-use Ghostwriter\Container\Exception\NotFoundExceptionInterface as ContainerNotFoundExceptionInterface;
-use Ghostwriter\Container\ExceptionInterface as ContainerExceptionInterface;
+use Ghostwriter\Container\Interface\Exception\NotFoundExceptionInterface as ContainerNotFoundExceptionInterface;
+use Ghostwriter\Container\Interface\ExceptionInterface as ContainerExceptionInterface;
+use Ghostwriter\Container\Reflector;
 use Ghostwriter\EventDispatcher\Exception\EventMustImplementEventInterfaceException;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
 use Ghostwriter\EventDispatcher\Exception\FailedToDetermineEventTypeException;
@@ -155,17 +156,9 @@ final class ListenerProvider implements ListenerProviderInterface
         }
     }
 
-
-    /** @throws FailedToDetermineEventTypeException */
-    private function createReflectionFunction(Closure $closure): ReflectionFunction
-    {
-        try {
-            $reflectionFunction = new ReflectionFunction($closure);
-        } catch (Throwable $reflectionException) {
-            throw new FailedToDetermineEventTypeException($reflectionException->getMessage());
-        }
-
-        return $reflectionFunction;
+    public function __construct(
+        private readonly Reflector $reflector = new Reflector(),
+    ){
     }
 
     /**
@@ -179,7 +172,7 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     private function resolveEvents(Closure $closure): Generator
     {
-        $reflectionFunction = $this->createReflectionFunction($closure);
+        $reflectionFunction = $this->reflector->reflectFunction($closure);
 
         $parameters = $reflectionFunction->getParameters();
         if ([] === $parameters) {
@@ -313,6 +306,6 @@ final class ListenerProvider implements ListenerProviderInterface
 
         $map[self::SUBSCRIBERS][$subscriber] = true;
 
-        Container::getInstance()->call($subscriber, [$this]);
+        Container::getInstance()->invoke($subscriber, [$this]);
     }
 }
