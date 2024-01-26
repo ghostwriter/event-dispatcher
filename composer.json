@@ -45,7 +45,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Ghostwriter\\EventDispatcher\\Tests\\": "tests"
+            "Ghostwriter\\EventDispatcher\\Tests\\": "tests",
+            "Ghostwriter\\EventDispatcherTests\\": "tests"
         },
         "files": [
             "tests/Fixture/functions.php"
@@ -54,9 +55,6 @@
     "config": {
         "discard-changes": true,
         "optimize-autoloader": true,
-        "platform": {
-            "php": "8.2.999"
-        },
         "preferred-install": "dist",
         "sort-packages": true
     },
