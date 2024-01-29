@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcherTests\Unit;
 
 use Ghostwriter\Container\Container;
-use Ghostwriter\EventDispatcher\AbstractEvent;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
@@ -22,7 +21,6 @@ use Throwable;
 
 use function iterator_to_array;
 
-#[CoversClass(AbstractEvent::class)]
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(EventServiceProvider::class)]
