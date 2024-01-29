@@ -13,11 +13,17 @@ use Ghostwriter\EventDispatcher\Interface\EventInterface;
  */
 trait EventTrait
 {
-    private bool $stopped = false;
+    /**
+     * @var TStopPropagation
+     */
+    private bool $propagationStopped = false;
 
+    /**
+     * @return (TStopPropagation is true ? true : false)
+     */
     final public function isPropagationStopped(): bool
     {
-        return $this->stopped;
+        return $this->propagationStopped;
     }
 
     /**
@@ -25,6 +31,6 @@ trait EventTrait
      */
     final public function stopPropagation(): void
     {
-        $this->stopped = true;
+        $this->propagationStopped = true;
     }
 }
