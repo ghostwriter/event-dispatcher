@@ -2,26 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Tests\Unit\Exception;
+namespace Ghostwriter\EventDispatcherTests\Unit\Exception;
 
+use Ghostwriter\EventDispatcher\Event\ErrorEvent;
+use Ghostwriter\EventDispatcher\EventDispatcher;
+use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\MissingParameterTypeDeclarationException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\MissingParameterTypeDeclarationListener;
+use Ghostwriter\EventDispatcherTests\Fixture\Listener\MissingParameterTypeDeclarationListener;
+use Ghostwriter\EventDispatcherTests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\TestCase;
+use Throwable;
 
-#[CoversClass(MissingParameterTypeDeclarationException::class)]
+#[CoversClass(EventDispatcher::class)]
+#[CoversClass(ErrorEvent::class)]
+#[CoversClass(EventServiceProvider::class)]
 #[CoversClass(ListenerProvider::class)]
-final class MissingParameterTypeDeclarationExceptionTest extends TestCase
+#[CoversClass(MissingParameterTypeDeclarationException::class)]
+final class MissingParameterTypeDeclarationExceptionTest extends AbstractTestCase
 {
-    public function testThrowsMissingParameterTypeDeclarationException(): void
+    /**
+     * @throws Throwable
+     */
+    public function testListen(): void
     {
-        $provider = new ListenerProvider();
-
         $this->expectException(MissingParameterTypeDeclarationException::class);
+        $this->expectExceptionMessage('event');
 
-        $provider->listen(MissingParameterTypeDeclarationListener::class);
+        $this->listenerProvider->listen(MissingParameterTypeDeclarationListener::class);
     }
 }
-
