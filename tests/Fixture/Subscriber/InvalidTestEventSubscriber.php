@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Tests\Fixture\Subscriber;
+namespace Ghostwriter\EventDispatcherTests\Fixture\Subscriber;
 
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
-use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
+use Ghostwriter\EventDispatcherTests\Fixture\TestEventListener;
 use Throwable;
 
 final readonly class InvalidTestEventSubscriber
