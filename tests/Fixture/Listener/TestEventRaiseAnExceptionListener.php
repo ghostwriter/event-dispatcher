@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Tests\Fixture\Listener;
+namespace Ghostwriter\EventDispatcherTests\Fixture\Listener;
 
-use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
+use Ghostwriter\EventDispatcherTests\Fixture\TestEvent;
 
 final class TestEventRaiseAnExceptionListener
 {
