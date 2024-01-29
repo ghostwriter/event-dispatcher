@@ -2,39 +2,43 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Tests\Unit\Exception;
+namespace Ghostwriter\EventDispatcherTests\Unit\Exception;
 
+use Ghostwriter\EventDispatcher\Event\ErrorEvent;
+use Ghostwriter\EventDispatcher\EventDispatcher;
+use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
-use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
+use Ghostwriter\EventDispatcherTests\Fixture\TestEvent;
+use Ghostwriter\EventDispatcherTests\Fixture\TestEventListener;
+use Ghostwriter\EventDispatcherTests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
+use Throwable;
 
+#[CoversClass(EventDispatcher::class)]
+#[CoversClass(ErrorEvent::class)]
+#[CoversClass(EventServiceProvider::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(ListenerAlreadyExistsException::class)]
-final class ListenerAlreadyExistsExceptionTest extends TestCase
+final class ListenerAlreadyExistsExceptionTest extends AbstractTestCase
 {
-    public function testListenThrowsListenerAlreadyExistsException(): void
+    /**
+     * @throws Throwable
+     */
+    public function testBind(): void
     {
-
-        $provider = new ListenerProvider();
-
         $this->expectException(ListenerAlreadyExistsException::class);
 
-        $provider->listen(TestEventListener::class);
-        $provider->listen(TestEventListener::class);
+        $this->bind(TestEvent::class, TestEventListener::class, TestEventListener::class);
     }
 
-    public function testBindThrowsListenerAlreadyExistsException(): void
+    /**
+     * @throws Throwable
+     */
+    public function testListen(): void
     {
-
-        $provider = new ListenerProvider();
-
         $this->expectException(ListenerAlreadyExistsException::class);
 
-        $provider->bind(TestEvent::class, TestEventListener::class);
-        $provider->bind(TestEvent::class, TestEventListener::class);
+        $this->listen(TestEventListener::class, TestEventListener::class);
     }
 }
-
