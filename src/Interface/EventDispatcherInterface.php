@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Interface;
 
-use Throwable;
-
-/**
- * Delegates dispatching an event to one or more dispatchers.
- */
-interface DispatcherInterface
+interface EventDispatcherInterface
 {
     /**
      * Provide all relevant listeners an event to process.
      *
      * @param EventInterface<bool> $event
      *
-     * @return EventInterface<bool>
+     * @throws EventDispatcherExceptionInterface
      *
-     * @throws Throwable
+     * @return EventInterface<bool>
      */
     public function dispatch(EventInterface $event): EventInterface;
 }
