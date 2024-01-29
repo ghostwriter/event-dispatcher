@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Interface\Event;
 
-use Throwable;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
+use Throwable;
 
 /**
  * An object that contains information about an error triggered by EventInterface handling.
@@ -17,19 +17,21 @@ use Ghostwriter\EventDispatcher\Interface\EventInterface;
 interface ErrorEventInterface extends EventInterface
 {
     /**
-     * Returns the event that triggered this error condition.
+     * Returns the event that triggered this error event.
+     *
+     * @return EventInterface<TStopPropagation>
      */
     public function getEvent(): EventInterface;
 
     /**
      * Returns the callable from which the exception or error was generated.
      *
-     * @return callable(EventInterface<TStopPropagation>): void
+     * @return class-string<callable(EventInterface<TStopPropagation>):void&object>
      */
-    public function getListener(): mixed;
+    public function getListener(): string;
 
     /**
-     * Returns the throwable (ExceptionInterface or ErrorInterface) that triggered this error condition.
+     * Returns the throwable that triggered this error event.
      */
     public function getThrowable(): Throwable;
 }
