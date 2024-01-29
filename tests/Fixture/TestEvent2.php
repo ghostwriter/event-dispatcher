@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Tests\Fixture;
+namespace Ghostwriter\EventDispatcherTests\Fixture;
 
 use Ghostwriter\EventDispatcher\Trait\EventTrait;
-use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventInterface;
+use Ghostwriter\EventDispatcherTests\Fixture\TestEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 
 /**
