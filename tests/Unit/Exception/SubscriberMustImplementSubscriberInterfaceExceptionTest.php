@@ -2,21 +2,32 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Tests\Unit\Exception;
+namespace Ghostwriter\EventDispatcherTests\Unit\Exception;
 
+use Ghostwriter\EventDispatcher\Event\ErrorEvent;
+use Ghostwriter\EventDispatcher\EventDispatcher;
+use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Tests\Fixture\Subscriber\InvalidTestEventSubscriber;
+use Ghostwriter\EventDispatcherTests\Fixture\Subscriber\InvalidTestEventSubscriber;
+use Ghostwriter\EventDispatcherTests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\TestCase;
-#[CoversClass(SubscriberMustImplementSubscriberInterfaceException::class)]
+use Throwable;
+
+#[CoversClass(EventDispatcher::class)]
+#[CoversClass(ErrorEvent::class)]
+#[CoversClass(EventServiceProvider::class)]
 #[CoversClass(ListenerProvider::class)]
-final class SubscriberMustImplementSubscriberInterfaceExceptionTest extends TestCase
+#[CoversClass(SubscriberMustImplementSubscriberInterfaceException::class)]
+final class SubscriberMustImplementSubscriberInterfaceExceptionTest extends AbstractTestCase
 {
+    /**
+     * @psalm-suppress InvalidArgument
+     *
+     * @throws Throwable
+     */
     public function testThrowsSubscriberMustImplementSubscriberInterfaceException(): void
     {
-
         $provider = new ListenerProvider();
 
         $this->expectException(SubscriberMustImplementSubscriberInterfaceException::class);
