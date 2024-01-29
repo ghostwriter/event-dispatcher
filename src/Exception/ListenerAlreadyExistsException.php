@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Exception;
 
-use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
+use Ghostwriter\EventDispatcher\Interface\EventDispatcherExceptionInterface;
 use InvalidArgumentException;
 
-final class ListenerAlreadyExistsException extends InvalidArgumentException implements ExceptionInterface
+final class ListenerAlreadyExistsException extends InvalidArgumentException implements EventDispatcherExceptionInterface
 {
 }
