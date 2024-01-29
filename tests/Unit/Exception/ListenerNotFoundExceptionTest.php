@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcherTests\Unit\Exception;
 
-use Ghostwriter\EventDispatcher\AbstractEvent;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
@@ -17,7 +16,6 @@ use Ghostwriter\EventDispatcherTests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
-#[CoversClass(AbstractEvent::class)]
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(EventServiceProvider::class)]
