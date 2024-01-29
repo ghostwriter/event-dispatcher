@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Tests\Fixture;
+namespace Ghostwriter\EventDispatcherTests\Fixture;
+
+use Ghostwriter\EventDispatcher\Interface\EventInterface;
 
 final class TestListener
 {
@@ -16,5 +18,10 @@ final class TestListener
     public function union(TestEvent|TestEvent2 $testEvent): void
     {
         $this->called[] = __METHOD__;
+    }
+
+    public function __invoke(EventInterface $event): void
+    {
+        $this->called[] = $event::class;
     }
 }
