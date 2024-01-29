@@ -2,170 +2,134 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Tests\Unit;
+namespace Ghostwriter\EventDispatcherTests\Unit;
 
-use Closure;
-use Generator;
 use Ghostwriter\Container\Container;
-use Ghostwriter\EventDispatcher\Exception\MissingParameterTypeDeclarationException;
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
-use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
+use Ghostwriter\EventDispatcher\AbstractEvent;
+use Ghostwriter\EventDispatcher\Event\ErrorEvent;
+use Ghostwriter\EventDispatcher\EventDispatcher;
+use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\IntersectionParameterTypeDeclarationListener;
-use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\MissingParameterTypeDeclarationListener;
-use Ghostwriter\EventDispatcher\Tests\Fixture\Listener\UnionParameterTypeDeclarationListener;
-use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent;
-use Ghostwriter\EventDispatcher\Tests\Fixture\TestEvent2;
-use Ghostwriter\EventDispatcher\Tests\Fixture\TestEventListener;
+use Ghostwriter\EventDispatcher\Trait\EventTrait;
+use Ghostwriter\EventDispatcherTests\Fixture\Listener\IntersectionParameterTypeDeclarationListener;
+use Ghostwriter\EventDispatcherTests\Fixture\Listener\UnionParameterTypeDeclarationListener;
+use Ghostwriter\EventDispatcherTests\Fixture\TestEvent;
+use Ghostwriter\EventDispatcherTests\Fixture\TestEvent2;
+use Ghostwriter\EventDispatcherTests\Fixture\TestEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\IgnoreMethodForCodeCoverage;
-use PHPUnit\Framework\Attributes\Small;
-use PHPUnit\Framework\TestCase;
 use Throwable;
 
+use function iterator_to_array;
+
+#[CoversClass(AbstractEvent::class)]
+#[CoversClass(EventDispatcher::class)]
+#[CoversClass(ErrorEvent::class)]
+#[CoversClass(EventServiceProvider::class)]
+#[CoversClass(EventTrait::class)]
 #[CoversClass(ListenerProvider::class)]
-#[Small]
-final class ListenerProviderTest extends TestCase
+final class ListenerProviderTest extends AbstractTestCase
 {
     /**
      * @var int
      */
     private const PRIORITY = 0;
 
-    public ListenerProviderInterface $provider;
-
-    protected function setUp(): void
-    {
-        $this->provider = new ListenerProvider();
-    }
-
-    /**
-     * @return Generator<string,list{0:callable|callable-string|Closure,1?:0,2?:string}>
-     */
-    public static function supportedListenersDataProvider(): Generator
-    {
-        yield from [
-            'FunctionListener' => ['Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction'],
-            'StaticMethodListener' => [TestEventListener::class . '::onStatic'],
-            'InvokableClass' => [TestEventListener::class],
-        ];
-    }
-
     /**
      * @throws Throwable
      */
-    public function testListenRaisesExceptionIfUnableToDetermineEventType(): void
-    {
-        $this->expectException(ExceptionInterface::class);
-        $this->expectException(MissingParameterTypeDeclarationException::class);
-        $this->expectExceptionMessage('event');
-
-        $this->provider->listen(MissingParameterTypeDeclarationListener::class);
-    }
-
     public function testProviderBind(): void
     {
         $testEvent = new TestEvent();
 
         self::assertSame('', $testEvent->read());
 
-        self::assertInstanceOf(ListenerProviderInterface::class, $this->provider);
+        self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
 
+        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
 
-        $this->provider->bind(TestEvent::class, TestEventListener::class);
+        $this->assertListenersCount(1, $testEvent);
 
-        $listeners = $this->provider->getListenersForEvent($testEvent);
+        $container = Container::getInstance();
 
+        $listeners = $this->listenerProvider->getListenersForEvent($testEvent);
         foreach ($listeners as $listener) {
-            $listener($testEvent);
+            $container->invoke($listener, [$testEvent]);
         }
 
         self::assertSame(TestEventListener::class . '::__invoke', $testEvent->read());
 
-        $this->provider->remove(TestEventListener::class);
+        $this->listenerProvider->remove(TestEventListener::class);
 
-        self::assertCount(0, iterator_to_array($this->provider->getListenersForEvent($testEvent)));
+        $this->assertListenersCount(0, $testEvent);
     }
-
-    /**
-     * @param callable-string|class-string $listener
-     */
-    #[DataProvider('supportedListenersDataProvider')]
-    public function testProviderDetectsEventType(
-        string $listener,
-        int $priority = 0,
-    ): void {
-        self::assertInstanceOf(ListenerProviderInterface::class, $this->provider);
-
-        $listeners = iterator_to_array($this->provider->getListenersForEvent(new TestEvent()));
-
-        self::assertCount(0, $listeners);
-
-        $this->provider->listen($listener, $priority);
-
-
-        $listeners = iterator_to_array($this->provider->getListenersForEvent(new TestEvent()));
-
-        self::assertCount(1, $listeners);
-
-        $this->provider->remove($listener);
-
-
-        $listeners = iterator_to_array($this->provider->getListenersForEvent(new TestEvent()));
-        self::assertCount(0, $listeners);
-    }
-
 
     /**
      * @throws Throwable
      */
-    public function testProviderListenToAllEvents(): void
+    public function testProviderDetectsEventType(): void
     {
-        self::assertInstanceOf(ListenerProviderInterface::class, $this->provider);
+        $testEvent = new TestEvent();
 
-        $this->provider->listen(TestEventListener::class);
+        $this->assertListenersCount(0, $testEvent);
 
-        self::assertCount(1, iterator_to_array($this->provider->getListenersForEvent(new TestEvent())));
+        $this->listenerProvider->listen(TestEventListener::class);
 
-        $this->provider->remove(TestEventListener::class);
+        $this->assertListenersCount(1, $testEvent);
 
-        self::assertCount(0, iterator_to_array($this->provider->getListenersForEvent(new TestEvent())));
+        $this->listenerProvider->remove(TestEventListener::class);
+
+        $this->assertListenersCount(0, $testEvent);
     }
 
     public function testProviderDetectsIntersectionTypes(): void
     {
-        $this->provider->listen(IntersectionParameterTypeDeclarationListener::class);
+        $this->listenerProvider->listen(IntersectionParameterTypeDeclarationListener::class);
 
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
-            $listeners = $this->provider->getListenersForEvent($event);
+            $listeners = $this->listenerProvider->getListenersForEvent($event);
             self::assertCount(1, iterator_to_array($listeners));
 
-            $this->provider->remove(IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->remove(IntersectionParameterTypeDeclarationListener::class);
 
-            $listeners = $this->provider->getListenersForEvent($event);
+            $listeners = $this->listenerProvider->getListenersForEvent($event);
             self::assertCount(0, iterator_to_array($listeners));
         }
     }
 
     public function testProviderDetectsUnionTypes(): void
     {
-        $this->provider->listen(UnionParameterTypeDeclarationListener::class);
+        $this->listenerProvider->listen(UnionParameterTypeDeclarationListener::class);
 
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
-            $listeners = $this->provider->getListenersForEvent($event);
+            $listeners = $this->listenerProvider->getListenersForEvent($event);
             self::assertCount(1, iterator_to_array($listeners));
 
-            $this->provider->remove(UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->remove(UnionParameterTypeDeclarationListener::class);
 
-            $listeners = $this->provider->getListenersForEvent($event);
+            $listeners = $this->listenerProvider->getListenersForEvent($event);
             self::assertCount(0, iterator_to_array($listeners));
         }
     }
 
     public function testProviderImplementsProviderInterface(): void
     {
-        self::assertInstanceOf(ListenerProviderInterface::class, $this->provider);
+        self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testProviderListenToAllEvents(): void
+    {
+        self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
+
+        $this->listenerProvider->listen(TestEventListener::class);
+
+        self::assertCount(1, iterator_to_array($this->listenerProvider->getListenersForEvent(new TestEvent())));
+
+        $this->listenerProvider->remove(TestEventListener::class);
+
+        self::assertCount(0, iterator_to_array($this->listenerProvider->getListenersForEvent(new TestEvent())));
     }
 }
