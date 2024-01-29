@@ -2,22 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Tests\Unit\Exception;
+namespace Ghostwriter\EventDispatcherTests\Unit\Exception;
 
+use Ghostwriter\EventDispatcher\Event\ErrorEvent;
+use Ghostwriter\EventDispatcher\EventDispatcher;
+use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\SubscriberAlreadyRegisteredException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Tests\Fixture\Subscriber\TestEventSubscriber;
+use Ghostwriter\EventDispatcherTests\Fixture\Subscriber\TestEventSubscriber;
+use Ghostwriter\EventDispatcherTests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\TestCase;
 
+#[CoversClass(EventDispatcher::class)]
+#[CoversClass(ErrorEvent::class)]
+#[CoversClass(EventServiceProvider::class)]
+#[CoversClass(ListenerProvider::class)]
 #[CoversClass(SubscriberAlreadyRegisteredException::class)]
 #[CoversClass(ListenerProvider::class)]
-final class SubscriberAlreadyRegisteredExceptionTest extends TestCase
+final class SubscriberAlreadyRegisteredExceptionTest extends AbstractTestCase
 {
     public function testThrowsSubscriberAlreadyRegisteredException(): void
     {
-
         $provider = new ListenerProvider();
 
         $this->expectException(SubscriberAlreadyRegisteredException::class);
@@ -26,4 +31,3 @@ final class SubscriberAlreadyRegisteredExceptionTest extends TestCase
         $provider->subscribe(TestEventSubscriber::class);
     }
 }
-
