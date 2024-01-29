@@ -9,38 +9,38 @@ use Generator;
 interface ListenerProviderInterface
 {
     /**
-     * @param class-string<EventInterface<bool>> $event
-     * @param class-string|callable-string       $listener
+     * @param class-string<EventInterface<bool>>                       $event
+     * @param class-string<callable(EventInterface<bool>):void&object> $listener
      *
-     * @throws ExceptionInterface
+     * @throws EventDispatcherExceptionInterface
      */
     public function bind(string $event, string $listener, int $priority = 0): void;
 
     /**
-     * @param class-string|callable-string $listener
-     *
-     * @throws ExceptionInterface
-     */
-    public function listen(string $listener, int $priority = 0): void;
-
-    /**
      * @param EventInterface<bool> $event
      *
-     * @return Generator<callable(EventInterface<bool>):void>
+     * @return Generator<class-string<callable(EventInterface<bool>):void&object>>
      */
     public function getListenersForEvent(EventInterface $event): Generator;
 
     /**
-     * @param class-string|callable-string $listenerId
+     * @param class-string<callable(EventInterface<bool>):void&object> $listener
      *
-     * @throws ExceptionInterface
+     * @throws EventDispatcherExceptionInterface
      */
-    public function remove(string $listenerId): void;
+    public function listen(string $listener, int $priority = 0): void;
+
+    /**
+     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     *
+     * @throws EventDispatcherExceptionInterface
+     */
+    public function remove(string $listener): void;
 
     /**
      * @param class-string<SubscriberInterface> $subscriber
      *
-     * @throws ExceptionInterface
+     * @throws EventDispatcherExceptionInterface
      */
     public function subscribe(string $subscriber): void;
 }
