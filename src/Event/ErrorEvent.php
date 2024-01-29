@@ -11,19 +11,23 @@ use Throwable;
 
 /**
  * @template TStopPropagation of bool
+ *
  * @implements ErrorEventInterface<TStopPropagation>
  */
 final class ErrorEvent implements ErrorEventInterface
 {
-    /** @use EventTrait<TStopPropagation> */
-    use EventTrait;
     /**
-     * @param EventInterface<TStopPropagation> $event
-     * @param callable(EventInterface<TStopPropagation>): void $listener
+     * @use EventTrait<TStopPropagation>
+     */
+    use EventTrait;
+
+    /**
+     * @param EventInterface<TStopPropagation>                                     $event
+     * @param class-string<callable(EventInterface<TStopPropagation>):void&object> $listener
      */
     public function __construct(
         private readonly EventInterface $event,
-        private readonly mixed $listener,
+        private readonly string $listener,
         private readonly Throwable $throwable
     ) {
     }
@@ -37,9 +41,9 @@ final class ErrorEvent implements ErrorEventInterface
     }
 
     /**
-     * @return callable(EventInterface<TStopPropagation>): void
+     * @return class-string<callable(EventInterface<TStopPropagation>):void&object>
      */
-    public function getListener(): mixed
+    public function getListener(): string
     {
         return $this->listener;
     }
