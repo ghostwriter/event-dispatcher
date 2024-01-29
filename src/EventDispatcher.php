@@ -44,6 +44,9 @@ final readonly class EventDispatcher implements EventDispatcherInterface
 
         $isErrorEvent = $event instanceof ErrorEventInterface;
 
+        /**
+         * @var class-string $listener
+         */
         foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
             try {
                 $this->container->invoke($listener, [$event]);
