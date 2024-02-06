@@ -16,49 +16,35 @@
                 }]]></code>
       <code>return $event;</code>
     </UnevaluatedCode>
+    <UnnecessaryVarAnnotation>
+      <code>class-string</code>
+    </UnnecessaryVarAnnotation>
   </file>
   <file src="src/Interface/Event/ErrorEventInterface.php">
     <InvalidDocblock>
       <code>public function getListener(): string;</code>
     </InvalidDocblock>
   </file>
-  <file src="src/Interface/ListenerProviderInterface.php">
-    <InvalidDocblock>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code>public function getListenersForEvent(EventInterface $event): Generator;</code>
-    </InvalidDocblock>
-  </file>
   <file src="src/ListenerProvider.php">
-    <InvalidDocblock>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code><![CDATA[class-string<callable(EventInterface<bool>):void&object>]]></code>
-      <code>public function getListenersForEvent(EventInterface $event): Generator</code>
-    </InvalidDocblock>
     <LessSpecificReturnType>
       <code><![CDATA[Generator<class-string<EventInterface<bool>>>]]></code>
     </LessSpecificReturnType>
     <MissingThrowsDocblock>
-      <code>assertListener</code>
-      <code>assertListener</code>
-      <code>assertListener</code>
-      <code>assertListener</code>
       <code>getMethod</code>
       <code>reflectClass</code>
+      <code>self::assertListener($listener)</code>
+      <code>self::assertListener($listener)</code>
+      <code>self::assertListener($listener)</code>
+      <code>self::assertListener($listener)</code>
       <code>throw new EventNotFoundException($event);</code>
     </MissingThrowsDocblock>
+    <MixedArgument>
+      <code>$listeners[$event]</code>
+      <code>$listeners[$event][$priority]</code>
+    </MixedArgument>
     <PossiblyUnusedMethod>
       <code>hasListener</code>
     </PossiblyUnusedMethod>
-    <PropertyTypeCoercion>
-      <code><![CDATA[$this->map]]></code>
-    </PropertyTypeCoercion>
   </file>
   <file src="src/Trait/EventTrait.php">
     <InvalidPropertyAssignmentValue>
@@ -68,11 +54,10 @@
   <file src="tests/Unit/AbstractTestCase.php">
     <ArgumentTypeCoercion>
       <code>$event</code>
+      <code>$listener</code>
+      <code>$listener</code>
       <code>$subscriber</code>
     </ArgumentTypeCoercion>
-    <InvalidDocblock>
-      <code>protected string $listener;</code>
-    </InvalidDocblock>
     <MissingTemplateParam>
       <code>EventInterface</code>
       <code>EventTrait</code>
@@ -167,6 +152,9 @@
     </PropertyNotSetInConstructor>
   </file>
   <file src="tests/Unit/Exception/ListenerNotFoundExceptionTest.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA['NonExistTestEventListener']]></code>
+    </ArgumentTypeCoercion>
     <PropertyNotSetInConstructor>
       <code>ListenerNotFoundExceptionTest</code>
       <code>ListenerNotFoundExceptionTest</code>
@@ -175,9 +163,6 @@
       <code>ListenerNotFoundExceptionTest</code>
       <code>ListenerNotFoundExceptionTest</code>
     </PropertyNotSetInConstructor>
-    <UnusedPsalmSuppress>
-      <code>UndefinedClass</code>
-    </UnusedPsalmSuppress>
   </file>
   <file src="tests/Unit/Exception/MissingEventParameterExceptionTest.php">
     <PropertyNotSetInConstructor>
@@ -230,12 +215,6 @@
     </PropertyNotSetInConstructor>
   </file>
   <file src="tests/Unit/ListenerProviderTest.php">
-    <MixedArgument>
-      <code>$listener</code>
-    </MixedArgument>
-    <MixedAssignment>
-      <code>$listener</code>
-    </MixedAssignment>
     <PropertyNotSetInConstructor>
       <code>ListenerProviderTest</code>
       <code>ListenerProviderTest</code>
