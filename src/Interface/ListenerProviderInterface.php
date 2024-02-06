@@ -10,7 +10,7 @@ interface ListenerProviderInterface
 {
     /**
      * @param class-string<EventInterface<bool>>                       $event
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ExceptionInterface
      */
@@ -19,19 +19,19 @@ interface ListenerProviderInterface
     /**
      * @param EventInterface<bool> $event
      *
-     * @return Generator<class-string<callable(EventInterface<bool>):void&object>>
+     * @return Generator<class-string<(callable(EventInterface<bool>):void)&object>>
      */
     public function getListenersForEvent(EventInterface $event): Generator;
 
     /**
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ExceptionInterface
      */
     public function listen(string $listener, int $priority = 0): void;
 
     /**
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ExceptionInterface
      */
