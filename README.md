@@ -28,12 +28,13 @@ You can also star (🌟) this repo to find it easier later.
 Registering and dispatching an Event Listener.
 
 ```php
-use Ghostwriter\EventDispatcher\AbstractEvent;
+use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 
-final class ExampleEvent extends AbstractEvent
+final class ExampleEvent
 {
+    use EventTrait;
 }
 
 final class ExampleEventListener
