@@ -27,7 +27,6 @@
         failOnDeprecation="true"
         failOnNotice="true"
         requireCoverageMetadata="true"
-        testdox="true"
 >
     <coverage>
         <report>
