@@ -70,7 +70,7 @@ final class ListenerProvider implements ListenerProviderInterface
 
     /**
      * @param class-string<EventInterface<bool>>                       $event
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ExceptionInterface
      */
@@ -88,7 +88,7 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * @param EventInterface<bool> $event
      *
-     * @return Generator<class-string<callable(EventInterface<bool>):void&object>>
+     * @return Generator<class-string<(callable(EventInterface<bool>):void)&object>>
      */
     public function getListenersForEvent(EventInterface $event): Generator
     {
@@ -111,7 +111,7 @@ final class ListenerProvider implements ListenerProviderInterface
 
     /**
      * @param class-string<EventInterface<bool>>                       $event
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      */
     public function hasListener(string $event, string $listener, int $priority): bool
     {
@@ -121,7 +121,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      */
     public function listen(string $listener, int $priority = 0): void
     {
@@ -131,7 +131,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ListenerNotFoundException
      */
@@ -177,7 +177,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws MissingEventParameterException
      * @throws MissingParameterTypeDeclarationException
@@ -258,7 +258,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ListenerNotFoundException
      * @throws ListenerMissingInvokeMethodException
@@ -276,7 +276,7 @@ final class ListenerProvider implements ListenerProviderInterface
 
     /**
      * @param class-string<EventInterface<bool>>                       $event
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ListenerAlreadyExistsException
      */
