@@ -37,7 +37,7 @@ final class ErrorEventTest extends AbstractTestCase
 
         $this->listenerProvider->listen(ErrorEventListener::class);
 
-        $this->eventDispatcher = new EventDispatcher($this->listenerProvider);
+        $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(self::ERROR_MESSAGE);
