@@ -9,7 +9,7 @@ use Ghostwriter\Container\Container;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
-use Ghostwriter\EventDispatcher\Interface\EventDispatcherExceptionInterface;
+use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
@@ -61,7 +61,7 @@ abstract class AbstractTestCase extends TestCase
 
         $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
         $this->listenerProvider = new ListenerProvider();
-        $this->eventDispatcher = new EventDispatcher($this->listenerProvider);
+        $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
         $this->listener = TestEventListener::class;
         $this->event = new TestEvent();
         $this->testEvent = new TestEvent();
@@ -81,7 +81,7 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      * @throws Throwable
      */
     final public function bind(string $event, string ...$listeners): self
@@ -90,13 +90,13 @@ abstract class AbstractTestCase extends TestCase
             $this->listenerProvider->bind($event, $listener);
         }
 
-        $this->eventDispatcher = new EventDispatcher($this->listenerProvider);
+        $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
 
         return $this;
     }
 
     /**
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      * @throws Throwable
      */
     final public function dispatch(EventInterface $event): EventInterface
@@ -107,7 +107,7 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      * @throws Throwable
      */
     final public function listen(string ...$listeners): self
@@ -122,7 +122,7 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      * @throws Throwable
      */
     final public function subscribe(string ...$subscribers): self
