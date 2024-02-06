@@ -19,13 +19,17 @@ You can install the package via composer:
 composer require ghostwriter/event-dispatcher
 ```
 
-## Usage
+### Star ⭐️ this repo if you find it useful
+
+You can also star (🌟) this repo to find it easier later.
+
+### Usage
 
 Registering and dispatching an Event Listener.
 
 ```php
 use Ghostwriter\EventDispatcher\AbstractEvent;
-use Ghostwriter\EventDispatcher\Dispatcher;
+use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 
 final class ExampleEvent extends AbstractEvent
@@ -44,7 +48,7 @@ $provider = new ListenerProvider();
 
 $provider->listen(ExampleEventListener::class)
 
-$dispatcher = new Dispatcher($provider);
+$dispatcher = new EventDispatcher($provider);
 
 $dispatcher->dispatch(new ExampleEvent());
 ```
@@ -80,12 +84,12 @@ final class EventSubscriber implements SubscriberInterface {
         // FunctionListener
         $provider->bind(
             TestEvent::class, 
-            'Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction',
+            'Ghostwriter\EventDispatcherTests\Fixture\listenerFunction',
             $priority
         );
         // or
         $provider->listen(
-            'Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction', 
+            'Ghostwriter\EventDispatcherTests\Fixture\listenerFunction', 
             $priority
         );
 
