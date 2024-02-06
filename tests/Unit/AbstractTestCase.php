@@ -42,7 +42,7 @@ abstract class AbstractTestCase extends TestCase
     protected EventDispatcherInterface $eventDispatcher;
 
     /**
-     * @var class-string<callable(EventInterface<bool>):void&object>
+     * @var class-string<(callable(EventInterface<bool>):void)&object>
      */
     protected string $listener;
 
