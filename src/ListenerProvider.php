@@ -284,7 +284,7 @@ final class ListenerProvider implements ListenerProviderInterface
         string $event,
         string $listener,
         int $priority = 0,
-        array $listeners
+        array $listeners = []
     ): void {
         self::assertListener($listener);
 
