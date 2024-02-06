@@ -68,6 +68,9 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         return $event;
     }
 
+    /**
+     * @throws Throwable
+     */
     public static function new(?ListenerProviderInterface $listenerProvider = null): self
     {
         $container = Container::getInstance();
