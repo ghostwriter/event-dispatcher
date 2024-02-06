@@ -15,18 +15,10 @@ use Throwable;
 
 final readonly class EventDispatcher implements EventDispatcherInterface
 {
-    private ContainerInterface $container;
-
     public function __construct(
-        private ListenerProviderInterface $listenerProvider = new ListenerProvider()
+        private ContainerInterface $container,
+        private ListenerProviderInterface $listenerProvider,
     ) {
-        $this->container = Container::getInstance();
-
-        if ($this->container->has(EventServiceProvider::class)) {
-            return;
-        }
-
-        $this->container->provide(EventServiceProvider::class);
     }
 
     /**
@@ -74,5 +66,20 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         }
 
         return $event;
+    }
+
+    public static function new(?ListenerProviderInterface $listenerProvider = null): self
+    {
+        $container = Container::getInstance();
+
+        if (! $container->has(EventServiceProvider::class)) {
+            $container->provide(EventServiceProvider::class);
+        }
+
+        if ($listenerProvider !== null) {
+            return $container->build(self::class, [$container, $listenerProvider]);
+        }
+
+        return $container->get(self::class);
     }
 }
