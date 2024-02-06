@@ -11,7 +11,7 @@ interface EventDispatcherInterface
      *
      * @param EventInterface<bool> $event
      *
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      *
      * @return EventInterface<bool>
      */
