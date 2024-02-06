@@ -76,9 +76,9 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     public function bind(string $event, string $listener, int $priority = 0): void
     {
-        $this->assertEvent($event);
+        self::assertEvent($event);
 
-        $this->assertListenerExists($event, $listener, $priority);
+        self::assertListenerExists($event, $listener, $priority, $this->map[self::LISTENERS]);
 
         $this->map[self::LISTENERS][$event][$priority][$listener] = true;
 
@@ -177,62 +177,6 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<EventInterface<bool>> $event
-     *
-     * @psalm-assert-if-true class-string<EventInterface<bool>> $event
-     *
-     * @throws EventMustImplementEventInterfaceException
-     */
-    private function assertEvent(string $event): void
-    {
-        if (! class_exists($event) && ! interface_exists($event)) {
-            throw new EventNotFoundException($event);
-        }
-
-        if (! is_a($event, EventInterface::class, true)) {
-            throw new EventMustImplementEventInterfaceException($event);
-        }
-    }
-
-    /**
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
-     *
-     * @throws ListenerNotFoundException
-     * @throws ListenerMissingInvokeMethodException
-     */
-    private function assertListener(string $listener): void
-    {
-        if (! class_exists($listener)) {
-            throw new ListenerNotFoundException($listener);
-        }
-
-        if (! method_exists($listener, '__invoke')) {
-            throw new ListenerMissingInvokeMethodException($listener);
-        }
-    }
-
-    /**
-     * @param class-string<EventInterface<bool>>                       $event
-     * @param class-string<callable(EventInterface<bool>):void&object> $listener
-     *
-     * @throws ListenerAlreadyExistsException
-     */
-    private function assertListenerExists(string $event, string $listener, int $priority = 0): void
-    {
-        $this->assertListener($listener);
-
-        $listeners = $this->map[self::LISTENERS];
-
-        if (
-            array_key_exists($event, $listeners)
-            && array_key_exists($priority, $listeners[$event])
-            && array_key_exists($listener, $listeners[$event][$priority])
-        ) {
-            throw new ListenerAlreadyExistsException($listener);
-        }
-    }
-
-    /**
      * @param class-string<callable(EventInterface<bool>):void&object> $listener
      *
      * @throws MissingEventParameterException
@@ -243,7 +187,7 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     private function resolveEvents(string $listener): Generator
     {
-        $this->assertListener($listener);
+        self::assertListener($listener);
 
         /** @var array<ReflectionParameter> $parameters */
         $parameters = $this->reflector
@@ -293,5 +237,63 @@ final class ListenerProvider implements ListenerProviderInterface
         };
 
         yield from $events;
+    }
+
+    /**
+     * @param class-string<EventInterface<bool>> $event
+     *
+     * @psalm-assert-if-true class-string<EventInterface<bool>> $event
+     *
+     * @throws EventMustImplementEventInterfaceException
+     */
+    private static function assertEvent(string $event): void
+    {
+        if (! class_exists($event) && ! interface_exists($event)) {
+            throw new EventNotFoundException($event);
+        }
+
+        if (! is_a($event, EventInterface::class, true)) {
+            throw new EventMustImplementEventInterfaceException($event);
+        }
+    }
+
+    /**
+     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     *
+     * @throws ListenerNotFoundException
+     * @throws ListenerMissingInvokeMethodException
+     */
+    private static function assertListener(string $listener): void
+    {
+        if (! class_exists($listener)) {
+            throw new ListenerNotFoundException($listener);
+        }
+
+        if (! method_exists($listener, '__invoke')) {
+            throw new ListenerMissingInvokeMethodException($listener);
+        }
+    }
+
+    /**
+     * @param class-string<EventInterface<bool>>                       $event
+     * @param class-string<callable(EventInterface<bool>):void&object> $listener
+     *
+     * @throws ListenerAlreadyExistsException
+     */
+    private static function assertListenerExists(
+        string $event,
+        string $listener,
+        int $priority = 0,
+        array $listeners
+    ): void {
+        self::assertListener($listener);
+
+        if (
+            array_key_exists($event, $listeners)
+            && array_key_exists($priority, $listeners[$event])
+            && array_key_exists($listener, $listeners[$event][$priority])
+        ) {
+            throw new ListenerAlreadyExistsException($listener);
+        }
     }
 }
