@@ -17,7 +17,7 @@ use Ghostwriter\EventDispatcher\Exception\MissingEventParameterException;
 use Ghostwriter\EventDispatcher\Exception\MissingParameterTypeDeclarationException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberAlreadyRegisteredException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
-use Ghostwriter\EventDispatcher\Interface\EventDispatcherExceptionInterface;
+use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -63,8 +63,8 @@ final class ExceptionsTest extends AbstractTestCase
     {
         foreach (self::EXCEPTIONS as $exception) {
             self::assertTrue(
-                is_a($exception, EventDispatcherExceptionInterface::class, true),
-                sprintf('Exception "%s" does not implement "%s"', $exception, EventDispatcherExceptionInterface::class)
+                is_a($exception, ExceptionInterface::class, true),
+                sprintf('Exception "%s" does not implement "%s"', $exception, ExceptionInterface::class)
             );
         }
     }
