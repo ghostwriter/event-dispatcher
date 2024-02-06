@@ -19,7 +19,7 @@ use Ghostwriter\EventDispatcher\Exception\MissingEventParameterException;
 use Ghostwriter\EventDispatcher\Exception\MissingParameterTypeDeclarationException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberAlreadyRegisteredException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
-use Ghostwriter\EventDispatcher\Interface\EventDispatcherExceptionInterface;
+use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Interface\SubscriberInterface;
@@ -72,7 +72,7 @@ final class ListenerProvider implements ListenerProviderInterface
      * @param class-string<EventInterface<bool>>                       $event
      * @param class-string<callable(EventInterface<bool>):void&object> $listener
      *
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      */
     public function bind(string $event, string $listener, int $priority = 0): void
     {
@@ -158,7 +158,7 @@ final class ListenerProvider implements ListenerProviderInterface
      * @throws SubscriberMustImplementSubscriberInterfaceException
      * @throws ContainerNotFoundExceptionInterface
      * @throws ContainerExceptionInterface
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      * @throws Throwable
      */
     public function subscribe(string $subscriber): void
