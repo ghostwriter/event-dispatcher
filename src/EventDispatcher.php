@@ -80,7 +80,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         }
 
         if ($listenerProvider !== null) {
-            return $container->build(self::class, [$container, $listenerProvider]);
+            return new self($container, $listenerProvider);
         }
 
         return $container->get(self::class);
