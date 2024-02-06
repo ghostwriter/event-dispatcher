@@ -12,7 +12,7 @@ interface ListenerProviderInterface
      * @param class-string<EventInterface<bool>>                       $event
      * @param class-string<callable(EventInterface<bool>):void&object> $listener
      *
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      */
     public function bind(string $event, string $listener, int $priority = 0): void;
 
@@ -26,21 +26,21 @@ interface ListenerProviderInterface
     /**
      * @param class-string<callable(EventInterface<bool>):void&object> $listener
      *
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      */
     public function listen(string $listener, int $priority = 0): void;
 
     /**
      * @param class-string<callable(EventInterface<bool>):void&object> $listener
      *
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      */
     public function remove(string $listener): void;
 
     /**
      * @param class-string<SubscriberInterface> $subscriber
      *
-     * @throws EventDispatcherExceptionInterface
+     * @throws ExceptionInterface
      */
     public function subscribe(string $subscriber): void;
 }
