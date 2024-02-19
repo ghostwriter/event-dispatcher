@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ghostwriter/container",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/container.git",
-                "reference": "1752d1da4e2e06286413eeed207632c2eae9b8d5"
+                "reference": "f0aaf48118aec90dd5bae69a55c17bbb17ddae06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/container/zipball/1752d1da4e2e06286413eeed207632c2eae9b8d5",
-                "reference": "1752d1da4e2e06286413eeed207632c2eae9b8d5",
+                "url": "https://api.github.com/repos/ghostwriter/container/zipball/f0aaf48118aec90dd5bae69a55c17bbb17ddae06",
+                "reference": "f0aaf48118aec90dd5bae69a55c17bbb17ddae06",
                 "shasum": ""
             },
             "require": {
@@ -53,7 +53,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ghostwriter/container/issues",
-                "source": "https://github.com/ghostwriter/container/tree/3.0.1"
+                "source": "https://github.com/ghostwriter/container/tree/3.0.2"
             },
             "funding": [
                 {
@@ -61,7 +61,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-06T18:55:15+00:00"
+            "time": "2024-02-19T03:38:42+00:00"
         }
     ],
     "packages-dev": [
