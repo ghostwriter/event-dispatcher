@@ -9,7 +9,7 @@ use Generator;
 interface ListenerProviderInterface
 {
     /**
-     * @param class-string<EventInterface<bool>>                       $event
+     * @param class-string<EventInterface<bool>>                         $event
      * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ExceptionInterface
