@@ -64,7 +64,7 @@
         "use-parent-dir": false
     },
     "scripts": {
-        "bench": "vendor/ghostwriter/coding-standard/tools/phpbench run --colors=always --report=default",
+        "bench": "vendor/ghostwriter/coding-standard/tools/phpbench run --colors=always --revs=10 --iterations=10 --report=aggregate",
         "cache:clear": "rm -rf ./.cache/*",
         "check": [
             "@composer validate",
