@@ -63,7 +63,6 @@ abstract class AbstractTestCase extends TestCase
         $this->listenerProvider = new ListenerProvider();
         $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
         $this->listener = TestEventListener::class;
-        $this->event = new TestEvent();
         $this->testEvent = new TestEvent();
         $this->errorEvent = new ErrorEvent($this->testEvent, $this->listener, $this->throwable);
     }
