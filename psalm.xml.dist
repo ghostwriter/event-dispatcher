@@ -1,32 +1,43 @@
 <?xml version="1.0"?>
-<psalm
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<psalm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config https://getpsalm.org/schema/config"
-    allowStringToStandInForClass="false"
+    addParamDefaultToDocblockType="true"
+    allowInternalNamedArgumentCalls="false"
+    allowNamedArgumentCalls="false"
+    autoloader="vendor/autoload.php"
     cacheDirectory=".cache/psalm"
     checkForThrowsDocblock="true"
     checkForThrowsInGlobalScope="true"
     disableSuppressAll="true"
     ensureArrayIntOffsetsExist="true"
     ensureArrayStringOffsetsExist="true"
+    ensureOverrideAttribute="true"
     errorBaseline="psalm-baseline.xml"
     errorLevel="1"
     findUnusedBaselineEntry="true"
     findUnusedCode="true"
     findUnusedPsalmSuppress="true"
     findUnusedVariablesAndParams="true"
+    limitMethodComplexity="true"
+    memoizeMethodCallResults="true"
+    reportInfo="true"
+    restrictReturnTypes="true"
     sealAllMethods="true"
     sealAllProperties="true"
     strictBinaryOperands="true"
-    reportMixedIssues="true"
-    restrictReturnTypes="true"
+    useDocblockPropertyTypes="true"
+    usePhpDocMethodsWithoutMagicCall="true"
+    usePhpDocPropertiesWithoutMagicCall="true"
 >
     <projectFiles>
         <directory name="src"/>
         <directory name="tests"/>
-        <ignoreFiles>
+        <ignoreFiles allowMissingFiles="true">
+            <directory name=".cache"/>
             <directory name=".github"/>
+            <directory name="bin"/>
+            <directory name="docs"/>
             <directory name="tests/Fixture"/>
             <directory name="vendor"/>
         </ignoreFiles>
