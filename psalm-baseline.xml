@@ -12,21 +12,21 @@
     </MissingOverrideAttribute>
   </file>
   <file src="src/EventDispatcher.php">
-    <InvalidParamDefault>
-      <code><![CDATA[SplQueue<Fiber>]]></code>
-    </InvalidParamDefault>
-    <LessSpecificReturnType>
-      <code><![CDATA[void]]></code>
-    </LessSpecificReturnType>
     <MissingOverrideAttribute>
       <code><![CDATA[public function dispatch(EventInterface $event): EventInterface]]></code>
     </MissingOverrideAttribute>
     <PossiblyUnusedReturnValue>
       <code><![CDATA[EventInterface<bool>]]></code>
     </PossiblyUnusedReturnValue>
-    <TooManyTemplateParams>
-      <code><![CDATA[$fiber]]></code>
-    </TooManyTemplateParams>
+    <UnevaluatedCode>
+      <code><![CDATA[if (! $event->isPropagationStopped()) {
+                    continue;
+                }]]></code>
+      <code><![CDATA[return $event;]]></code>
+    </UnevaluatedCode>
+    <UnnecessaryVarAnnotation>
+      <code><![CDATA[class-string]]></code>
+    </UnnecessaryVarAnnotation>
   </file>
   <file src="src/EventServiceProvider.php">
     <MissingOverrideAttribute>
@@ -44,7 +44,7 @@
     </LessSpecificReturnType>
     <MissingOverrideAttribute>
       <code><![CDATA[public function bind(string $event, string $listener, int $priority = 0): void]]></code>
-      <code><![CDATA[public function getListenersForEvent(EventInterface $event): iterable]]></code>
+      <code><![CDATA[public function getListenersForEvent(EventInterface $event): Generator]]></code>
       <code><![CDATA[public function listen(string $listener, int $priority = 0): void]]></code>
       <code><![CDATA[public function remove(string $listener): void]]></code>
       <code><![CDATA[public function subscribe(string $subscriber): void]]></code>
@@ -62,26 +62,9 @@
       <code><![CDATA[$listeners[$event]]]></code>
       <code><![CDATA[$listeners[$event][$priority]]]></code>
     </MixedArgument>
-    <MixedAssignment>
-      <code><![CDATA[$listener]]></code>
-    </MixedAssignment>
-    <MixedMethodCall>
-      <code><![CDATA[isSuspended]]></code>
-      <code><![CDATA[resume]]></code>
-    </MixedMethodCall>
-    <MixedReturnTypeCoercion>
-      <code><![CDATA[Generator<class-string<(callable(EventInterface<bool>):void)&object>>]]></code>
-    </MixedReturnTypeCoercion>
-    <PossiblyUndefinedVariable>
-      <code><![CDATA[$fiber]]></code>
-      <code><![CDATA[$fiber]]></code>
-    </PossiblyUndefinedVariable>
     <PossiblyUnusedMethod>
       <code><![CDATA[hasListener]]></code>
     </PossiblyUnusedMethod>
-    <UnusedClosureParam>
-      <code><![CDATA[$event]]></code>
-    </UnusedClosureParam>
   </file>
   <file src="src/Trait/EventTrait.php">
     <InvalidPropertyAssignmentValue>
@@ -99,9 +82,6 @@
       <code><![CDATA[$listener]]></code>
       <code><![CDATA[$subscriber]]></code>
     </ArgumentTypeCoercion>
-    <InvalidArgument>
-      <code><![CDATA[$this->listenerProvider->getListenersForEvent($event)]]></code>
-    </InvalidArgument>
     <MissingOverrideAttribute>
       <code><![CDATA[final protected function setUp(): void]]></code>
       <code><![CDATA[final protected function tearDown(): void]]></code>
@@ -116,9 +96,6 @@
     <PossiblyUnusedReturnValue>
       <code><![CDATA[EventInterface]]></code>
     </PossiblyUnusedReturnValue>
-    <UndefinedThisPropertyAssignment>
-      <code><![CDATA[$this->event]]></code>
-    </UndefinedThisPropertyAssignment>
   </file>
   <file src="tests/Unit/ErrorEventTest.php">
     <PropertyNotSetInConstructor>
@@ -273,14 +250,6 @@
     <DocblockTypeContradiction>
       <code><![CDATA[assertSame]]></code>
     </DocblockTypeContradiction>
-    <InvalidArgument>
-      <code><![CDATA[$listeners]]></code>
-      <code><![CDATA[$listeners]]></code>
-      <code><![CDATA[$listeners]]></code>
-      <code><![CDATA[$listeners]]></code>
-      <code><![CDATA[$this->listenerProvider->getListenersForEvent(new TestEvent())]]></code>
-      <code><![CDATA[$this->listenerProvider->getListenersForEvent(new TestEvent())]]></code>
-    </InvalidArgument>
     <PropertyNotSetInConstructor>
       <code><![CDATA[ListenerProviderTest]]></code>
       <code><![CDATA[ListenerProviderTest]]></code>
