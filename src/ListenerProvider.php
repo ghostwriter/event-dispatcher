@@ -69,7 +69,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<EventInterface<bool>>                       $event
+     * @param class-string<EventInterface<bool>>                         $event
      * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ExceptionInterface
@@ -110,7 +110,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<EventInterface<bool>>                       $event
+     * @param class-string<EventInterface<bool>>                         $event
      * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      */
     public function hasListener(string $event, string $listener, int $priority): bool
@@ -275,7 +275,7 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<EventInterface<bool>>                       $event
+     * @param class-string<EventInterface<bool>>                         $event
      * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
      *
      * @throws ListenerAlreadyExistsException
