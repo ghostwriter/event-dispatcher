@@ -69,11 +69,97 @@
   <file src="src/Trait/EventTrait.php">
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[true]]></code>
+      <code><![CDATA[true]]></code>
+      <code><![CDATA[true]]></code>
     </InvalidPropertyAssignmentValue>
     <MissingOverrideAttribute>
       <code><![CDATA[final public function isPropagationStopped(): bool]]></code>
       <code><![CDATA[final public function stopPropagation(): void]]></code>
     </MissingOverrideAttribute>
+  </file>
+  <file src="tests/Fixture/Listener/AlreadyStoppedEventCallsNoListener.php">
+    <MissingThrowsDocblock>
+      <code><![CDATA[throw new RuntimeException(self::ERROR_MESSAGE . $event::class, self::ERROR_CODE);]]></code>
+    </MissingThrowsDocblock>
+  </file>
+  <file src="tests/Fixture/Listener/ErrorEventListener.php">
+    <MissingThrowsDocblock>
+      <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
+    </MissingThrowsDocblock>
+  </file>
+  <file src="tests/Fixture/Listener/IntersectionParameterTypeDeclarationListener.php">
+    <ReservedWord>
+      <code><![CDATA[TestEvent&TestEvent2 $testEvent]]></code>
+    </ReservedWord>
+    <UnusedParam>
+      <code><![CDATA[$testEvent]]></code>
+    </UnusedParam>
+  </file>
+  <file src="tests/Fixture/Listener/MissingInvokeMethodListener.php">
+    <MissingThrowsDocblock>
+      <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
+    </MissingThrowsDocblock>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[onError]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="tests/Fixture/Listener/MissingParameterTypeDeclarationListener.php">
+    <MissingThrowsDocblock>
+      <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
+    </MissingThrowsDocblock>
+  </file>
+  <file src="tests/Fixture/Listener/ReturnsEventWithoutResolvingListenersIfPropagationIsStoppedListener.php">
+    <MissingThrowsDocblock>
+      <code><![CDATA[throw new RuntimeException(
+            sprintf(
+                self::ERROR_MESSAGE,
+                $event::class
+            ),
+            self::ERROR_CODE
+        );]]></code>
+    </MissingThrowsDocblock>
+  </file>
+  <file src="tests/Fixture/Listener/TestEventRaiseAnExceptionListener.php">
+    <MissingThrowsDocblock>
+      <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
+    </MissingThrowsDocblock>
+  </file>
+  <file src="tests/Fixture/Listener/UnionParameterTypeDeclarationListener.php">
+    <UnusedParam>
+      <code><![CDATA[$testEvent]]></code>
+    </UnusedParam>
+  </file>
+  <file src="tests/Fixture/Subscriber/TestEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function __invoke(ListenerProviderInterface $provider): void]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="tests/Fixture/TestEvent.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function count(): int]]></code>
+      <code><![CDATA[public function read(): string]]></code>
+      <code><![CDATA[public function write(string $event): void]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="tests/Fixture/TestEventListener.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[onStatic]]></code>
+      <code><![CDATA[onStaticCallableArray]]></code>
+      <code><![CDATA[onTest]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="tests/Fixture/TestListener.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[intersection]]></code>
+      <code><![CDATA[union]]></code>
+    </PossiblyUnusedMethod>
+    <ReservedWord>
+      <code><![CDATA[TestEvent&TestEvent2 $testEvent]]></code>
+    </ReservedWord>
+    <UnusedParam>
+      <code><![CDATA[$testEvent]]></code>
+      <code><![CDATA[$testEvent]]></code>
+    </UnusedParam>
   </file>
   <file src="tests/Unit/AbstractTestCase.php">
     <ArgumentTypeCoercion>
