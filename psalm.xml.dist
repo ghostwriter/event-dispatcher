@@ -2,9 +2,6 @@
 <psalm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config https://getpsalm.org/schema/config"
-    addParamDefaultToDocblockType="true"
-    allowInternalNamedArgumentCalls="false"
-    allowNamedArgumentCalls="false"
     autoloader="vendor/autoload.php"
     cacheDirectory=".cache/psalm"
     checkForThrowsDocblock="true"
@@ -19,9 +16,9 @@
     findUnusedCode="true"
     findUnusedPsalmSuppress="true"
     findUnusedVariablesAndParams="true"
+    hideAllErrorsExceptPassedFiles="false"
     limitMethodComplexity="true"
     memoizeMethodCallResults="true"
-    reportInfo="true"
     restrictReturnTypes="true"
     sealAllMethods="true"
     sealAllProperties="true"
@@ -33,13 +30,17 @@
     <projectFiles>
         <directory name="src"/>
         <directory name="tests"/>
+        <ignoreFiles>
+            <directory name=".github"/>
+            <directory name="vendor"/>
+        </ignoreFiles>
         <ignoreFiles allowMissingFiles="true">
             <directory name=".cache"/>
-            <directory name=".github"/>
             <directory name="bin"/>
             <directory name="docs"/>
+            <directory name="fixtures"/>
             <directory name="tests/Fixture"/>
-            <directory name="vendor"/>
+            <directory name="tests/fixtures"/>
         </ignoreFiles>
     </projectFiles>
     <plugins>
