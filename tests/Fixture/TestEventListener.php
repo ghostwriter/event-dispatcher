@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Fixture;
+namespace Tests\Fixture;
 final class TestEventListener
 {
     public function __invoke(TestEvent $testEvent): void
