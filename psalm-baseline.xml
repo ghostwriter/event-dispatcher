@@ -38,33 +38,43 @@
       <code><![CDATA[public function getListener(): string;]]></code>
     </InvalidDocblock>
   </file>
+  <file src="src/Interface/ListenerProviderInterface.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[unsubscribe]]></code>
+    </PossiblyUnusedMethod>
+  </file>
   <file src="src/ListenerProvider.php">
-    <LessSpecificReturnType>
-      <code><![CDATA[Generator<class-string<EventInterface<bool>>>]]></code>
-    </LessSpecificReturnType>
+    <InvalidArgument>
+      <code><![CDATA[$listeners]]></code>
+      <code><![CDATA[$this->listeners[$event]]]></code>
+    </InvalidArgument>
+    <InvalidArrayOffset>
+      <code><![CDATA[$this->listeners[$event][$listener]]]></code>
+      <code><![CDATA[$this->listeners[$event][$listener]]]></code>
+    </InvalidArrayOffset>
+    <InvalidDocblock>
+      <code><![CDATA[class-string<EventInterface<bool>|TAssertEvent>|string]]></code>
+      <code><![CDATA[private static function assertEvent(string $event): void]]></code>
+    </InvalidDocblock>
+    <InvalidIterator>
+      <code><![CDATA[$listeners]]></code>
+    </InvalidIterator>
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$this->listeners]]></code>
+    </InvalidPropertyAssignmentValue>
     <MissingOverrideAttribute>
-      <code><![CDATA[public function bind(string $event, string $listener, int $priority = 0): void]]></code>
-      <code><![CDATA[public function getListenersForEvent(EventInterface $event): Generator]]></code>
-      <code><![CDATA[public function listen(string $listener, int $priority = 0): void]]></code>
-      <code><![CDATA[public function remove(string $listener): void]]></code>
+      <code><![CDATA[public function forget(string $listener): void]]></code>
+      <code><![CDATA[public function listen(string $event, string $listener): void]]></code>
+      <code><![CDATA[public function provide(EventInterface $event): Generator]]></code>
       <code><![CDATA[public function subscribe(string $subscriber): void]]></code>
+      <code><![CDATA[public function unsubscribe(string $subscriber): void]]></code>
     </MissingOverrideAttribute>
     <MissingThrowsDocblock>
-      <code><![CDATA[getMethod]]></code>
-      <code><![CDATA[reflectClass]]></code>
-      <code><![CDATA[self::assertListener($listener)]]></code>
-      <code><![CDATA[self::assertListener($listener)]]></code>
-      <code><![CDATA[self::assertListener($listener)]]></code>
-      <code><![CDATA[self::assertListener($listener)]]></code>
       <code><![CDATA[throw new EventNotFoundException($event);]]></code>
     </MissingThrowsDocblock>
-    <MixedArgument>
-      <code><![CDATA[$listeners[$event]]]></code>
-      <code><![CDATA[$listeners[$event][$priority]]]></code>
-    </MixedArgument>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[hasListener]]></code>
-    </PossiblyUnusedMethod>
+    <UnevaluatedCode>
+      <code><![CDATA[$this->subscribers[$subscriber] = $provider;]]></code>
+    </UnevaluatedCode>
   </file>
   <file src="src/Trait/EventTrait.php">
     <InvalidPropertyAssignmentValue>
@@ -95,6 +105,11 @@
       <code><![CDATA[$testEvent]]></code>
     </UnusedParam>
   </file>
+  <file src="tests/Fixture/Listener/MissingEventParameterListener.php">
+    <UnusedClass>
+      <code><![CDATA[MissingEventParameterListener]]></code>
+    </UnusedClass>
+  </file>
   <file src="tests/Fixture/Listener/MissingInvokeMethodListener.php">
     <MissingThrowsDocblock>
       <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
@@ -107,6 +122,9 @@
     <MissingThrowsDocblock>
       <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
     </MissingThrowsDocblock>
+    <UnusedClass>
+      <code><![CDATA[MissingParameterTypeDeclarationListener]]></code>
+    </UnusedClass>
   </file>
   <file src="tests/Fixture/Listener/ReturnsEventWithoutResolvingListenersIfPropagationIsStoppedListener.php">
     <MissingThrowsDocblock>
@@ -129,6 +147,15 @@
       <code><![CDATA[$testEvent]]></code>
     </UnusedParam>
   </file>
+  <file src="tests/Fixture/Subscriber/InvalidTestEventSubscriber.php">
+    <InvalidArgument>
+      <code><![CDATA[TestEventListener::class]]></code>
+    </InvalidArgument>
+    <TooFewArguments>
+      <code><![CDATA[listen]]></code>
+      <code><![CDATA[listen]]></code>
+    </TooFewArguments>
+  </file>
   <file src="tests/Fixture/Subscriber/TestEventSubscriber.php">
     <MissingOverrideAttribute>
       <code><![CDATA[public function __invoke(ListenerProviderInterface $provider): void]]></code>
@@ -140,6 +167,11 @@
       <code><![CDATA[public function read(): string]]></code>
       <code><![CDATA[public function write(string $event): void]]></code>
     </MissingOverrideAttribute>
+  </file>
+  <file src="tests/Fixture/TestEventInterface.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[count]]></code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="tests/Fixture/TestEventListener.php">
     <PossiblyUnusedMethod>
@@ -163,8 +195,6 @@
   </file>
   <file src="tests/Unit/AbstractTestCase.php">
     <ArgumentTypeCoercion>
-      <code><![CDATA[$event]]></code>
-      <code><![CDATA[$listener]]></code>
       <code><![CDATA[$listener]]></code>
       <code><![CDATA[$subscriber]]></code>
     </ArgumentTypeCoercion>
@@ -177,11 +207,19 @@
       <code><![CDATA[EventTrait]]></code>
     </MissingTemplateParam>
     <PossiblyUnusedMethod>
+      <code><![CDATA[bind]]></code>
+      <code><![CDATA[dispatch]]></code>
       <code><![CDATA[eventDataProvider]]></code>
+      <code><![CDATA[listen]]></code>
+      <code><![CDATA[subscribe]]></code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[EventInterface]]></code>
-    </PossiblyUnusedReturnValue>
+    <TooFewArguments>
+      <code><![CDATA[listen]]></code>
+      <code><![CDATA[listen]]></code>
+    </TooFewArguments>
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[bind]]></code>
+    </UndefinedInterfaceMethod>
   </file>
   <file src="tests/Unit/ErrorEventTest.php">
     <PropertyNotSetInConstructor>
@@ -206,7 +244,6 @@
       <code><![CDATA[EventDispatcherTest]]></code>
     </PropertyNotSetInConstructor>
     <RedundantConditionGivenDocblockType>
-      <code><![CDATA[assertSame]]></code>
       <code><![CDATA[assertTrue]]></code>
     </RedundantConditionGivenDocblockType>
   </file>
@@ -270,9 +307,6 @@
     </PropertyNotSetInConstructor>
   </file>
   <file src="tests/Unit/Exception/ListenerNotFoundExceptionTest.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA['NonExistTestEventListener']]></code>
-    </ArgumentTypeCoercion>
     <PropertyNotSetInConstructor>
       <code><![CDATA[ListenerNotFoundExceptionTest]]></code>
       <code><![CDATA[ListenerNotFoundExceptionTest]]></code>
@@ -280,26 +314,6 @@
       <code><![CDATA[ListenerNotFoundExceptionTest]]></code>
       <code><![CDATA[ListenerNotFoundExceptionTest]]></code>
       <code><![CDATA[ListenerNotFoundExceptionTest]]></code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="tests/Unit/Exception/MissingEventParameterExceptionTest.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[MissingEventParameterExceptionTest]]></code>
-      <code><![CDATA[MissingEventParameterExceptionTest]]></code>
-      <code><![CDATA[MissingEventParameterExceptionTest]]></code>
-      <code><![CDATA[MissingEventParameterExceptionTest]]></code>
-      <code><![CDATA[MissingEventParameterExceptionTest]]></code>
-      <code><![CDATA[MissingEventParameterExceptionTest]]></code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="tests/Unit/Exception/MissingParameterTypeDeclarationExceptionTest.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[MissingParameterTypeDeclarationExceptionTest]]></code>
-      <code><![CDATA[MissingParameterTypeDeclarationExceptionTest]]></code>
-      <code><![CDATA[MissingParameterTypeDeclarationExceptionTest]]></code>
-      <code><![CDATA[MissingParameterTypeDeclarationExceptionTest]]></code>
-      <code><![CDATA[MissingParameterTypeDeclarationExceptionTest]]></code>
-      <code><![CDATA[MissingParameterTypeDeclarationExceptionTest]]></code>
     </PropertyNotSetInConstructor>
   </file>
   <file src="tests/Unit/Exception/SubscriberAlreadyRegisteredExceptionTest.php">
