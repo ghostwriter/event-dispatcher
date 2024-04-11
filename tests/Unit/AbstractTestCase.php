@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Unit;
+namespace Tests\Unit;
 
 use Generator;
 use Ghostwriter\Container\Container;
@@ -15,10 +15,10 @@ use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Trait\EventTrait;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEvent;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEventInterface;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEventListener;
-use Ghostwriter\EventDispatcherTests\Fixture\TestListener;
+use Tests\Fixture\TestEvent;
+use Tests\Fixture\TestEventInterface;
+use Tests\Fixture\TestEventListener;
+use Tests\Fixture\TestListener;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Throwable;
@@ -27,22 +27,19 @@ use function iterator_to_array;
 
 abstract class AbstractTestCase extends TestCase
 {
-    /**
-     * @var int
-     */
-    public const ERROR_CODE = 42;
+    public const int ERROR_CODE = 42;
 
-    /**
-     * @var string
-     */
-    public const ERROR_MESSAGE = 'Could not handle the event!';
+    public const string ERROR_MESSAGE = 'Could not handle the event!';
 
     protected ErrorEventInterface $errorEvent;
 
     protected EventDispatcherInterface $eventDispatcher;
 
     /**
-     * @var class-string<(callable(EventInterface<bool>):void)&object>
+     * @template TEvent of object
+     * @template TListener of object
+     *
+     * @var class-string<(callable(TEvent):void)&TListener>
      */
     protected string $listener;
 
@@ -59,11 +56,12 @@ abstract class AbstractTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
         $this->listenerProvider = ListenerProvider::new();
         $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
-        $this->listener = TestEventListener::class;
+
         $this->testEvent = new TestEvent();
+        $this->listener = TestEventListener::class;
+        $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
         $this->errorEvent = new ErrorEvent($this->testEvent, $this->listener, $this->throwable);
     }
 
@@ -76,22 +74,7 @@ abstract class AbstractTestCase extends TestCase
 
     final public function assertListenersCount(int $expectedCount, EventInterface $event): void
     {
-        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->provide($event)));
-    }
-
-    /**
-     * @throws ExceptionInterface
-     * @throws Throwable
-     */
-    final public function bind(string $event, string ...$listeners): self
-    {
-        foreach ($listeners as $listener) {
-            $this->listenerProvider->bind($event, $listener);
-        }
-
-        $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
-
-        return $this;
+        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->getListenersForEvent($event)));
     }
 
     /**
@@ -109,13 +92,11 @@ abstract class AbstractTestCase extends TestCase
      * @throws ExceptionInterface
      * @throws Throwable
      */
-    final public function listen(string ...$listeners): self
+    final public function listen(string $event, string ...$listeners): self
     {
         foreach ($listeners as $listener) {
-            $this->listenerProvider->listen($listener);
+            $this->listenerProvider->listen($event, $listener);
         }
-
-        //        $this->dispatcher = new EventDispatcher($this->listenerProvider);
 
         return $this;
     }
