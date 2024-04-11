@@ -9,7 +9,6 @@ use Ghostwriter\Container\Interface\ContainerInterface;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Throwable;
 
@@ -21,28 +20,29 @@ final readonly class EventDispatcher implements EventDispatcherInterface
     ) {}
 
     /**
-     * @param EventInterface<bool> $event
+     * @template TEvent of object
+     *
+     * @param TEvent $event
      *
      * @throws Throwable
      *
-     * @return EventInterface<bool>
+     * @return TEvent
      */
-    public function dispatch(EventInterface $event): EventInterface
+    public function dispatch(object $event): object
     {
-        if ($event->isPropagationStopped()) {
+        $isEvent = $event instanceof ErrorEventInterface;
+
+        if ($isEvent && $event->isPropagationStopped()) {
             return $event;
         }
 
         $isErrorEvent = $event instanceof ErrorEventInterface;
 
-        /**
-         * @var class-string $listener
-         */
-        foreach ($this->listenerProvider->provide($event) as $listener) {
+        foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
             try {
                 $this->container->invoke($listener, [$event]);
 
-                if (! $event->isPropagationStopped()) {
+                if ($isEvent && ! $event->isPropagationStopped()) {
                     continue;
                 }
 
