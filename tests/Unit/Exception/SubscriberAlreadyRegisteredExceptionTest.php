@@ -23,11 +23,9 @@ final class SubscriberAlreadyRegisteredExceptionTest extends AbstractTestCase
 {
     public function testThrowsSubscriberAlreadyRegisteredException(): void
     {
-        $provider = new ListenerProvider();
-
         $this->expectException(SubscriberAlreadyRegisteredException::class);
 
-        $provider->subscribe(TestEventSubscriber::class);
-        $provider->subscribe(TestEventSubscriber::class);
+        $this->listenerProvider->subscribe(TestEventSubscriber::class);
+        $this->listenerProvider->subscribe(TestEventSubscriber::class);
     }
 }
