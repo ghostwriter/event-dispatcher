@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Unit;
+namespace Tests\Unit;
 
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
@@ -12,14 +12,14 @@ use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Trait\EventTrait;
-use Ghostwriter\EventDispatcherTests\Fixture\Listener\AlreadyStoppedEventCallsNoListener;
-use Ghostwriter\EventDispatcherTests\Fixture\Listener\BlackLivesMatterListener;
-use Ghostwriter\EventDispatcherTests\Fixture\Listener\LogTestEventExceptionMessageListener;
-use Ghostwriter\EventDispatcherTests\Fixture\Listener\ReturnsEventWithoutResolvingListenersIfPropagationIsStoppedListener;
-use Ghostwriter\EventDispatcherTests\Fixture\Listener\TestEventRaiseAnExceptionListener;
-use Ghostwriter\EventDispatcherTests\Fixture\Subscriber\TestEventSubscriber;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEvent;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEventInterface;
+use Tests\Fixture\Listener\AlreadyStoppedEventCallsNoListener;
+use Tests\Fixture\Listener\BlackLivesMatterListener;
+use Tests\Fixture\Listener\LogTestEventExceptionMessageListener;
+use Tests\Fixture\Listener\ReturnsEventWithoutResolvingListenersIfPropagationIsStoppedListener;
+use Tests\Fixture\Listener\TestEventRaiseAnExceptionListener;
+use Tests\Fixture\Subscriber\TestEventSubscriber;
+use Tests\Fixture\TestEvent;
+use Tests\Fixture\TestEventInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
@@ -48,7 +48,7 @@ final class EventDispatcherTest extends AbstractTestCase
 
         $this->listenerProvider->listen(EventInterface::class, AlreadyStoppedEventCallsNoListener::class);
 
-        $this->eventDispatcher->dispatch($event);
+        $this->dispatch($event);
 
         self::assertTrue($event->isPropagationStopped());
     }
@@ -62,7 +62,7 @@ final class EventDispatcherTest extends AbstractTestCase
 
         $this->listenerProvider->listen(TestEventInterface::class, BlackLivesMatterListener::class);
 
-        $this->eventDispatcher->dispatch($this->testEvent);
+        $this->dispatch($this->testEvent);
 
         self::assertSame('#BlackLivesMatter', $this->testEvent->read());
     }
@@ -74,7 +74,8 @@ final class EventDispatcherTest extends AbstractTestCase
     public function testDispatch(EventInterface $event): void
     {
         self::assertInstanceOf(EventDispatcherInterface::class, $this->eventDispatcher);
-        self::assertSame($event, $this->eventDispatcher->dispatch($event));
+
+        $this->dispatch($event);
     }
 
     public function testImplementsDispatcherInterfaceAndPsrEventDispatcherInterface(): void
@@ -91,7 +92,7 @@ final class EventDispatcherTest extends AbstractTestCase
 
         $this->listenerProvider->subscribe(TestEventSubscriber::class);
 
-        $this->eventDispatcher->dispatch($this->testEvent);
+        $this->dispatch($this->testEvent);
 
         //        self::assertListenersCount($this->testEvent->count(), $this->testEvent);
 
@@ -130,7 +131,7 @@ final class EventDispatcherTest extends AbstractTestCase
         $this->listenerProvider->listen(ErrorEventInterface::class, LogTestEventExceptionMessageListener::class);
 
         try {
-            $this->eventDispatcher->dispatch($this->testEvent);
+            $this->dispatch($this->testEvent);
 
             self::fail('Expected an exception to be not thrown');
         } catch (Throwable $exception) {
@@ -150,7 +151,7 @@ final class EventDispatcherTest extends AbstractTestCase
 
         $this->listenerProvider->listen(TestEvent::class, TestEventRaiseAnExceptionListener::class);
 
-        $this->eventDispatcher->dispatch($this->testEvent);
+        $this->dispatch($this->testEvent);
     }
 
     /**
