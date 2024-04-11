@@ -29,8 +29,7 @@ final class ErrorEvent implements ErrorEventInterface
         private readonly EventInterface $event,
         private readonly string $listener,
         private readonly Throwable $throwable
-    ) {
-    }
+    ) {}
 
     /**
      * @return EventInterface<TStopPropagation>
