@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Unit;
+namespace Tests\Unit;
 
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
@@ -11,7 +11,7 @@ use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Trait\EventTrait;
-use Ghostwriter\EventDispatcherTests\Fixture\Listener\ErrorEventListener;
+use Tests\Fixture\Listener\ErrorEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use RuntimeException;
 use Throwable;
