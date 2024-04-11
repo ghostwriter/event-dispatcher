@@ -18,8 +18,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
     public function __construct(
         private ContainerInterface $container,
         private ListenerProviderInterface $listenerProvider,
-    ) {
-    }
+    ) {}
 
     /**
      * @param EventInterface<bool> $event
@@ -39,7 +38,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         /**
          * @var class-string $listener
          */
-        foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
+        foreach ($this->listenerProvider->provide($event) as $listener) {
             try {
                 $this->container->invoke($listener, [$event]);
 
