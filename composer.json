@@ -30,7 +30,7 @@
     ],
     "require": {
         "php": ">=8.3",
-        "ghostwriter/container": "^3.0.2"
+        "ghostwriter/container": "^3.0.3"
     },
     "require-dev": {
         "ghostwriter/coding-standard": "dev-main",
@@ -45,7 +45,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Ghostwriter\\EventDispatcherTests\\": "tests"
+            "Ghostwriter\\EventDispatcherTests\\": "tests",
+            "Tests\\": "tests"
         },
         "files": [
             "tests/Fixture/functions.php"
@@ -83,7 +84,6 @@
             "@psalm:dry-run"
         ],
         "ecs": "vendor/bin/ecs check --clear-cache --fix --no-interaction",
-        "fix": "tools/php-cs-fixer fix --diff --allow-risky=yes --using-cache=no --verbose",
         "infection": "vendor/ghostwriter/coding-standard/tools/infection --ansi --verbose --threads=max --min-msi=0 --min-covered-msi=0",
         "phpunit": "vendor/ghostwriter/coding-standard/tools/phpunit --do-not-cache-result --colors=always",
         "phpunit:migrate": "@phpunit --migrate-configuration",
