@@ -60,7 +60,7 @@ abstract class AbstractTestCase extends TestCase
         parent::setUp();
 
         $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
-        $this->listenerProvider = new ListenerProvider();
+        $this->listenerProvider = ListenerProvider::new();
         $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
         $this->listener = TestEventListener::class;
         $this->testEvent = new TestEvent();
@@ -76,7 +76,7 @@ abstract class AbstractTestCase extends TestCase
 
     final public function assertListenersCount(int $expectedCount, EventInterface $event): void
     {
-        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->getListenersForEvent($event)));
+        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->provide($event)));
     }
 
     /**
@@ -130,8 +130,6 @@ abstract class AbstractTestCase extends TestCase
             $this->listenerProvider->subscribe($subscriber);
         }
 
-        //        $this->dispatcher = new EventDispatcher($this->listenerProvider);
-
         return $this;
     }
 
@@ -140,7 +138,7 @@ abstract class AbstractTestCase extends TestCase
      */
     public static function eventDataProvider(): Generator
     {
-        yield EventInterface::class => [new class() implements EventInterface {
+        yield EventInterface::class => [new class () implements EventInterface {
             use EventTrait;
         }, ];
 
