@@ -14,28 +14,21 @@ interface ListenerProviderInterface
      *
      * @throws ExceptionInterface
      */
-    public function bind(string $event, string $listener, int $priority = 0): void;
+    public function listen(string $event, string $listener): void;
+
+    /**
+     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
+     *
+     * @throws ExceptionInterface
+     */
+    public function forget(string $listener): void;
 
     /**
      * @param EventInterface<bool> $event
      *
      * @return Generator<class-string<(callable(EventInterface<bool>):void)&object>>
      */
-    public function getListenersForEvent(EventInterface $event): Generator;
-
-    /**
-     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
-     *
-     * @throws ExceptionInterface
-     */
-    public function listen(string $listener, int $priority = 0): void;
-
-    /**
-     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
-     *
-     * @throws ExceptionInterface
-     */
-    public function remove(string $listener): void;
+    public function provide(EventInterface $event): Generator;
 
     /**
      * @param class-string<SubscriberInterface> $subscriber
@@ -43,4 +36,11 @@ interface ListenerProviderInterface
      * @throws ExceptionInterface
      */
     public function subscribe(string $subscriber): void;
+
+    /**
+     * @param class-string<SubscriberInterface> $subscriber
+     *
+     * @throws ExceptionInterface
+     */
+    public function unsubscribe(string $subscriber): void;
 }
