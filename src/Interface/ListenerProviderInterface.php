@@ -9,26 +9,32 @@ use Generator;
 interface ListenerProviderInterface
 {
     /**
-     * @param class-string<EventInterface<bool>>                         $event
-     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
+     * @template TEvent of object
+     *
+     * @param class-string<TEvent>                         $event
+     * @param class-string<(callable(TEvent):void)&object> $listener
      *
      * @throws ExceptionInterface
      */
     public function listen(string $event, string $listener): void;
 
     /**
-     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
+     * @template TEvent of object
+     *
+     * @param class-string<(callable(TEvent):void)&object> $listener
      *
      * @throws ExceptionInterface
      */
     public function forget(string $listener): void;
 
     /**
-     * @param EventInterface<bool> $event
+     * @template TEvent of object
      *
-     * @return Generator<class-string<(callable(EventInterface<bool>):void)&object>>
+     * @param TEvent $event
+     *
+     * @return Generator<class-string<(callable(TEvent):void)&object>>
      */
-    public function provide(EventInterface $event): Generator;
+    public function getListenersForEvent(object $event): Generator;
 
     /**
      * @param class-string<SubscriberInterface> $subscriber
