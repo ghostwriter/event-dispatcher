@@ -13,6 +13,7 @@ use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use Ghostwriter\EventDispatcherTests\Fixture\TestEvent;
 use Ghostwriter\EventDispatcherTests\Fixture\TestEventListener;
 use Ghostwriter\EventDispatcherTests\Unit\AbstractTestCase;
+use NonExistentTestEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
@@ -29,21 +30,17 @@ final class ListenerNotFoundExceptionTest extends AbstractTestCase
      *
      * @throws Throwable
      */
-    public function testBind(): void
+    public function testListen(): void
     {
-        $provider = new ListenerProvider();
-
         $this->expectException(ListenerNotFoundException::class);
 
-        $provider->bind(TestEvent::class, 'NonExistTestEventListener');
+        $this->listenerProvider->listen(TestEvent::class, NonExistentTestEventListener::class);
     }
 
     public function testRemove(): void
     {
-        $provider = new ListenerProvider();
-
         $this->expectException(ListenerNotFoundException::class);
 
-        $provider->remove(TestEventListener::class);
+        $this->listenerProvider->forget(TestEventListener::class);
     }
 }
