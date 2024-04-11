@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Fixture\Listener;
+namespace Tests\Fixture\Listener;
 
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEventInterface;
+use Tests\Fixture\TestEventInterface;
 
 final readonly class LogTestEventExceptionMessageListener
 {
