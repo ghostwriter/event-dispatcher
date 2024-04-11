@@ -13,8 +13,6 @@ use Ghostwriter\EventDispatcher\Exception\FailedToDetermineEventTypeException;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
 use Ghostwriter\EventDispatcher\Exception\ListenerNotFoundException;
-use Ghostwriter\EventDispatcher\Exception\MissingEventParameterException;
-use Ghostwriter\EventDispatcher\Exception\MissingParameterTypeDeclarationException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberAlreadyRegisteredException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
@@ -37,8 +35,6 @@ use function sprintf;
 #[CoversClass(ListenerAlreadyExistsException::class)]
 #[CoversClass(ListenerMissingInvokeMethodException::class)]
 #[CoversClass(ListenerNotFoundException::class)]
-#[CoversClass(MissingEventParameterException::class)]
-#[CoversClass(MissingParameterTypeDeclarationException::class)]
 #[CoversClass(SubscriberAlreadyRegisteredException::class)]
 #[CoversClass(SubscriberMustImplementSubscriberInterfaceException::class)]
 final class ExceptionsTest extends AbstractTestCase
@@ -53,8 +49,6 @@ final class ExceptionsTest extends AbstractTestCase
         ListenerAlreadyExistsException::class,
         ListenerMissingInvokeMethodException::class,
         ListenerNotFoundException::class,
-        MissingEventParameterException::class,
-        MissingParameterTypeDeclarationException::class,
         SubscriberAlreadyRegisteredException::class,
         SubscriberMustImplementSubscriberInterfaceException::class,
     ];
