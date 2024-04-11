@@ -23,21 +23,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(ListenerProvider::class)]
 final class ListenerMissingInvokeMethodExceptionTest extends AbstractTestCase
 {
-    public function testBindThrowsListenerMissingInvokeMethodException(): void
-    {
-        $provider = new ListenerProvider();
-
-        $this->expectException(ListenerMissingInvokeMethodException::class);
-
-        $provider->bind(EventInterface::class, MissingInvokeMethodListener::class);
-    }
-
     public function testListenThrowsListenerMissingInvokeMethodException(): void
     {
-        $provider = new ListenerProvider();
-
         $this->expectException(ListenerMissingInvokeMethodException::class);
 
-        $provider->listen(MissingInvokeMethodListener::class);
+        $this->listenerProvider->listen(EventInterface::class, MissingInvokeMethodListener::class);
     }
 }
