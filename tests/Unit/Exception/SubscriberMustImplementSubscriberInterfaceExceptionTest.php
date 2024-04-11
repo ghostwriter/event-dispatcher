@@ -28,10 +28,8 @@ final class SubscriberMustImplementSubscriberInterfaceExceptionTest extends Abst
      */
     public function testThrowsSubscriberMustImplementSubscriberInterfaceException(): void
     {
-        $provider = new ListenerProvider();
-
         $this->expectException(SubscriberMustImplementSubscriberInterfaceException::class);
 
-        $provider->subscribe(InvalidTestEventSubscriber::class);
+        $this->listenerProvider->subscribe(InvalidTestEventSubscriber::class);
     }
 }
