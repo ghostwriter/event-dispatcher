@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Fixture\Listener;
+namespace Tests\Fixture\Listener;
 
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 
