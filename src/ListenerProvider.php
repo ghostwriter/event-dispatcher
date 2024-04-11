@@ -37,7 +37,10 @@ use function trait_exists;
 final class ListenerProvider implements ListenerProviderInterface
 {
     /**
-     * @param array<class-string<(callable(EventInterface<bool>):void)&object>>  $listeners
+     * @template TEvent of object
+     * @template TListener of object
+     *
+     * @param array<class-string<(callable(TEvent):void)&TListener>>             $listeners
      * @param array<class-string<SubscriberInterface>,ListenerProviderInterface> $subscribers
      */
     public function __construct(
@@ -47,8 +50,11 @@ final class ListenerProvider implements ListenerProviderInterface
     ) {}
 
     /**
-     * @param array<class-string<EventInterface>,class-string<(callable(EventInterface<bool>):void)&object>> $listeners
-     * @param array<class-string<SubscriberInterface>>                                                       $subscribers
+     * @template TEvent of object
+     * @template TListener of object
+     *
+     * @param array<class-string<TEvent>,class-string<(callable(TEvent):void)&TListener>> $listeners
+     * @param array<class-string<SubscriberInterface>>                                    $subscribers
      *
      * @throws Throwable
      */
@@ -73,8 +79,11 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<EventInterface<bool>>                         $event
-     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
+     * @template TEvent of object
+     * @template TListener of object
+     *
+     * @param class-string<TEvent>                            $event
+     * @param class-string<(callable(TEvent):void)&TListener> $listener
      *
      * @throws ExceptionInterface
      */
@@ -95,13 +104,19 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param EventInterface<bool> $event
+     * @template TEvent of object
+     * @template TListener of object
      *
-     * @return Generator<class-string<(callable(EventInterface<bool>):void)&object>>
+     * @param TEvent $event
+     *
+     * @return Generator<class-string<(callable(TEvent):void)&TListener>>
      */
-    public function provide(EventInterface $event): Generator
+    public function getListenersForEvent(object $event): Generator
     {
-        if ($event->isPropagationStopped()) {
+        if (
+            $event instanceof EventInterface
+            && $event->isPropagationStopped()
+        ) {
             return;
         }
 
@@ -114,12 +129,19 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         foreach ($this->subscribers as $provider) {
-            yield from $provider->provide($event);
+            if (! $provider instanceof ListenerProviderInterface) {
+                continue;
+            }
+
+            yield from $provider->getListenersForEvent($event);
         }
     }
 
     /**
-     * @param class-string<(callable(EventInterface<bool>):void)&object> $listener
+     * @template TEvent of object
+     * @template TListener of object
+     *
+     * @param class-string<(callable(TEvent):void)&TListener> $listener
      *
      * @throws ListenerNotFoundException
      */
@@ -190,11 +212,11 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @template TAssertEvent of object
+     * @template TEvent of object
      *
-     * @param class-string<EventInterface<bool>|TAssertEvent>|string $event
+     * @param class-string<TEvent>|string $event
      *
-     * @psalm-assert class-string<TAssertEvent|EventInterface<bool>> $event
+     * @psalm-assert class-string<TEvent> $event
      *
      * @throws EventMustImplementEventInterfaceException
      */
@@ -215,9 +237,12 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param class-string<(callable(EventInterface<bool>):void)&object>|string $listener
+     * @template TEvent of object
+     * @template TListener of object
      *
-     * @psalm-assert class-string<(callable(EventInterface<bool>):void)&object> $listener
+     * @param class-string<(callable(TEvent):void)&TListener>|string $listener
+     *
+     * @psalm-assert class-string<(callable(TEvent):void)&TListener> $listener
      *
      * @throws ListenerNotFoundException
      * @throws ListenerMissingInvokeMethodException
