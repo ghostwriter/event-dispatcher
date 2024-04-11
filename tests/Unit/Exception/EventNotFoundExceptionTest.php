@@ -28,10 +28,8 @@ final class EventNotFoundExceptionTest extends AbstractTestCase
      */
     public function testThrowsEventNotFoundException(): void
     {
-        $provider = new ListenerProvider();
-
         $this->expectException(EventNotFoundException::class);
 
-        $provider->bind('does-not-exist', TestEventListener::class);
+        $this->listenerProvider->listen('does-not-exist', TestEventListener::class);
     }
 }
