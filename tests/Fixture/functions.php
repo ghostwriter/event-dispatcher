@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Fixture;
+namespace Tests\Fixture;
 
 function listenerFunction(TestEvent $testEvent): void
 {
