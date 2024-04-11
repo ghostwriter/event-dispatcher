@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ad66db6adf375f66489f903dd3cbd20",
+    "content-hash": "50f412332fee9c85f00397f71557bfb7",
     "packages": [
         {
             "name": "ghostwriter/container",
@@ -1186,16 +1186,16 @@
         },
         {
             "name": "ghostwriter/psalm-plugin",
-            "version": "0.2.0",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/psalm-plugin.git",
-                "reference": "c1e0e0110f2e8ad5dd3f4f8decd698dcd4803f60"
+                "reference": "fc8ae0fc63a9848b5aed385b088e3b7bfb59afcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/psalm-plugin/zipball/c1e0e0110f2e8ad5dd3f4f8decd698dcd4803f60",
-                "reference": "c1e0e0110f2e8ad5dd3f4f8decd698dcd4803f60",
+                "url": "https://api.github.com/repos/ghostwriter/psalm-plugin/zipball/fc8ae0fc63a9848b5aed385b088e3b7bfb59afcf",
+                "reference": "fc8ae0fc63a9848b5aed385b088e3b7bfb59afcf",
                 "shasum": ""
             },
             "require": {
@@ -1211,6 +1211,7 @@
                 "psr/container": "^1.1 || ^2.0",
                 "vimeo/psalm": "^5.0 || ^6.0"
             },
+            "default-branch": true,
             "type": "psalm-plugin",
             "extra": {
                 "psalm": {
@@ -1256,7 +1257,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-27T13:19:25+00:00"
+            "time": "2023-12-05T03:03:08+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -1801,28 +1802,35 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.3.0",
+            "version": "5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170"
+                "reference": "298d2febfe79d03fe714eb871d5538da55205b1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/622548b623e81ca6d78b721c5e029f4ce664f170",
-                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/298d2febfe79d03fe714eb871d5538da55205b1a",
+                "reference": "298d2febfe79d03fe714eb871d5538da55205b1a",
                 "shasum": ""
             },
             "require": {
+                "doctrine/deprecations": "^1.1",
                 "ext-filter": "*",
-                "php": "^7.2 || ^8.0",
+                "php": "^7.4 || ^8.0",
                 "phpdocumentor/reflection-common": "^2.2",
-                "phpdocumentor/type-resolver": "^1.3",
+                "phpdocumentor/type-resolver": "^1.7",
+                "phpstan/phpdoc-parser": "^1.7",
                 "webmozart/assert": "^1.9.1"
             },
             "require-dev": {
-                "mockery/mockery": "~1.3.2",
-                "psalm/phar": "^4.8"
+                "mockery/mockery": "~1.3.5",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-mockery": "^1.1",
+                "phpstan/phpstan-webmozart-assert": "^1.2",
+                "phpunit/phpunit": "^9.5",
+                "vimeo/psalm": "^5.13"
             },
             "type": "library",
             "extra": {
@@ -1846,15 +1854,15 @@
                 },
                 {
                     "name": "Jaap van Otterdijk",
-                    "email": "account@ijaap.nl"
+                    "email": "opensource@ijaap.nl"
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.3.0"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.4.0"
             },
-            "time": "2021-10-19T17:43:47+00:00"
+            "time": "2024-04-09T21:13:58+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -4929,10 +4937,18 @@
             "time": "2022-06-03T18:03:27+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "ghostwriter/psalm-plugin",
+            "version": "dev-main",
+            "alias": "0.999",
+            "alias_normalized": "0.999.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "ghostwriter/coding-standard": 20
+        "ghostwriter/coding-standard": 20,
+        "ghostwriter/psalm-plugin": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
