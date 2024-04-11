@@ -19,7 +19,7 @@ final readonly class TestEventSubscriber implements SubscriberInterface
     {
         // Invokable class '::__invoke'
 //                $provider->bind(TestEvent::class, TestEventListener::class);
-        $provider->listen(TestEventListener::class);
+        $provider->listen(TestEvent::class,TestEventListener::class);
 
         // Invokable function
         //        $provider->bind(TestEvent::class, 'Ghostwriter\EventDispatcher\Tests\Fixture\listenerFunction');
