@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Unit\Exception;
+namespace Tests\Unit\Exception;
 
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcherTests\Fixture\Subscriber\InvalidTestEventSubscriber;
-use Ghostwriter\EventDispatcherTests\Unit\AbstractTestCase;
+use Tests\Fixture\Subscriber\InvalidTestEventSubscriber;
+use Tests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
