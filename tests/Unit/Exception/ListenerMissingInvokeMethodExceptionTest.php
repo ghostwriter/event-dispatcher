@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Unit\Exception;
+namespace Tests\Unit\Exception;
 
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
@@ -11,8 +11,8 @@ use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Trait\EventTrait;
-use Ghostwriter\EventDispatcherTests\Fixture\Listener\MissingInvokeMethodListener;
-use Ghostwriter\EventDispatcherTests\Unit\AbstractTestCase;
+use Tests\Fixture\Listener\MissingInvokeMethodListener;
+use Tests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(ListenerMissingInvokeMethodException::class)]
