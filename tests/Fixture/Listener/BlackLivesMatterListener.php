@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Fixture\Listener;
+namespace Tests\Fixture\Listener;
 
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEventInterface;
+use Tests\Fixture\TestEventInterface;
 use RuntimeException;
 
 final class BlackLivesMatterListener
