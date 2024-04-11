@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Unit;
+namespace Tests\Unit;
 
 use Ghostwriter\Container\Container;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
@@ -11,11 +11,11 @@ use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\EventDispatcher\Trait\EventTrait;
-use Ghostwriter\EventDispatcherTests\Fixture\Listener\IntersectionParameterTypeDeclarationListener;
-use Ghostwriter\EventDispatcherTests\Fixture\Listener\UnionParameterTypeDeclarationListener;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEvent;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEvent2;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEventListener;
+use Tests\Fixture\Listener\IntersectionParameterTypeDeclarationListener;
+use Tests\Fixture\Listener\UnionParameterTypeDeclarationListener;
+use Tests\Fixture\TestEvent;
+use Tests\Fixture\TestEvent2;
+use Tests\Fixture\TestEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
@@ -43,7 +43,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
         $container = Container::getInstance();
 
-        $listeners = $this->listenerProvider->provide($testEvent);
+        $listeners = $this->listenerProvider->getListenersForEvent($testEvent);
         foreach ($listeners as $listener) {
             $container->invoke($listener, [$testEvent]);
         }
