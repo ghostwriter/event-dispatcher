@@ -29,10 +29,8 @@ final class EventMustImplementEventInterfaceExceptionTest extends AbstractTestCa
      */
     public function testThrowsEventMustImplementEventInterfaceException(): void
     {
-        $provider = new ListenerProvider();
-
         $this->expectException(EventMustImplementEventInterfaceException::class);
 
-        $provider->bind(stdClass::class, TestEventListener::class);
+        $this->listenerProvider->listen(stdClass::class, TestEventListener::class);
     }
 }
