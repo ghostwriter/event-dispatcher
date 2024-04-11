@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Fixture\Subscriber;
+namespace Tests\Fixture\Subscriber;
 
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Interface\SubscriberInterface;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEvent;
-use Ghostwriter\EventDispatcherTests\Fixture\TestEventListener;
+use Tests\Fixture\TestEvent;
+use Tests\Fixture\TestEventListener;
 use Throwable;
 
 final readonly class TestEventSubscriber implements SubscriberInterface
