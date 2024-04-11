@@ -9,11 +9,13 @@ interface EventDispatcherInterface
     /**
      * Provide all relevant listeners an event to process.
      *
-     * @param EventInterface<bool> $event
+     * @template TEvent of object
+     *
+     * @param TEvent $event
      *
      * @throws ExceptionInterface
      *
-     * @return EventInterface<bool>
+     * @return TEvent
      */
-    public function dispatch(EventInterface $event): EventInterface;
+    public function dispatch(object $event): object;
 }
