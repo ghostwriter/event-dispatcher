@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcherTests\Fixture;
+namespace Tests\Fixture;
 
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 
