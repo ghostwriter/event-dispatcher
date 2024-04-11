@@ -45,11 +45,11 @@ final class ExampleEventListener
     }
 }
 
-$provider = new ListenerProvider();
+$provider = ListenerProvider::new();
 
-$provider->listen(ExampleEventListener::class)
+$provider->listen(ExampleEvent::class, ExampleEventListener::class);
 
-$dispatcher = new EventDispatcher($provider);
+$dispatcher = EventDispatcher::new($provider);
 
 $dispatcher->dispatch(new ExampleEvent());
 ```
@@ -69,42 +69,30 @@ final class EventSubscriber implements SubscriberInterface {
     public function __invoke(ListenerProviderInterface $provider): void
     {
         // InvokableListener '::__invoke'
-        $provider->bind(
-            TestEvent::class, 
-            TestEventListener::class,
-        );
-        // or
         $provider->listen(
+            TestEvent::class, 
             TestEventListener::class,
         );
 
         // FunctionListener
-        $provider->bind(
+        $provider->listen(
             TestEvent::class, 
             'Tests\Fixture\listenerFunction',
         );
-        // or
-        $provider->listen(
-            'Tests\Fixture\listenerFunction', 
-        );
 
         // StaticMethodListener
-        $provider->bind(
-            TestEvent::class,
-            TestEventListener::class . '::onStatic',
-        );
-        // or
         $provider->listen(
+            TestEvent::class,
             TestEventListener::class . '::onStatic',
         );
     }
 }
 
-$provider = new ListenerProvider();
+$provider = ListenerProvider::new();
 
 $provider->subscribe(EventSubscriber::class);
 
-$dispatcher = new EventDispatcher($provider);
+$dispatcher = EventDispatcher::new($provider);
 
 $dispatcher->dispatch(new TestEvent());
 ```
