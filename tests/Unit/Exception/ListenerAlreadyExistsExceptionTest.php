@@ -25,20 +25,11 @@ final class ListenerAlreadyExistsExceptionTest extends AbstractTestCase
     /**
      * @throws Throwable
      */
-    public function testBind(): void
-    {
-        $this->expectException(ListenerAlreadyExistsException::class);
-
-        $this->bind(TestEvent::class, TestEventListener::class, TestEventListener::class);
-    }
-
-    /**
-     * @throws Throwable
-     */
     public function testListen(): void
     {
         $this->expectException(ListenerAlreadyExistsException::class);
 
-        $this->listen(TestEventListener::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
     }
 }
