@@ -12,21 +12,24 @@
     </MissingOverrideAttribute>
   </file>
   <file src="src/EventDispatcher.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$event]]></code>
+    </ArgumentTypeCoercion>
     <MissingOverrideAttribute>
-      <code><![CDATA[public function dispatch(EventInterface $event): EventInterface]]></code>
+      <code><![CDATA[public function dispatch(object $event): object]]></code>
     </MissingOverrideAttribute>
+    <MixedMethodCall>
+      <code><![CDATA[isPropagationStopped]]></code>
+    </MixedMethodCall>
     <PossiblyUnusedReturnValue>
-      <code><![CDATA[EventInterface<bool>]]></code>
+      <code><![CDATA[TEvent]]></code>
     </PossiblyUnusedReturnValue>
     <UnevaluatedCode>
-      <code><![CDATA[if (! $event->isPropagationStopped()) {
+      <code><![CDATA[if ($isEvent && ! $event->isPropagationStopped()) {
                     continue;
                 }]]></code>
       <code><![CDATA[return $event;]]></code>
     </UnevaluatedCode>
-    <UnnecessaryVarAnnotation>
-      <code><![CDATA[class-string]]></code>
-    </UnnecessaryVarAnnotation>
   </file>
   <file src="src/EventServiceProvider.php">
     <MissingOverrideAttribute>
@@ -52,10 +55,6 @@
       <code><![CDATA[$this->listeners[$event][$listener]]]></code>
       <code><![CDATA[$this->listeners[$event][$listener]]]></code>
     </InvalidArrayOffset>
-    <InvalidDocblock>
-      <code><![CDATA[class-string<EventInterface<bool>|TAssertEvent>|string]]></code>
-      <code><![CDATA[private static function assertEvent(string $event): void]]></code>
-    </InvalidDocblock>
     <InvalidIterator>
       <code><![CDATA[$listeners]]></code>
     </InvalidIterator>
@@ -64,8 +63,8 @@
     </InvalidPropertyAssignmentValue>
     <MissingOverrideAttribute>
       <code><![CDATA[public function forget(string $listener): void]]></code>
+      <code><![CDATA[public function getListenersForEvent(object $event): Generator]]></code>
       <code><![CDATA[public function listen(string $event, string $listener): void]]></code>
-      <code><![CDATA[public function provide(EventInterface $event): Generator]]></code>
       <code><![CDATA[public function subscribe(string $subscriber): void]]></code>
       <code><![CDATA[public function unsubscribe(string $subscriber): void]]></code>
     </MissingOverrideAttribute>
@@ -148,9 +147,6 @@
     </UnusedParam>
   </file>
   <file src="tests/Fixture/Subscriber/InvalidTestEventSubscriber.php">
-    <InvalidArgument>
-      <code><![CDATA[TestEventListener::class]]></code>
-    </InvalidArgument>
     <TooFewArguments>
       <code><![CDATA[listen]]></code>
       <code><![CDATA[listen]]></code>
@@ -195,9 +191,13 @@
   </file>
   <file src="tests/Unit/AbstractTestCase.php">
     <ArgumentTypeCoercion>
+      <code><![CDATA[$event]]></code>
       <code><![CDATA[$listener]]></code>
       <code><![CDATA[$subscriber]]></code>
     </ArgumentTypeCoercion>
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[TestEventListener::class]]></code>
+    </InvalidPropertyAssignmentValue>
     <MissingOverrideAttribute>
       <code><![CDATA[final protected function setUp(): void]]></code>
       <code><![CDATA[final protected function tearDown(): void]]></code>
@@ -207,19 +207,16 @@
       <code><![CDATA[EventTrait]]></code>
     </MissingTemplateParam>
     <PossiblyUnusedMethod>
-      <code><![CDATA[bind]]></code>
-      <code><![CDATA[dispatch]]></code>
       <code><![CDATA[eventDataProvider]]></code>
       <code><![CDATA[listen]]></code>
       <code><![CDATA[subscribe]]></code>
     </PossiblyUnusedMethod>
-    <TooFewArguments>
-      <code><![CDATA[listen]]></code>
-      <code><![CDATA[listen]]></code>
-    </TooFewArguments>
-    <UndefinedInterfaceMethod>
-      <code><![CDATA[bind]]></code>
-    </UndefinedInterfaceMethod>
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[EventInterface]]></code>
+    </PossiblyUnusedReturnValue>
+    <UndefinedDocblockClass>
+      <code><![CDATA[string]]></code>
+    </UndefinedDocblockClass>
   </file>
   <file src="tests/Unit/ErrorEventTest.php">
     <PropertyNotSetInConstructor>
@@ -248,9 +245,6 @@
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="tests/Unit/Exception/EventMustImplementEventInterfaceExceptionTest.php">
-    <InvalidArgument>
-      <code><![CDATA[stdClass::class]]></code>
-    </InvalidArgument>
     <PropertyNotSetInConstructor>
       <code><![CDATA[EventMustImplementEventInterfaceExceptionTest]]></code>
       <code><![CDATA[EventMustImplementEventInterfaceExceptionTest]]></code>
