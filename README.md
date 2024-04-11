@@ -68,42 +68,34 @@ final class EventSubscriber implements SubscriberInterface {
      */
     public function __invoke(ListenerProviderInterface $provider): void
     {
-        $priority = 0;
-        
         // InvokableListener '::__invoke'
         $provider->bind(
             TestEvent::class, 
             TestEventListener::class,
-            $priority
         );
         // or
         $provider->listen(
             TestEventListener::class,
-            $priority
         );
 
         // FunctionListener
         $provider->bind(
             TestEvent::class, 
-            'Ghostwriter\EventDispatcherTests\Fixture\listenerFunction',
-            $priority
+            'Tests\Fixture\listenerFunction',
         );
         // or
         $provider->listen(
-            'Ghostwriter\EventDispatcherTests\Fixture\listenerFunction', 
-            $priority
+            'Tests\Fixture\listenerFunction', 
         );
 
         // StaticMethodListener
         $provider->bind(
             TestEvent::class,
             TestEventListener::class . '::onStatic',
-            $priority
         );
         // or
         $provider->listen(
             TestEventListener::class . '::onStatic',
-            $priority
         );
     }
 }
