@@ -19,8 +19,6 @@ use Ghostwriter\EventDispatcherTests\Fixture\TestEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
-use function iterator_to_array;
-
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(EventServiceProvider::class)]
@@ -28,11 +26,6 @@ use function iterator_to_array;
 #[CoversClass(ListenerProvider::class)]
 final class ListenerProviderTest extends AbstractTestCase
 {
-    /**
-     * @var int
-     */
-    private const PRIORITY = 0;
-
     /**
      * @throws Throwable
      */
@@ -44,20 +37,20 @@ final class ListenerProviderTest extends AbstractTestCase
 
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
 
-        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
 
         $this->assertListenersCount(1, $testEvent);
 
         $container = Container::getInstance();
 
-        $listeners = $this->listenerProvider->getListenersForEvent($testEvent);
+        $listeners = $this->listenerProvider->provide($testEvent);
         foreach ($listeners as $listener) {
             $container->invoke($listener, [$testEvent]);
         }
 
         self::assertSame(TestEventListener::class . '::__invoke', $testEvent->read());
 
-        $this->listenerProvider->remove(TestEventListener::class);
+        $this->listenerProvider->forget(TestEventListener::class);
 
         $this->assertListenersCount(0, $testEvent);
     }
@@ -71,42 +64,44 @@ final class ListenerProviderTest extends AbstractTestCase
 
         $this->assertListenersCount(0, $testEvent);
 
-        $this->listenerProvider->listen(TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
 
         $this->assertListenersCount(1, $testEvent);
 
-        $this->listenerProvider->remove(TestEventListener::class);
+        $this->listenerProvider->forget(TestEventListener::class);
 
         $this->assertListenersCount(0, $testEvent);
     }
 
     public function testProviderDetectsIntersectionTypes(): void
     {
-        $this->listenerProvider->listen(IntersectionParameterTypeDeclarationListener::class);
-
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
-            $listeners = $this->listenerProvider->getListenersForEvent($event);
-            self::assertCount(1, iterator_to_array($listeners));
+            $this->assertListenersCount(0, $event);
 
-            $this->listenerProvider->remove(IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->listen(TestEvent::class, IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->listen(TestEvent2::class, IntersectionParameterTypeDeclarationListener::class);
 
-            $listeners = $this->listenerProvider->getListenersForEvent($event);
-            self::assertCount(0, iterator_to_array($listeners));
+            $this->assertListenersCount(1, $event);
+
+            $this->listenerProvider->forget(IntersectionParameterTypeDeclarationListener::class);
+
+            $this->assertListenersCount(0, $event);
         }
     }
 
     public function testProviderDetectsUnionTypes(): void
     {
-        $this->listenerProvider->listen(UnionParameterTypeDeclarationListener::class);
-
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
-            $listeners = $this->listenerProvider->getListenersForEvent($event);
-            self::assertCount(1, iterator_to_array($listeners));
+            $this->assertListenersCount(0, $event);
 
-            $this->listenerProvider->remove(UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->listen(TestEvent::class, UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->listen(TestEvent2::class, UnionParameterTypeDeclarationListener::class);
 
-            $listeners = $this->listenerProvider->getListenersForEvent($event);
-            self::assertCount(0, iterator_to_array($listeners));
+            $this->assertListenersCount(1, $event);
+
+            $this->listenerProvider->forget(UnionParameterTypeDeclarationListener::class);
+
+            $this->assertListenersCount(0, $event);
         }
     }
 
@@ -122,12 +117,12 @@ final class ListenerProviderTest extends AbstractTestCase
     {
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
 
-        $this->listenerProvider->listen(TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
 
-        self::assertCount(1, iterator_to_array($this->listenerProvider->getListenersForEvent(new TestEvent())));
+        $this->assertListenersCount(1, new TestEvent());
 
-        $this->listenerProvider->remove(TestEventListener::class);
+        $this->listenerProvider->forget(TestEventListener::class);
 
-        self::assertCount(0, iterator_to_array($this->listenerProvider->getListenersForEvent(new TestEvent())));
+        $this->assertListenersCount(0, new TestEvent());
     }
 }
