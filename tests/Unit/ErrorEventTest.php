@@ -35,7 +35,7 @@ final class ErrorEventTest extends AbstractTestCase
         self::assertSame(self::ERROR_MESSAGE, $this->errorEvent->getThrowable()->getMessage());
         self::assertSame(self::ERROR_CODE, $this->errorEvent->getThrowable()->getCode());
 
-        $this->listenerProvider->listen(ErrorEventListener::class);
+        $this->listenerProvider->listen(ErrorEvent::class, ErrorEventListener::class);
 
         $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
 
