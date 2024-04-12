@@ -10,7 +10,6 @@ use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use Tests\Fixture\Listener\ErrorEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
 use RuntimeException;
@@ -19,12 +18,37 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(EventServiceProvider::class)]
-#[CoversClass(EventTrait::class)]
 #[CoversClass(ListenerProvider::class)]
 final class ErrorEventTest extends AbstractTestCase
 {
     /**
      * @throws Throwable
+     */
+    public function testGetEvent(): void
+    {
+        self::assertSame($this->testEvent, $this->errorEvent->getEvent());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testGetListener(): void
+    {
+        self::assertSame($this->listener, $this->errorEvent->getListener());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testGetThrowable(): void
+    {
+        self::assertSame($this->throwable, $this->errorEvent->getThrowable());
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @psalm-suppress UnevaluatedCode
      */
     public function testErrorEventComposesEventListenerAndThrowable(): void
     {
@@ -34,10 +58,14 @@ final class ErrorEventTest extends AbstractTestCase
 
         self::assertSame(self::ERROR_MESSAGE, $this->errorEvent->getThrowable()->getMessage());
         self::assertSame(self::ERROR_CODE, $this->errorEvent->getThrowable()->getCode());
+    }
 
+    /**
+     * @throws Throwable
+     */
+    public function testErrorEventListenerThrowsRuntimeException(): void
+    {
         $this->listenerProvider->listen(ErrorEvent::class, ErrorEventListener::class);
-
-        $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(self::ERROR_MESSAGE);
