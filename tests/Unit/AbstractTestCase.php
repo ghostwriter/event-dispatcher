@@ -14,7 +14,6 @@ use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use Tests\Fixture\TestEvent;
 use Tests\Fixture\TestEventInterface;
 use Tests\Fixture\TestEventListener;
@@ -22,6 +21,8 @@ use Tests\Fixture\TestListener;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Throwable;
+use Override;
+use stdClass;
 
 use function iterator_to_array;
 
@@ -35,12 +36,6 @@ abstract class AbstractTestCase extends TestCase
 
     protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @template TEvent of object
-     * @template TListener of object
-     *
-     * @var class-string<(callable(TEvent):void)&TListener>
-     */
     protected string $listener;
 
     protected ListenerProviderInterface $listenerProvider;
@@ -52,6 +47,7 @@ abstract class AbstractTestCase extends TestCase
     /**
      * @throws Throwable
      */
+    #[Override]
     final protected function setUp(): void
     {
         parent::setUp();
@@ -65,6 +61,7 @@ abstract class AbstractTestCase extends TestCase
         $this->errorEvent = new ErrorEvent($this->testEvent, $this->listener, $this->throwable);
     }
 
+    #[Override]
     final protected function tearDown(): void
     {
         parent::tearDown();
@@ -78,61 +75,36 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
+     * @template TEvent of object
+     *
+     * @param TEvent $event
+     *
      * @throws ExceptionInterface
      * @throws Throwable
      */
-    final public function dispatch(EventInterface $event): EventInterface
+    final public function dispatch(object $event): void
     {
         self::assertSame($event, $this->eventDispatcher->dispatch($event));
-
-        return $event;
     }
 
     /**
-     * @throws ExceptionInterface
-     * @throws Throwable
-     */
-    final public function listen(string $event, string ...$listeners): self
-    {
-        foreach ($listeners as $listener) {
-            $this->listenerProvider->listen($event, $listener);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @throws ExceptionInterface
-     * @throws Throwable
-     */
-    final public function subscribe(string ...$subscribers): self
-    {
-        foreach ($subscribers as $subscriber) {
-            $this->listenerProvider->subscribe($subscriber);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Generator<string,list<EventInterface<bool>>>
+     * @return Generator<class-string<ErrorEvent|EventInterface|stdClass|TestEvent>,list{ErrorEvent|EventInterface|stdClass|TestEvent}>
      */
     public static function eventDataProvider(): Generator
     {
-        yield EventInterface::class => [new class () implements EventInterface {
-            use EventTrait;
-        }, ];
-
         $testEvent = new TestEvent();
 
-        yield TestEventInterface::class => [$testEvent];
-
-        yield ErrorEvent::class => [
-            new ErrorEvent(
-                $testEvent,
-                TestListener::class,
-                new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
-            ),
+        yield from [
+            stdClass::class => [new stdClass()],
+            EventInterface::class => [new class () implements EventInterface {}],
+            TestEvent::class => [$testEvent],
+            ErrorEvent::class => [
+                new ErrorEvent(
+                    $testEvent,
+                    TestListener::class,
+                    new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)
+                ),
+            ],
         ];
     }
 }
