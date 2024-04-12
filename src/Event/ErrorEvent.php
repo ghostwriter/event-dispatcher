@@ -5,48 +5,48 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Event;
 
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
-use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use Throwable;
+use Override;
 
-/**
- * @template TStopPropagation of bool
- *
- * @implements ErrorEventInterface<TStopPropagation>
- */
-final class ErrorEvent implements ErrorEventInterface
+final readonly class ErrorEvent implements ErrorEventInterface
 {
     /**
-     * @use EventTrait<TStopPropagation>
-     */
-    use EventTrait;
-
-    /**
-     * @param EventInterface<TStopPropagation>                                     $event
-     * @param class-string<callable(EventInterface<TStopPropagation>):void&object> $listener
+     * @template TEvent of object
+     * @template TListener of object
+     *
+     * @param TEvent                                          $event
+     * @param class-string<(callable(TEvent):void)&TListener> $listener
      */
     public function __construct(
-        private readonly EventInterface $event,
-        private readonly string $listener,
-        private readonly Throwable $throwable
+        private object $event,
+        private string $listener,
+        private Throwable $throwable
     ) {}
 
     /**
-     * @return EventInterface<TStopPropagation>
+     * @template TEvent of object
+     *
+     * @return TEvent
      */
-    public function getEvent(): EventInterface
+    #[Override]
+    public function getEvent(): object
     {
         return $this->event;
     }
 
     /**
-     * @return class-string<callable(EventInterface<TStopPropagation>):void&object>
+     * @template TEvent of object
+     * @template TListener of object
+     *
+     * @return class-string<(callable(TEvent):void)&TListener>
      */
+    #[Override]
     public function getListener(): string
     {
         return $this->listener;
     }
 
+    #[Override]
     public function getThrowable(): Throwable
     {
         return $this->throwable;
