@@ -10,7 +10,6 @@ use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use Tests\Fixture\Listener\IntersectionParameterTypeDeclarationListener;
 use Tests\Fixture\Listener\UnionParameterTypeDeclarationListener;
 use Tests\Fixture\TestEvent;
@@ -22,7 +21,6 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(EventServiceProvider::class)]
-#[CoversClass(EventTrait::class)]
 #[CoversClass(ListenerProvider::class)]
 final class ListenerProviderTest extends AbstractTestCase
 {
@@ -33,7 +31,7 @@ final class ListenerProviderTest extends AbstractTestCase
     {
         $testEvent = new TestEvent();
 
-        self::assertSame('', $testEvent->read());
+        self::assertEmpty($testEvent->read());
 
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
 
@@ -48,7 +46,7 @@ final class ListenerProviderTest extends AbstractTestCase
             $container->invoke($listener, [$testEvent]);
         }
 
-        self::assertSame(TestEventListener::class . '::__invoke', $testEvent->read());
+        self::assertCount(1, $testEvent->read());
 
         $this->listenerProvider->forget(TestEventListener::class);
 
