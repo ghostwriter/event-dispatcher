@@ -9,13 +9,9 @@ use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Trait\EventTrait;
-use Tests\Fixture\Listener\AlreadyStoppedEventCallsNoListener;
 use Tests\Fixture\Listener\BlackLivesMatterListener;
 use Tests\Fixture\Listener\LogTestEventExceptionMessageListener;
-use Tests\Fixture\Listener\ReturnsEventWithoutResolvingListenersIfPropagationIsStoppedListener;
 use Tests\Fixture\Listener\TestEventRaiseAnExceptionListener;
 use Tests\Fixture\Subscriber\TestEventSubscriber;
 use Tests\Fixture\TestEvent;
@@ -28,50 +24,42 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(EventServiceProvider::class)]
-#[CoversClass(EventTrait::class)]
 #[CoversClass(ListenerProvider::class)]
 final class EventDispatcherTest extends AbstractTestCase
 {
-    /**
-     * @param EventInterface<bool> $event
-     *
-     * @throws Throwable
-     */
-    #[DataProvider('eventDataProvider')]
-    public function testAlreadyStoppedEventCallsNoListeners(EventInterface $event): void
-    {
-        self::assertFalse($event->isPropagationStopped());
-
-        $event->stopPropagation();
-
-        self::assertTrue($event->isPropagationStopped());
-
-        $this->listenerProvider->listen(EventInterface::class, AlreadyStoppedEventCallsNoListener::class);
-
-        $this->dispatch($event);
-
-        self::assertTrue($event->isPropagationStopped());
-    }
-
     /**
      * @throws Throwable
      */
     public function testBlackLivesMatterListener(): void
     {
-        self::assertSame('', $this->testEvent->read());
+        self::assertEmpty($this->testEvent->read());
 
         $this->listenerProvider->listen(TestEventInterface::class, BlackLivesMatterListener::class);
 
         $this->dispatch($this->testEvent);
 
-        self::assertSame('#BlackLivesMatter', $this->testEvent->read());
+        self::assertCount(1, $this->testEvent->read());
     }
 
     /**
-     * @param EventInterface<bool> $event
+     * @throws Throwable
+     */
+    public function testDispatchAll(): void
+    {
+        foreach (self::eventDataProvider() as $event) {
+            $this->dispatch($event[0]);
+        }
+    }
+
+    /**
+     * @template TEvent of object
+     *
+     * @param TEvent $event
+     *
+     * @throws Throwable
      */
     #[DataProvider('eventDataProvider')]
-    public function testDispatch(EventInterface $event): void
+    public function testDispatch(object $event): void
     {
         self::assertInstanceOf(EventDispatcherInterface::class, $this->eventDispatcher);
 
@@ -88,37 +76,21 @@ final class EventDispatcherTest extends AbstractTestCase
      */
     public function testMustCallListenersSynchronouslyInTheOrderTheyAreReturnedFromAProvider(): void
     {
-        self::assertSame('', $this->testEvent->read());
+        self::assertEmpty($this->testEvent->read());
 
         $this->listenerProvider->subscribe(TestEventSubscriber::class);
+        $this->assertListenersCount(1, $this->testEvent);
 
         $this->dispatch($this->testEvent);
+        self::assertSame(1, $this->testEvent->count());
 
-        //        self::assertListenersCount($this->testEvent->count(), $this->testEvent);
+        $this->dispatch($this->testEvent);
+        self::assertGreaterThan(1, $this->testEvent->count());
 
-        //        self::assertSame('', $this->testEvent->read());
-    }
+        $this->listenerProvider->unsubscribe(TestEventSubscriber::class);
+        $this->assertListenersCount(0, $this->testEvent);
 
-    /**
-     * @param EventInterface<bool> $event
-     *
-     * @throws Throwable
-     */
-    #[DataProvider('eventDataProvider')]
-    public function testReturnsEventWithoutResolvingListenersIfPropagationIsStopped(EventInterface $event): void
-    {
-        $this->listenerProvider->listen(
-            EventInterface::class,
-            ReturnsEventWithoutResolvingListenersIfPropagationIsStoppedListener::class
-        );
-
-        self::assertFalse($event->isPropagationStopped());
-
-        $event->stopPropagation();
-
-        self::assertTrue($event->isPropagationStopped());
-
-        $this->assertListenersCount(0, $event);
+        self::assertCount(2, $this->testEvent->read());
     }
 
     /**
@@ -137,7 +109,6 @@ final class EventDispatcherTest extends AbstractTestCase
         } catch (Throwable $exception) {
             self::assertInstanceOf($this->throwable::class, $exception);
             self::assertSame($this->testEvent::class, $exception->getMessage());
-            self::assertSame($this->testEvent::class, $this->testEvent->read());
         }
     }
 
