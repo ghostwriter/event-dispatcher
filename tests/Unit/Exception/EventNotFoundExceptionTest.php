@@ -9,7 +9,6 @@ use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use Tests\Fixture\TestEventListener;
 use Tests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -18,7 +17,6 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(EventServiceProvider::class)]
-#[CoversClass(EventTrait::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(EventNotFoundException::class)]
 final class EventNotFoundExceptionTest extends AbstractTestCase
@@ -30,6 +28,7 @@ final class EventNotFoundExceptionTest extends AbstractTestCase
     {
         $this->expectException(EventNotFoundException::class);
 
+        /** @psalm-suppress ArgumentTypeCoercion */
         $this->listenerProvider->listen('does-not-exist', TestEventListener::class);
     }
 }
