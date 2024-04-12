@@ -4,32 +4,32 @@ declare(strict_types=1);
 
 namespace Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\Trait\EventTrait;
+use Override;
+use Tests\Fixture\TestEventInterface;
 
-/**
- * @template TStopPropagation of bool
- * @implements TestEventInterface<TStopPropagation>
- */
 final class TestEvent implements TestEventInterface
 {
-    /** @use EventTrait<TStopPropagation> */
-    use EventTrait;
-
     /**
      * @var array<array-key,string>
      */
     private array $events = [];
 
-    public function count(): int
+    #[Override]
+        public function count(): int
     {
         return \count($this->events);
     }
 
-    public function read(): string
+    /**
+     * @return array<array-key,string>
+     */
+    #[Override]
+    public function read(): array
     {
-        return implode('|', $this->events);
+        return $this->events;
     }
 
+    #[Override]
     public function write(string $event): void
     {
         $this->events[] = $event;
