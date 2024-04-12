@@ -9,19 +9,4 @@ final class TestEventListener
     {
         $testEvent->write(__METHOD__);
     }
-
-    public static function onStatic(TestEvent $testEvent): void
-    {
-        $testEvent->write(__METHOD__);
-    }
-
-    public static function onStaticCallableArray(TestEvent $testEvent): void
-    {
-        $testEvent->write(__METHOD__);
-    }
-
-    public function onTest(TestEvent $testEvent): void
-    {
-        $testEvent->write(__METHOD__);
-    }
 }
