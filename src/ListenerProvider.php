@@ -9,7 +9,6 @@ use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
 use Ghostwriter\Container\Interface\Exception\NotFoundExceptionInterface as ContainerNotFoundExceptionInterface;
 use Ghostwriter\Container\Interface\ExceptionInterface as ContainerExceptionInterface;
-use Ghostwriter\EventDispatcher\Exception\EventMustImplementEventInterfaceException;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
@@ -17,11 +16,11 @@ use Ghostwriter\EventDispatcher\Exception\ListenerNotFoundException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberAlreadyRegisteredException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
 use Ghostwriter\EventDispatcher\Exception\SubscriberNotFoundException;
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Interface\SubscriberInterface;
 use Throwable;
+use Override;
 
 use function array_key_exists;
 use function class_exists;
@@ -40,8 +39,8 @@ final class ListenerProvider implements ListenerProviderInterface
      * @template TEvent of object
      * @template TListener of object
      *
-     * @param array<class-string<(callable(TEvent):void)&TListener>>             $listeners
-     * @param array<class-string<SubscriberInterface>,ListenerProviderInterface> $subscribers
+     * @param array<class-string<TEvent>,array<class-string<(callable(TEvent):void)&TListener>,null>> $listeners
+     * @param array<class-string<SubscriberInterface>,ListenerProviderInterface>                      $subscribers
      */
     public function __construct(
         private readonly ContainerInterface $container,
@@ -82,11 +81,12 @@ final class ListenerProvider implements ListenerProviderInterface
      * @template TEvent of object
      * @template TListener of object
      *
-     * @param class-string<TEvent>                            $event
+     * @param 'object'|class-string<TEvent>                   $event
      * @param class-string<(callable(TEvent):void)&TListener> $listener
      *
      * @throws ExceptionInterface
      */
+    #[Override]
     public function listen(string $event, string $listener): void
     {
         self::assertEvent($event);
@@ -100,7 +100,7 @@ final class ListenerProvider implements ListenerProviderInterface
             throw new ListenerAlreadyExistsException($listener);
         }
 
-        $this->listeners[$event][$listener] = $listener;
+        $this->listeners[$event][$listener] = null;
     }
 
     /**
@@ -111,21 +111,17 @@ final class ListenerProvider implements ListenerProviderInterface
      *
      * @return Generator<class-string<(callable(TEvent):void)&TListener>>
      */
+    #[Override]
     public function getListenersForEvent(object $event): Generator
     {
-        if (
-            $event instanceof EventInterface
-            && $event->isPropagationStopped()
-        ) {
-            return;
-        }
-
         foreach ($this->listeners as $type => $listeners) {
             if (! $event instanceof $type) {
                 continue;
             }
 
-            yield from $listeners;
+            foreach ($listeners as $listener => $_) {
+                yield $listener;
+            }
         }
 
         foreach ($this->subscribers as $provider) {
@@ -145,6 +141,7 @@ final class ListenerProvider implements ListenerProviderInterface
      *
      * @throws ListenerNotFoundException
      */
+    #[Override]
     public function forget(string $listener): void
     {
         $removed = false;
@@ -175,6 +172,7 @@ final class ListenerProvider implements ListenerProviderInterface
      * @throws ExceptionInterface
      * @throws Throwable
      */
+    #[Override]
     public function subscribe(string $subscriber): void
     {
         if (! is_a($subscriber, SubscriberInterface::class, true)) {
@@ -185,13 +183,7 @@ final class ListenerProvider implements ListenerProviderInterface
             throw new SubscriberAlreadyRegisteredException($subscriber);
         }
 
-        $provider = self::new();
-
-        $this->container->invoke($subscriber, [
-            'provider' => $provider,
-        ]);
-
-        $this->subscribers[$subscriber] = $provider;
+        $this->container->invoke($subscriber, [$this->subscribers[$subscriber] = self::new()]);
     }
 
     /**
@@ -200,6 +192,7 @@ final class ListenerProvider implements ListenerProviderInterface
      * @throws SubscriberNotFoundException
      * @throws Throwable
      */
+    #[Override]
     public function unsubscribe(string $subscriber): void
     {
         if (! array_key_exists($subscriber, $this->subscribers)) {
@@ -218,29 +211,25 @@ final class ListenerProvider implements ListenerProviderInterface
      *
      * @psalm-assert class-string<TEvent> $event
      *
-     * @throws EventMustImplementEventInterfaceException
+     * @throws EventNotFoundException
      */
     private static function assertEvent(string $event): void
     {
-        if (
-            ! class_exists($event) &&
-            ! interface_exists($event) &&
-                        ! trait_exists($event) &&
-                        ! enum_exists($event)
-        ) {
-            throw new EventNotFoundException($event);
-        }
-
-        if (! is_a($event, EventInterface::class, true)) {
-            throw new EventMustImplementEventInterfaceException($event);
-        }
+        match (true) {
+            default => throw new EventNotFoundException($event),
+            $event === 'object',
+            class_exists($event),
+            interface_exists($event),
+            trait_exists($event),
+            enum_exists($event) => null,
+        };
     }
 
     /**
      * @template TEvent of object
      * @template TListener of object
      *
-     * @param class-string<(callable(TEvent):void)&TListener>|string $listener
+     * @param class-string<(callable(TEvent):void)&TListener> $listener
      *
      * @psalm-assert class-string<(callable(TEvent):void)&TListener> $listener
      *
