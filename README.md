@@ -49,7 +49,9 @@ $provider->listen(ExampleEvent::class, ExampleEventListener::class);
 
 $dispatcher = EventDispatcher::new($provider);
 
-$dispatcher->dispatch(new ExampleEvent());
+$event = $dispatcher->dispatch(new ExampleEvent());
+
+assert($event instanceof ExampleEvent);
 ```
 
 ### Event Subscriber
@@ -72,18 +74,6 @@ final class EventSubscriber implements SubscriberInterface {
             TestEvent::class, 
             TestEventListener::class,
         );
-
-        // FunctionListener
-        $provider->listen(
-            TestEvent::class, 
-            'Tests\Fixture\listenerFunction',
-        );
-
-        // StaticMethodListener
-        $provider->listen(
-            TestEvent::class,
-            TestEventListener::class . '::onStatic',
-        );
     }
 }
 
@@ -93,7 +83,9 @@ $provider->subscribe(EventSubscriber::class);
 
 $dispatcher = EventDispatcher::new($provider);
 
-$dispatcher->dispatch(new TestEvent());
+$event = $dispatcher->dispatch(new TestEvent());
+
+assert($event instanceof TestEvent);
 ```
 
 ### Changelog
