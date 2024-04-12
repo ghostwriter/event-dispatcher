@@ -8,6 +8,9 @@ use Tests\Fixture\TestEvent;
 
 final class TestEventRaiseAnExceptionListener
 {
+    /**
+     * @throws \RuntimeException
+     */
     public function __invoke(TestEvent $event): void
     {
         // Raise an exception
