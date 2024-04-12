@@ -8,9 +8,5 @@ use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 
 final class MissingInvokeMethodListener
 {
-    public static function onError(ErrorEvent $event): void
-    {
-        // Raise an exception
-        throw new \RuntimeException($event::class);
-    }
+
 }
