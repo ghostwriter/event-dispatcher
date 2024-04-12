@@ -28,13 +28,11 @@ You can also star (🌟) this repo to find it easier later.
 Registering and dispatching an Event Listener.
 
 ```php
-use Ghostwriter\EventDispatcher\Trait\EventTrait;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 
 final class ExampleEvent
 {
-    use EventTrait;
 }
 
 final class ExampleEventListener
@@ -66,6 +64,7 @@ final class EventSubscriber implements SubscriberInterface {
     /**
      * @throws Throwable
      */
+    #[\Override]
     public function __invoke(ListenerProviderInterface $provider): void
     {
         // InvokableListener '::__invoke'
