@@ -1,223 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.23.1@8471a896ccea3526b26d082f4461eeea467f10a4">
-  <file src="src/Event/ErrorEvent.php">
-    <InvalidDocblock>
-      <code><![CDATA[class-string<callable(EventInterface<TStopPropagation>):void&object>]]></code>
-      <code><![CDATA[public function getListener(): string]]></code>
-    </InvalidDocblock>
-    <MissingOverrideAttribute>
-      <code><![CDATA[public function getEvent(): EventInterface]]></code>
-      <code><![CDATA[public function getListener(): string]]></code>
-      <code><![CDATA[public function getThrowable(): Throwable]]></code>
-    </MissingOverrideAttribute>
-  </file>
-  <file src="src/EventDispatcher.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA[$event]]></code>
-    </ArgumentTypeCoercion>
-    <MissingOverrideAttribute>
-      <code><![CDATA[public function dispatch(object $event): object]]></code>
-    </MissingOverrideAttribute>
-    <MixedMethodCall>
-      <code><![CDATA[isPropagationStopped]]></code>
-    </MixedMethodCall>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[TEvent]]></code>
-    </PossiblyUnusedReturnValue>
-    <UnevaluatedCode>
-      <code><![CDATA[if ($isEvent && ! $event->isPropagationStopped()) {
-                    continue;
-                }]]></code>
-      <code><![CDATA[return $event;]]></code>
-    </UnevaluatedCode>
-  </file>
-  <file src="src/EventServiceProvider.php">
-    <MissingOverrideAttribute>
-      <code><![CDATA[public function __invoke(ContainerInterface $container): void]]></code>
-    </MissingOverrideAttribute>
-  </file>
-  <file src="src/Interface/Event/ErrorEventInterface.php">
-    <InvalidDocblock>
-      <code><![CDATA[public function getListener(): string;]]></code>
-    </InvalidDocblock>
-  </file>
-  <file src="src/Interface/ListenerProviderInterface.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[unsubscribe]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/ListenerProvider.php">
-    <InvalidArgument>
-      <code><![CDATA[$listeners]]></code>
-      <code><![CDATA[$this->listeners[$event]]]></code>
-    </InvalidArgument>
-    <InvalidArrayOffset>
-      <code><![CDATA[$this->listeners[$event][$listener]]]></code>
-      <code><![CDATA[$this->listeners[$event][$listener]]]></code>
-    </InvalidArrayOffset>
-    <InvalidIterator>
-      <code><![CDATA[$listeners]]></code>
-    </InvalidIterator>
-    <InvalidPropertyAssignmentValue>
-      <code><![CDATA[$this->listeners]]></code>
-    </InvalidPropertyAssignmentValue>
-    <MissingOverrideAttribute>
-      <code><![CDATA[public function forget(string $listener): void]]></code>
-      <code><![CDATA[public function getListenersForEvent(object $event): Generator]]></code>
-      <code><![CDATA[public function listen(string $event, string $listener): void]]></code>
-      <code><![CDATA[public function subscribe(string $subscriber): void]]></code>
-      <code><![CDATA[public function unsubscribe(string $subscriber): void]]></code>
-    </MissingOverrideAttribute>
-    <MissingThrowsDocblock>
-      <code><![CDATA[throw new EventNotFoundException($event);]]></code>
-    </MissingThrowsDocblock>
-    <UnevaluatedCode>
-      <code><![CDATA[$this->subscribers[$subscriber] = $provider;]]></code>
-    </UnevaluatedCode>
-  </file>
-  <file src="src/Trait/EventTrait.php">
-    <InvalidPropertyAssignmentValue>
-      <code><![CDATA[true]]></code>
-      <code><![CDATA[true]]></code>
-      <code><![CDATA[true]]></code>
-    </InvalidPropertyAssignmentValue>
-    <MissingOverrideAttribute>
-      <code><![CDATA[final public function isPropagationStopped(): bool]]></code>
-      <code><![CDATA[final public function stopPropagation(): void]]></code>
-    </MissingOverrideAttribute>
-  </file>
-  <file src="tests/Fixture/Listener/AlreadyStoppedEventCallsNoListener.php">
-    <MissingThrowsDocblock>
-      <code><![CDATA[throw new RuntimeException(self::ERROR_MESSAGE . $event::class, self::ERROR_CODE);]]></code>
-    </MissingThrowsDocblock>
-  </file>
-  <file src="tests/Fixture/Listener/ErrorEventListener.php">
-    <MissingThrowsDocblock>
-      <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
-    </MissingThrowsDocblock>
-  </file>
-  <file src="tests/Fixture/Listener/IntersectionParameterTypeDeclarationListener.php">
-    <ReservedWord>
-      <code><![CDATA[TestEvent&TestEvent2 $testEvent]]></code>
-    </ReservedWord>
-    <UnusedParam>
-      <code><![CDATA[$testEvent]]></code>
-    </UnusedParam>
-  </file>
-  <file src="tests/Fixture/Listener/MissingEventParameterListener.php">
-    <UnusedClass>
-      <code><![CDATA[MissingEventParameterListener]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Fixture/Listener/MissingInvokeMethodListener.php">
-    <MissingThrowsDocblock>
-      <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
-    </MissingThrowsDocblock>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[onError]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="tests/Fixture/Listener/MissingParameterTypeDeclarationListener.php">
-    <MissingThrowsDocblock>
-      <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
-    </MissingThrowsDocblock>
-    <UnusedClass>
-      <code><![CDATA[MissingParameterTypeDeclarationListener]]></code>
-    </UnusedClass>
-  </file>
-  <file src="tests/Fixture/Listener/ReturnsEventWithoutResolvingListenersIfPropagationIsStoppedListener.php">
-    <MissingThrowsDocblock>
-      <code><![CDATA[throw new RuntimeException(
-            sprintf(
-                self::ERROR_MESSAGE,
-                $event::class
-            ),
-            self::ERROR_CODE
-        );]]></code>
-    </MissingThrowsDocblock>
-  </file>
-  <file src="tests/Fixture/Listener/TestEventRaiseAnExceptionListener.php">
-    <MissingThrowsDocblock>
-      <code><![CDATA[throw new \RuntimeException($event::class);]]></code>
-    </MissingThrowsDocblock>
-  </file>
-  <file src="tests/Fixture/Listener/UnionParameterTypeDeclarationListener.php">
-    <UnusedParam>
-      <code><![CDATA[$testEvent]]></code>
-    </UnusedParam>
-  </file>
-  <file src="tests/Fixture/Subscriber/InvalidTestEventSubscriber.php">
-    <TooFewArguments>
-      <code><![CDATA[listen]]></code>
-      <code><![CDATA[listen]]></code>
-    </TooFewArguments>
-  </file>
-  <file src="tests/Fixture/Subscriber/TestEventSubscriber.php">
-    <MissingOverrideAttribute>
-      <code><![CDATA[public function __invoke(ListenerProviderInterface $provider): void]]></code>
-    </MissingOverrideAttribute>
-  </file>
-  <file src="tests/Fixture/TestEvent.php">
-    <MissingOverrideAttribute>
-      <code><![CDATA[public function count(): int]]></code>
-      <code><![CDATA[public function read(): string]]></code>
-      <code><![CDATA[public function write(string $event): void]]></code>
-    </MissingOverrideAttribute>
-  </file>
-  <file src="tests/Fixture/TestEventInterface.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[count]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="tests/Fixture/TestEventListener.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[onStatic]]></code>
-      <code><![CDATA[onStaticCallableArray]]></code>
-      <code><![CDATA[onTest]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="tests/Fixture/TestListener.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[intersection]]></code>
-      <code><![CDATA[union]]></code>
-    </PossiblyUnusedMethod>
-    <ReservedWord>
-      <code><![CDATA[TestEvent&TestEvent2 $testEvent]]></code>
-    </ReservedWord>
-    <UnusedParam>
-      <code><![CDATA[$testEvent]]></code>
-      <code><![CDATA[$testEvent]]></code>
-    </UnusedParam>
-  </file>
-  <file src="tests/Unit/AbstractTestCase.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA[$event]]></code>
-      <code><![CDATA[$listener]]></code>
-      <code><![CDATA[$subscriber]]></code>
-    </ArgumentTypeCoercion>
-    <InvalidPropertyAssignmentValue>
-      <code><![CDATA[TestEventListener::class]]></code>
-    </InvalidPropertyAssignmentValue>
-    <MissingOverrideAttribute>
-      <code><![CDATA[final protected function setUp(): void]]></code>
-      <code><![CDATA[final protected function tearDown(): void]]></code>
-    </MissingOverrideAttribute>
-    <MissingTemplateParam>
-      <code><![CDATA[EventInterface]]></code>
-      <code><![CDATA[EventTrait]]></code>
-    </MissingTemplateParam>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[eventDataProvider]]></code>
-      <code><![CDATA[listen]]></code>
-      <code><![CDATA[subscribe]]></code>
-    </PossiblyUnusedMethod>
-    <PossiblyUnusedReturnValue>
-      <code><![CDATA[EventInterface]]></code>
-    </PossiblyUnusedReturnValue>
-    <UndefinedDocblockClass>
-      <code><![CDATA[string]]></code>
-    </UndefinedDocblockClass>
-  </file>
   <file src="tests/Unit/ErrorEventTest.php">
     <PropertyNotSetInConstructor>
       <code><![CDATA[ErrorEventTest]]></code>
@@ -229,9 +11,6 @@
     </PropertyNotSetInConstructor>
   </file>
   <file src="tests/Unit/EventDispatcherTest.php">
-    <DocblockTypeContradiction>
-      <code><![CDATA[assertSame]]></code>
-    </DocblockTypeContradiction>
     <PropertyNotSetInConstructor>
       <code><![CDATA[EventDispatcherTest]]></code>
       <code><![CDATA[EventDispatcherTest]]></code>
@@ -239,25 +18,9 @@
       <code><![CDATA[EventDispatcherTest]]></code>
       <code><![CDATA[EventDispatcherTest]]></code>
       <code><![CDATA[EventDispatcherTest]]></code>
-    </PropertyNotSetInConstructor>
-    <RedundantConditionGivenDocblockType>
-      <code><![CDATA[assertTrue]]></code>
-    </RedundantConditionGivenDocblockType>
-  </file>
-  <file src="tests/Unit/Exception/EventMustImplementEventInterfaceExceptionTest.php">
-    <PropertyNotSetInConstructor>
-      <code><![CDATA[EventMustImplementEventInterfaceExceptionTest]]></code>
-      <code><![CDATA[EventMustImplementEventInterfaceExceptionTest]]></code>
-      <code><![CDATA[EventMustImplementEventInterfaceExceptionTest]]></code>
-      <code><![CDATA[EventMustImplementEventInterfaceExceptionTest]]></code>
-      <code><![CDATA[EventMustImplementEventInterfaceExceptionTest]]></code>
-      <code><![CDATA[EventMustImplementEventInterfaceExceptionTest]]></code>
     </PropertyNotSetInConstructor>
   </file>
   <file src="tests/Unit/Exception/EventNotFoundExceptionTest.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA['does-not-exist']]></code>
-    </ArgumentTypeCoercion>
     <PropertyNotSetInConstructor>
       <code><![CDATA[EventNotFoundExceptionTest]]></code>
       <code><![CDATA[EventNotFoundExceptionTest]]></code>
@@ -266,9 +29,6 @@
       <code><![CDATA[EventNotFoundExceptionTest]]></code>
       <code><![CDATA[EventNotFoundExceptionTest]]></code>
     </PropertyNotSetInConstructor>
-    <UndefinedClass>
-      <code><![CDATA['does-not-exist']]></code>
-    </UndefinedClass>
   </file>
   <file src="tests/Unit/Exception/FailedToDetermineEventTypeExceptionTest.php">
     <PropertyNotSetInConstructor>
@@ -341,9 +101,6 @@
     </PropertyNotSetInConstructor>
   </file>
   <file src="tests/Unit/ListenerProviderTest.php">
-    <DocblockTypeContradiction>
-      <code><![CDATA[assertSame]]></code>
-    </DocblockTypeContradiction>
     <PropertyNotSetInConstructor>
       <code><![CDATA[ListenerProviderTest]]></code>
       <code><![CDATA[ListenerProviderTest]]></code>
