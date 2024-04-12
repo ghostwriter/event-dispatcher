@@ -7,10 +7,10 @@ namespace Ghostwriter\EventDispatcher;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
-use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Throwable;
+use Override;
 
 final readonly class EventDispatcher implements EventDispatcherInterface
 {
@@ -28,32 +28,21 @@ final readonly class EventDispatcher implements EventDispatcherInterface
      *
      * @return TEvent
      */
+    #[Override]
     public function dispatch(object $event): object
     {
-        $isEvent = $event instanceof ErrorEventInterface;
-
-        if ($isEvent && $event->isPropagationStopped()) {
-            return $event;
-        }
-
-        $isErrorEvent = $event instanceof ErrorEventInterface;
+        $isErrorEvent = $event instanceof ErrorEvent;
 
         foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
             try {
                 $this->container->invoke($listener, [$event]);
-
-                if ($isEvent && ! $event->isPropagationStopped()) {
-                    continue;
-                }
-
-                return $event;
             } catch (Throwable $throwable) {
                 if ($isErrorEvent) {
                     /**
                      * If an error is raised while processing an ErrorEvent,
                      * re-throw the original throwable to prevent recursion.
                      *
-                     * @var ErrorEvent<bool> $event
+                     * @var ErrorEvent $event
                      */
                     throw $event->getThrowable();
                 }
