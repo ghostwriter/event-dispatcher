@@ -7,6 +7,7 @@ namespace Tests\Fixture\Subscriber;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Tests\Fixture\TestEventListener;
 use Throwable;
+use Tests\Fixture\TestEvent;
 
 final readonly class InvalidTestEventSubscriber
 {
@@ -15,6 +16,6 @@ final readonly class InvalidTestEventSubscriber
      */
     public function __invoke(ListenerProviderInterface $provider): void
     {
-        $provider->listen(TestEventListener::class);
+        $provider->listen(TestEvent::class, TestEventListener::class);
     }
 }
