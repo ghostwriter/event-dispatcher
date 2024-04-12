@@ -10,9 +10,10 @@ interface ListenerProviderInterface
 {
     /**
      * @template TEvent of object
+     * @template TListener of object
      *
-     * @param class-string<TEvent>                         $event
-     * @param class-string<(callable(TEvent):void)&object> $listener
+     * @param 'object'|class-string<TEvent>                   $event
+     * @param class-string<(callable(TEvent):void)&TListener> $listener
      *
      * @throws ExceptionInterface
      */
@@ -20,8 +21,9 @@ interface ListenerProviderInterface
 
     /**
      * @template TEvent of object
+     * @template TListener of object
      *
-     * @param class-string<(callable(TEvent):void)&object> $listener
+     * @param class-string<(callable(TEvent):void)&TListener> $listener
      *
      * @throws ExceptionInterface
      */
@@ -29,10 +31,11 @@ interface ListenerProviderInterface
 
     /**
      * @template TEvent of object
+     * @template TListener of object
      *
      * @param TEvent $event
      *
-     * @return Generator<class-string<(callable(TEvent):void)&object>>
+     * @return Generator<class-string<(callable(TEvent):void)&TListener>>
      */
     public function getListenersForEvent(object $event): Generator;
 
