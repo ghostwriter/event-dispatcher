@@ -11,9 +11,6 @@ final readonly class LogTestEventExceptionMessageListener
 {
     public function __invoke(ErrorEventInterface $event): void
     {
-        /** @var TestEventInterface $testEvent */
-        $testEvent = $event->getEvent();
-
-        $testEvent->write($event->getThrowable()->getMessage());
+        unset($event);
     }
 }
