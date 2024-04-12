@@ -8,8 +8,10 @@ use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 
 final class ErrorEventListener
 {
-    /** @param ErrorEvent<bool> $event */
-    public function __invoke(ErrorEvent $event): void
+    /**
+     * @throws \RuntimeException
+     */
+    public function __invoke(ErrorEvent $event): never
     {
         // Raise an exception
         throw new \RuntimeException($event::class);
