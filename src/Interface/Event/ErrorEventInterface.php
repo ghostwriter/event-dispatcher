@@ -8,30 +8,31 @@ use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Throwable;
 
 /**
- * An object that contains information about an error triggered by EventInterface handling.
- *
- * @template TStopPropagation of bool
- *
- * @extends EventInterface<TStopPropagation>
+ * An object that contains information about an error triggered by Event handling.
  */
 interface ErrorEventInterface extends EventInterface
 {
     /**
      * Returns the event that triggered this error event.
      *
-     * @return EventInterface<TStopPropagation>
+     * @template TEvent of object
+     *
+     * @return TEvent
      */
-    public function getEvent(): EventInterface;
+    public function getEvent(): object;
 
     /**
-     * Returns the callable from which the exception or error was generated.
+     * Returns the listener that raised the error.
      *
-     * @return class-string<callable(EventInterface<TStopPropagation>):void&object>
+     * @template TEvent of object
+     * @template TListener of object
+     *
+     * @return class-string<(callable(TEvent):void)&TListener>
      */
     public function getListener(): string;
 
     /**
-     * Returns the throwable that triggered this error event.
+     * Returns the exception thrown by the listener.
      */
     public function getThrowable(): Throwable;
 }
