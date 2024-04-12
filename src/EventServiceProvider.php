@@ -9,12 +9,14 @@ use Ghostwriter\Container\Interface\ServiceProviderInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Throwable;
+use Override;
 
 final readonly class EventServiceProvider implements ServiceProviderInterface
 {
     /**
      * @throws Throwable
      */
+    #[Override]
     public function __invoke(ContainerInterface $container): void
     {
         $container->alias(EventDispatcherInterface::class, EventDispatcher::class);
