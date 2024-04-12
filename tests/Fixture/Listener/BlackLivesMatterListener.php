@@ -13,7 +13,5 @@ final class BlackLivesMatterListener
     public function __invoke(TestEventInterface $event): void
     {
         $event->write('#BlackLivesMatter');
-
-        $event->stopPropagation();
     }
 }
