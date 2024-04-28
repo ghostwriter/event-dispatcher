@@ -61,12 +61,13 @@ Registering an Event Subscriber.
 ```php
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Interface\SubscriberInterface;
+use Override;
 
 final class EventSubscriber implements SubscriberInterface {
     /**
      * @throws Throwable
      */
-    #[\Override]
+    #[Override]
     public function __invoke(ListenerProviderInterface $provider): void
     {
         // InvokableListener '::__invoke'
