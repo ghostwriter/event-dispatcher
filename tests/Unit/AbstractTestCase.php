@@ -10,7 +10,6 @@ use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
@@ -69,7 +68,14 @@ abstract class AbstractTestCase extends TestCase
         Container::getInstance()->__destruct();
     }
 
-    final public function assertListenersCount(int $expectedCount, EventInterface $event): void
+    /**
+     * @template TEvent of object
+     *
+     * @param TEvent $event
+     *
+     * @throws Throwable
+     */
+    final public function assertListenersCount(int $expectedCount, object $event): void
     {
         self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->getListenersForEvent($event)));
     }
@@ -88,7 +94,7 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @return Generator<class-string<ErrorEvent|EventInterface|stdClass|TestEvent>,list{ErrorEvent|EventInterface|stdClass|TestEvent}>
+     * @return Generator<string,array{0:object}>
      */
     public static function eventDataProvider(): Generator
     {
@@ -96,7 +102,7 @@ abstract class AbstractTestCase extends TestCase
 
         yield from [
             stdClass::class => [new stdClass()],
-            EventInterface::class => [new class () implements EventInterface {}],
+            'noop' => [new class () {}],
             TestEvent::class => [$testEvent],
             ErrorEvent::class => [
                 new ErrorEvent(
