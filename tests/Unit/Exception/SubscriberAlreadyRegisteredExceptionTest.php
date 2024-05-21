@@ -12,6 +12,7 @@ use Ghostwriter\EventDispatcher\ListenerProvider;
 use Tests\Fixture\Subscriber\TestEventSubscriber;
 use Tests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
@@ -21,6 +22,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(ListenerProvider::class)]
 final class SubscriberAlreadyRegisteredExceptionTest extends AbstractTestCase
 {
+    /**
+     * @throws Throwable
+     */
     public function testThrowsSubscriberAlreadyRegisteredException(): void
     {
         $this->expectException(SubscriberAlreadyRegisteredException::class);
