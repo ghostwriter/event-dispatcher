@@ -8,11 +8,12 @@ use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
+use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Tests\Fixture\Listener\MissingInvokeMethodListener;
 use Tests\Unit\AbstractTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Throwable;
 
 #[CoversClass(ListenerMissingInvokeMethodException::class)]
 #[CoversClass(EventDispatcher::class)]
@@ -21,10 +22,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(ListenerProvider::class)]
 final class ListenerMissingInvokeMethodExceptionTest extends AbstractTestCase
 {
+    /**
+     * @throws Throwable
+     */
     public function testListenThrowsListenerMissingInvokeMethodException(): void
     {
         $this->expectException(ListenerMissingInvokeMethodException::class);
 
-        $this->listenerProvider->listen(EventInterface::class, MissingInvokeMethodListener::class);
+        $this->listenerProvider->listen(ErrorEventInterface::class, MissingInvokeMethodListener::class);
     }
 }
