@@ -71,6 +71,9 @@ final class ListenerProviderTest extends AbstractTestCase
         $this->assertListenersCount(0, $testEvent);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testProviderDetectsIntersectionTypes(): void
     {
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
@@ -87,6 +90,9 @@ final class ListenerProviderTest extends AbstractTestCase
         }
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testProviderDetectsUnionTypes(): void
     {
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
@@ -103,6 +109,9 @@ final class ListenerProviderTest extends AbstractTestCase
         }
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testProviderImplementsProviderInterface(): void
     {
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
