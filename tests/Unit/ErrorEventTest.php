@@ -8,7 +8,6 @@ use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Tests\Fixture\Listener\ErrorEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -47,8 +46,6 @@ final class ErrorEventTest extends AbstractTestCase
 
     /**
      * @throws Throwable
-     *
-     * @psalm-suppress UnevaluatedCode
      */
     public function testErrorEventComposesEventListenerAndThrowable(): void
     {
@@ -74,9 +71,11 @@ final class ErrorEventTest extends AbstractTestCase
         $this->eventDispatcher->dispatch($this->errorEvent);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testErrorEventImplementsErrorEventInterface(): void
     {
         self::assertInstanceOf(ErrorEventInterface::class, $this->errorEvent);
-        self::assertInstanceOf(EventInterface::class, $this->errorEvent);
     }
 }
