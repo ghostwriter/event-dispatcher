@@ -9,33 +9,33 @@ use Generator;
 interface ListenerProviderInterface
 {
     /**
-     * @template TEvent of object
-     * @template TListener of object
+     * @template TLEvent of object
+     * @template TLListener of object
      *
-     * @param 'object'|class-string<TEvent>                   $event
-     * @param class-string<(callable(TEvent):void)&TListener> $listener
+     * @param 'object'|class-string<TLEvent>                    $event
+     * @param class-string<(callable(TLEvent):void)&TLListener> $listener
      *
      * @throws ExceptionInterface
      */
     public function listen(string $event, string $listener): void;
 
     /**
-     * @template TEvent of object
-     * @template TListener of object
+     * @template TFEvent of object
+     * @template TFListener of (callable(TFEvent):void)&object
      *
-     * @param class-string<(callable(TEvent):void)&TListener> $listener
+     * @param class-string<TFListener> $listener
      *
      * @throws ExceptionInterface
      */
     public function forget(string $listener): void;
 
     /**
-     * @template TEvent of object
-     * @template TListener of object
+     * @template TGEvent of object
+     * @template TGListener of (callable(TGEvent):void)&object
      *
-     * @param TEvent $event
+     * @param TGEvent $event
      *
-     * @return Generator<class-string<(callable(TEvent):void)&TListener>>
+     * @return Generator<class-string<TGListener>>
      */
     public function getListenersForEvent(object $event): Generator;
 
