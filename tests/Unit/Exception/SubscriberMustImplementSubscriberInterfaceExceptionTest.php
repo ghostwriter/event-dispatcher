@@ -22,8 +22,6 @@ use Throwable;
 final class SubscriberMustImplementSubscriberInterfaceExceptionTest extends AbstractTestCase
 {
     /**
-     * @psalm-suppress InvalidArgument
-     *
      * @throws Throwable
      */
     public function testThrowsSubscriberMustImplementSubscriberInterfaceException(): void
