@@ -35,6 +35,9 @@ final class ListenerNotFoundExceptionTest extends AbstractTestCase
         $this->listenerProvider->listen(TestEvent::class, NonExistentTestEventListener::class);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testRemove(): void
     {
         $this->expectException(ListenerNotFoundException::class);
