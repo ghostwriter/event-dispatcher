@@ -19,6 +19,7 @@ use Tests\Fixture\TestEventInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
+use Tests\Fixture\TestListener;
 use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
@@ -42,16 +43,6 @@ final class EventDispatcherTest extends AbstractTestCase
     }
 
     /**
-     * @throws Throwable
-     */
-    public function testDispatchAll(): void
-    {
-        foreach (self::eventDataProvider() as $event) {
-            $this->dispatch($event[0]);
-        }
-    }
-
-    /**
      * @template TEvent of object
      *
      * @param TEvent $event
@@ -66,9 +57,12 @@ final class EventDispatcherTest extends AbstractTestCase
         $this->dispatch($event);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testImplementsDispatcherInterfaceAndPsrEventDispatcherInterface(): void
     {
-        self::assertInstanceOf(EventDispatcherInterface::class, $this->eventDispatcher);
+        self::assertInstanceOf(EventDispatcherInterface::class, EventDispatcher::new());
     }
 
     /**
@@ -128,19 +122,20 @@ final class EventDispatcherTest extends AbstractTestCase
     /**
      * @throws Throwable
      */
-    #[DataProvider('eventDataProvider')]
-    public function testThrows(object $event): void
+    public function testThrows(): void
     {
-        if ($event instanceof ErrorEvent) {
-            $throwable = $event->getThrowable();
+        $event = new TestEvent();
+        $listener = TestListener::class;
+        $throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
 
-            $this->expectException($throwable::class);
-            $this->expectExceptionMessage($throwable->getMessage());
-            $this->expectExceptionCode($throwable->getCode());
+        $errorEvent = new ErrorEvent($event, $listener, $throwable);
+        //
+        $this->expectException($throwable::class);
+        $this->expectExceptionMessage($throwable->getMessage());
+        $this->expectExceptionCode($throwable->getCode());
 
-            throw $throwable;
-        }
+        $this->eventDispatcher->dispatch($errorEvent);
 
-        self::assertInstanceOf(EventDispatcherInterface::class, $this->eventDispatcher);
+        throw $errorEvent->getThrowable();
     }
 }
