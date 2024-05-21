@@ -8,7 +8,6 @@ use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
-use Ghostwriter\EventDispatcher\Exception\FailedToDetermineEventTypeException;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
 use Ghostwriter\EventDispatcher\Exception\ListenerNotFoundException;
@@ -27,7 +26,6 @@ use function sprintf;
 #[CoversClass(EventServiceProvider::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(EventNotFoundException::class)]
-#[CoversClass(FailedToDetermineEventTypeException::class)]
 #[CoversClass(ListenerAlreadyExistsException::class)]
 #[CoversClass(ListenerMissingInvokeMethodException::class)]
 #[CoversClass(ListenerNotFoundException::class)]
@@ -38,9 +36,8 @@ final class ExceptionsTest extends AbstractTestCase
     /**
      * @var array<class-string<Throwable>>
      */
-    public const EXCEPTIONS = [
+    public const array EXCEPTIONS = [
         EventNotFoundException::class,
-        FailedToDetermineEventTypeException::class,
         ListenerAlreadyExistsException::class,
         ListenerMissingInvokeMethodException::class,
         ListenerNotFoundException::class,
