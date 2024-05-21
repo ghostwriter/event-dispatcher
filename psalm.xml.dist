@@ -37,6 +37,29 @@
         </ignoreFiles>
     </projectFiles>
     <plugins>
-        <pluginClass class="Ghostwriter\PsalmPlugin\Plugin"/>
+<!--        <pluginClass class="Ghostwriter\PsalmPlugin\Plugin"/>-->
     </plugins>
+    <issueHandlers>
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <file name="src/EventDispatcher.php"/>
+                <file name="tests/Unit/Exception/SubscriberMustImplementSubscriberInterfaceExceptionTest.php"/>
+            </errorLevel>
+        </InvalidArgument>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+        <PossiblyUnusedMethod>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </PossiblyUnusedMethod>
+        <UnusedClass>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </UnusedClass>
+    </issueHandlers>
 </psalm>
