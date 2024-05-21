@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
-
-interface TestEventInterface extends EventInterface
+interface TestEventInterface
 {
     public function count(): int;
 
