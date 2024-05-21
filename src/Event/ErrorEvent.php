@@ -8,12 +8,15 @@ use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Throwable;
 use Override;
 
+/**
+ * @template TEvent of object
+ * @template TListener of object
+ *
+ * @implements ErrorEventInterface<TEvent,TListener>
+ */
 final readonly class ErrorEvent implements ErrorEventInterface
 {
     /**
-     * @template TEvent of object
-     * @template TListener of object
-     *
      * @param TEvent                                          $event
      * @param class-string<(callable(TEvent):void)&TListener> $listener
      */
@@ -24,8 +27,6 @@ final readonly class ErrorEvent implements ErrorEventInterface
     ) {}
 
     /**
-     * @template TEvent of object
-     *
      * @return TEvent
      */
     #[Override]
@@ -35,9 +36,6 @@ final readonly class ErrorEvent implements ErrorEventInterface
     }
 
     /**
-     * @template TEvent of object
-     * @template TListener of object
-     *
      * @return class-string<(callable(TEvent):void)&TListener>
      */
     #[Override]
