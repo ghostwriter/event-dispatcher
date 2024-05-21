@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Fixture;
 
-use Ghostwriter\EventDispatcher\Interface\EventInterface;
-
 final class TestListener
 {
     private array $called = [];
 
-    public function __invoke(EventInterface $event): void
+    public function __invoke(object $event): void
     {
         $this->called[] = $event::class;
+    }
+
+    public function called(): array
+    {
+        return $this->called;
     }
 }
