@@ -36,11 +36,11 @@ use function trait_exists;
 final class ListenerProvider implements ListenerProviderInterface
 {
     /**
-     * @template TEvent of object
-     * @template TListener of object
+     * @template Event of object
+     * @template Listener of object
      *
-     * @param array<class-string<TEvent>,array<class-string<(callable(TEvent):void)&TListener>,null>> $listeners
-     * @param array<class-string<SubscriberInterface>,ListenerProviderInterface>                      $subscribers
+     * @param array<class-string<Event>,array<class-string<(callable(Event):void)&Listener>,null>> $listeners
+     * @param array<class-string<SubscriberInterface>,ListenerProviderInterface>                   $subscribers
      */
     public function __construct(
         private readonly ContainerInterface $container,
@@ -49,11 +49,11 @@ final class ListenerProvider implements ListenerProviderInterface
     ) {}
 
     /**
-     * @template TEvent of object
-     * @template TListener of object
+     * @template Event of object
+     * @template Listener of object
      *
-     * @param array<class-string<TEvent>,class-string<(callable(TEvent):void)&TListener>> $listeners
-     * @param array<class-string<SubscriberInterface>>                                    $subscribers
+     * @param array<class-string<Event>,class-string<(callable(Event):void)&Listener>> $listeners
+     * @param array<class-string<SubscriberInterface>>                                 $subscribers
      *
      * @throws Throwable
      */
@@ -67,7 +67,7 @@ final class ListenerProvider implements ListenerProviderInterface
         $listenerProvider = new self($container);
 
         foreach ($listeners as $event => $listener) {
-            $listenerProvider->listen($event, $listener);
+            $listenerProvider->bind($event, $listener);
         }
 
         foreach ($subscribers as $subscriber) {
@@ -78,16 +78,16 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @template TEvent of object
-     * @template TListener of object
+     * @template Event of object
+     * @template Listener of object
      *
-     * @param 'object'|class-string<TEvent>                   $event
-     * @param class-string<(callable(TEvent):void)&TListener> $listener
+     * @param 'object'|class-string<Event>                  $event
+     * @param class-string<(callable(Event):void)&Listener> $listener
      *
      * @throws ExceptionInterface
      */
     #[Override]
-    public function listen(string $event, string $listener): void
+    public function bind(string $event, string $listener): void
     {
         self::assertEvent($event);
 
@@ -104,15 +104,15 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @template TEvent of object
-     * @template TListener of object
+     * @template Event of object
+     * @template Listener of object
      *
-     * @param TEvent $event
+     * @param Event $event
      *
-     * @return Generator<class-string<(callable(TEvent):void)&TListener>>
+     * @return Generator<class-string<(callable(Event):void)&Listener>>
      */
     #[Override]
-    public function getListenersForEvent(object $event): Generator
+    public function listeners(object $event): Generator
     {
         foreach ($this->listeners as $type => $listeners) {
             if (! $event instanceof $type) {
@@ -129,20 +129,20 @@ final class ListenerProvider implements ListenerProviderInterface
                 continue;
             }
 
-            yield from $provider->getListenersForEvent($event);
+            yield from $provider->listeners($event);
         }
     }
 
     /**
-     * @template TEvent of object
-     * @template TListener of object
+     * @template Event of object
+     * @template Listener of object
      *
-     * @param class-string<(callable(TEvent):void)&TListener> $listener
+     * @param class-string<(callable(Event):void)&Listener> $listener
      *
      * @throws ListenerNotFoundException
      */
     #[Override]
-    public function forget(string $listener): void
+    public function unbind(string $listener): void
     {
         $removed = false;
 
@@ -205,11 +205,11 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @template TEvent of object
+     * @template Event of object
      *
-     * @param class-string<TEvent>|string $event
+     * @param class-string<Event>|string $event
      *
-     * @psalm-assert class-string<TEvent> $event
+     * @psalm-assert class-string<Event> $event
      *
      * @throws EventNotFoundException
      */
@@ -226,12 +226,12 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @template TEvent of object
-     * @template TListener of object
+     * @template Event of object
+     * @template Listener of object
      *
-     * @param class-string<(callable(TEvent):void)&TListener> $listener
+     * @param class-string<(callable(Event):void)&Listener> $listener
      *
-     * @psalm-assert class-string<(callable(TEvent):void)&TListener> $listener
+     * @psalm-assert class-string<(callable(Event):void)&Listener> $listener
      *
      * @throws ListenerNotFoundException
      * @throws ListenerMissingInvokeMethodException
