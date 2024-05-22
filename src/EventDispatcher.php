@@ -21,20 +21,20 @@ final readonly class EventDispatcher implements EventDispatcherInterface
     ) {}
 
     /**
-     * @template TEvent of object
+     * @template Event of object
      *
-     * @param TEvent $event
+     * @param Event $event
      *
      * @throws Throwable
      *
-     * @return TEvent
+     * @return Event
      */
     #[Override]
     public function dispatch(object $event): object
     {
         $isErrorEvent = $event instanceof ErrorEventInterface;
 
-        foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
+        foreach ($this->listenerProvider->listeners($event) as $listener) {
             try {
                 $this->container->invoke($listener, [$event]);
             } catch (Throwable $throwable) {
@@ -45,7 +45,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
                      *
                      * @var ErrorEventInterface $event
                      */
-                    throw $event->getThrowable();
+                    throw $event->throwable();
                 }
 
                 $this->dispatch(new ErrorEvent($event, $listener, $throwable));
@@ -68,7 +68,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
             $container->provide(EventServiceProvider::class);
         }
 
-        if ($listenerProvider !== null) {
+        if ($listenerProvider instanceof ListenerProviderInterface) {
             return new self($container, $listenerProvider);
         }
 
