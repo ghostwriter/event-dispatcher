@@ -16,6 +16,6 @@ final readonly class InvalidTestEventSubscriber
      */
     public function __invoke(ListenerProviderInterface $provider): void
     {
-        $provider->listen(TestEvent::class, TestEventListener::class);
+        $provider->bind(TestEvent::class, TestEventListener::class);
     }
 }
