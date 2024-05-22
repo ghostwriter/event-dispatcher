@@ -69,21 +69,21 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @template TEvent of object
+     * @template Event of object
      *
-     * @param TEvent $event
+     * @param Event $event
      *
      * @throws Throwable
      */
     final public function assertListenersCount(int $expectedCount, object $event): void
     {
-        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->getListenersForEvent($event)));
+        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->listeners($event)));
     }
 
     /**
-     * @template TEvent of object
+     * @template Event of object
      *
-     * @param TEvent $event
+     * @param Event $event
      *
      * @throws ExceptionInterface
      * @throws Throwable
