@@ -25,7 +25,7 @@ final class ErrorEventTest extends AbstractTestCase
      */
     public function testGetEvent(): void
     {
-        self::assertSame($this->testEvent, $this->errorEvent->getEvent());
+        self::assertSame($this->testEvent, $this->errorEvent->event());
     }
 
     /**
@@ -33,7 +33,7 @@ final class ErrorEventTest extends AbstractTestCase
      */
     public function testGetListener(): void
     {
-        self::assertSame($this->listener, $this->errorEvent->getListener());
+        self::assertSame($this->listener, $this->errorEvent->listener());
     }
 
     /**
@@ -41,7 +41,7 @@ final class ErrorEventTest extends AbstractTestCase
      */
     public function testGetThrowable(): void
     {
-        self::assertSame($this->throwable, $this->errorEvent->getThrowable());
+        self::assertSame($this->throwable, $this->errorEvent->throwable());
     }
 
     /**
@@ -49,12 +49,12 @@ final class ErrorEventTest extends AbstractTestCase
      */
     public function testErrorEventComposesEventListenerAndThrowable(): void
     {
-        self::assertSame($this->testEvent, $this->errorEvent->getEvent());
-        self::assertSame($this->listener, $this->errorEvent->getListener());
-        self::assertSame($this->throwable, $this->errorEvent->getThrowable());
+        self::assertSame($this->testEvent, $this->errorEvent->event());
+        self::assertSame($this->listener, $this->errorEvent->listener());
+        self::assertSame($this->throwable, $this->errorEvent->throwable());
 
-        self::assertSame(self::ERROR_MESSAGE, $this->errorEvent->getThrowable()->getMessage());
-        self::assertSame(self::ERROR_CODE, $this->errorEvent->getThrowable()->getCode());
+        self::assertSame(self::ERROR_MESSAGE, $this->errorEvent->throwable()->getMessage());
+        self::assertSame(self::ERROR_CODE, $this->errorEvent->throwable()->getCode());
     }
 
     /**
@@ -62,7 +62,7 @@ final class ErrorEventTest extends AbstractTestCase
      */
     public function testErrorEventListenerThrowsRuntimeException(): void
     {
-        $this->listenerProvider->listen(ErrorEvent::class, ErrorEventListener::class);
+        $this->listenerProvider->bind(ErrorEvent::class, ErrorEventListener::class);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(self::ERROR_MESSAGE);
