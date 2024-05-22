@@ -22,7 +22,7 @@ final readonly class TestEventSubscriber implements SubscriberInterface
     public function __invoke(ListenerProviderInterface $listenerProvider): void
     {
         // Invokable class '::__invoke'
-        $listenerProvider->listen(TestEvent::class, TestEventListener::class);
-        $listenerProvider->listen(ErrorEventInterface::class, LogTestEventExceptionMessageListener::class);
+        $listenerProvider->bind(TestEvent::class, TestEventListener::class);
+        $listenerProvider->bind(ErrorEventInterface::class, LogTestEventExceptionMessageListener::class);
     }
 }
