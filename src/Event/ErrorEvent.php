@@ -9,16 +9,16 @@ use Throwable;
 use Override;
 
 /**
- * @template TEvent of object
- * @template TListener of object
+ * @template Event of object
+ * @template Listener of object
  *
- * @implements ErrorEventInterface<TEvent,TListener>
+ * @implements ErrorEventInterface<Event,Listener>
  */
 final readonly class ErrorEvent implements ErrorEventInterface
 {
     /**
-     * @param TEvent                                          $event
-     * @param class-string<(callable(TEvent):void)&TListener> $listener
+     * @param Event                                         $event
+     * @param class-string<(callable(Event):void)&Listener> $listener
      */
     public function __construct(
         private object $event,
@@ -27,25 +27,25 @@ final readonly class ErrorEvent implements ErrorEventInterface
     ) {}
 
     /**
-     * @return TEvent
+     * @return Event
      */
     #[Override]
-    public function getEvent(): object
+    public function event(): object
     {
         return $this->event;
     }
 
     /**
-     * @return class-string<(callable(TEvent):void)&TListener>
+     * @return class-string<(callable(Event):void)&Listener>
      */
     #[Override]
-    public function getListener(): string
+    public function listener(): string
     {
         return $this->listener;
     }
 
     #[Override]
-    public function getThrowable(): Throwable
+    public function throwable(): Throwable
     {
         return $this->throwable;
     }
