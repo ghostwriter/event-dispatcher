@@ -35,20 +35,20 @@ final class ListenerProviderTest extends AbstractTestCase
 
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
 
-        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
 
         $this->assertListenersCount(1, $testEvent);
 
         $container = Container::getInstance();
 
-        $listeners = $this->listenerProvider->getListenersForEvent($testEvent);
+        $listeners = $this->listenerProvider->listeners($testEvent);
         foreach ($listeners as $listener) {
             $container->invoke($listener, [$testEvent]);
         }
 
         self::assertCount(1, $testEvent->read());
 
-        $this->listenerProvider->forget(TestEventListener::class);
+        $this->listenerProvider->unbind(TestEventListener::class);
 
         $this->assertListenersCount(0, $testEvent);
     }
@@ -62,11 +62,11 @@ final class ListenerProviderTest extends AbstractTestCase
 
         $this->assertListenersCount(0, $testEvent);
 
-        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
 
         $this->assertListenersCount(1, $testEvent);
 
-        $this->listenerProvider->forget(TestEventListener::class);
+        $this->listenerProvider->unbind(TestEventListener::class);
 
         $this->assertListenersCount(0, $testEvent);
     }
@@ -79,12 +79,12 @@ final class ListenerProviderTest extends AbstractTestCase
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
             $this->assertListenersCount(0, $event);
 
-            $this->listenerProvider->listen(TestEvent::class, IntersectionParameterTypeDeclarationListener::class);
-            $this->listenerProvider->listen(TestEvent2::class, IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->bind(TestEvent::class, IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->bind(TestEvent2::class, IntersectionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(1, $event);
 
-            $this->listenerProvider->forget(IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->unbind(IntersectionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(0, $event);
         }
@@ -98,12 +98,12 @@ final class ListenerProviderTest extends AbstractTestCase
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
             $this->assertListenersCount(0, $event);
 
-            $this->listenerProvider->listen(TestEvent::class, UnionParameterTypeDeclarationListener::class);
-            $this->listenerProvider->listen(TestEvent2::class, UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->bind(TestEvent::class, UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->bind(TestEvent2::class, UnionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(1, $event);
 
-            $this->listenerProvider->forget(UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->unbind(UnionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(0, $event);
         }
@@ -124,11 +124,11 @@ final class ListenerProviderTest extends AbstractTestCase
     {
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
 
-        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
 
         $this->assertListenersCount(1, new TestEvent());
 
-        $this->listenerProvider->forget(TestEventListener::class);
+        $this->listenerProvider->unbind(TestEventListener::class);
 
         $this->assertListenersCount(0, new TestEvent());
     }
