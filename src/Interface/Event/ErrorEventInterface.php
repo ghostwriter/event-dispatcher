@@ -9,27 +9,27 @@ use Throwable;
 /**
  * An object that contains information about an error triggered by Event handling.
  *
- * @template TEvent of object
- * @template TListener of object
+ * @template Event of object
+ * @template Listener of object
  */
 interface ErrorEventInterface
 {
     /**
      * Returns the event that triggered this error event.
      *
-     * @return TEvent
+     * @return Event
      */
-    public function getEvent(): object;
+    public function event(): object;
 
     /**
      * Returns the listener that raised the error.
      *
-     * @return class-string<(callable(TEvent):void)&TListener>
+     * @return class-string<(callable(Event):void)&Listener>
      */
-    public function getListener(): string;
+    public function listener(): string;
 
     /**
      * Returns the exception thrown by the listener.
      */
-    public function getThrowable(): Throwable;
+    public function throwable(): Throwable;
 }
