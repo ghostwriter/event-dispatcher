@@ -48,7 +48,10 @@ final readonly class EventDispatcher implements EventDispatcherInterface
                     throw $event->throwable();
                 }
 
-                $this->dispatch(new ErrorEvent($event, $listener, $throwable));
+                /** @var ErrorEventInterface&Event $errorEvent */
+                $errorEvent = new ErrorEvent($event, $listener, $throwable);
+
+                $this->dispatch($errorEvent);
 
                 throw $throwable;
             }
