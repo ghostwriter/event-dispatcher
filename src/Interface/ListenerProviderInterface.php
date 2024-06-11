@@ -23,16 +23,6 @@ interface ListenerProviderInterface
      * @template Event of object
      * @template Listener of (callable(Event):void)&object
      *
-     * @param class-string<Listener> $listener
-     *
-     * @throws ExceptionInterface
-     */
-    public function unbind(string $listener): void;
-
-    /**
-     * @template Event of object
-     * @template Listener of (callable(Event):void)&object
-     *
      * @param Event $event
      *
      * @return Generator<class-string<Listener>>
@@ -45,6 +35,16 @@ interface ListenerProviderInterface
      * @throws ExceptionInterface
      */
     public function subscribe(string $subscriber): void;
+
+    /**
+     * @template Event of object
+     * @template Listener of (callable(Event):void)&object
+     *
+     * @param class-string<Listener> $listener
+     *
+     * @throws ExceptionInterface
+     */
+    public function unbind(string $listener): void;
 
     /**
      * @param class-string<SubscriberInterface> $subscriber
