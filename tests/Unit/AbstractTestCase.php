@@ -13,15 +13,15 @@ use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use Override;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
+use stdClass;
 use Tests\Fixture\TestEvent;
 use Tests\Fixture\TestEventInterface;
 use Tests\Fixture\TestEventListener;
 use Tests\Fixture\TestListener;
-use PHPUnit\Framework\TestCase;
-use RuntimeException;
 use Throwable;
-use Override;
-use stdClass;
 
 use function iterator_to_array;
 
@@ -102,7 +102,8 @@ abstract class AbstractTestCase extends TestCase
 
         yield from [
             stdClass::class => [new stdClass()],
-            'noop' => [new class () {}],
+            'noop' => [new class() {
+            }],
             TestEvent::class => [$testEvent],
             ErrorEvent::class => [
                 new ErrorEvent(
