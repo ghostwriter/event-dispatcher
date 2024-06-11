@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Event;
 
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
-use Throwable;
 use Override;
+use Throwable;
 
 /**
  * @template Event of object
@@ -24,7 +24,8 @@ final readonly class ErrorEvent implements ErrorEventInterface
         private object $event,
         private string $listener,
         private Throwable $throwable
-    ) {}
+    ) {
+    }
 
     /**
      * @return Event
