@@ -8,8 +8,8 @@ use Ghostwriter\Container\Interface\ContainerInterface;
 use Ghostwriter\Container\Interface\ServiceProviderInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
-use Throwable;
 use Override;
+use Throwable;
 
 final readonly class EventServiceProvider implements ServiceProviderInterface
 {
