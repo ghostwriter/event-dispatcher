@@ -10,15 +10,15 @@ use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use RuntimeException;
 use Tests\Fixture\Listener\BlackLivesMatterListener;
 use Tests\Fixture\Listener\LogTestEventExceptionMessageListener;
 use Tests\Fixture\Listener\TestEventRaiseAnExceptionListener;
 use Tests\Fixture\Subscriber\TestEventSubscriber;
 use Tests\Fixture\TestEvent;
 use Tests\Fixture\TestEventInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use RuntimeException;
 use Tests\Fixture\TestListener;
 use Throwable;
 
