@@ -7,4 +7,6 @@ namespace Ghostwriter\EventDispatcher\Exception;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use RuntimeException;
 
-final class SubscriberNotFoundException extends RuntimeException implements ExceptionInterface {}
+final class SubscriberNotFoundException extends RuntimeException implements ExceptionInterface
+{
+}
