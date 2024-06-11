@@ -10,12 +10,12 @@ use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixture\Listener\IntersectionParameterTypeDeclarationListener;
 use Tests\Fixture\Listener\UnionParameterTypeDeclarationListener;
 use Tests\Fixture\TestEvent;
 use Tests\Fixture\TestEvent2;
 use Tests\Fixture\TestEventListener;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
