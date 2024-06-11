@@ -6,4 +6,6 @@ namespace Ghostwriter\EventDispatcher\Interface;
 
 use Throwable;
 
-interface ExceptionInterface extends Throwable {}
+interface ExceptionInterface extends Throwable
+{
+}
