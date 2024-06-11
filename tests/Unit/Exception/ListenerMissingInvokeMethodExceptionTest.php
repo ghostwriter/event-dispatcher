@@ -10,9 +10,9 @@ use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixture\Listener\MissingInvokeMethodListener;
 use Tests\Unit\AbstractTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
 #[CoversClass(ListenerMissingInvokeMethodException::class)]
