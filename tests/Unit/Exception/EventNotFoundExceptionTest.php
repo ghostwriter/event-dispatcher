@@ -9,9 +9,9 @@ use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Fixture\TestEventListener;
 use Tests\Unit\AbstractTestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
