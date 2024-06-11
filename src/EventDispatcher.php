@@ -10,15 +10,16 @@ use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
-use Throwable;
 use Override;
+use Throwable;
 
 final readonly class EventDispatcher implements EventDispatcherInterface
 {
     public function __construct(
         private ContainerInterface $container,
         private ListenerProviderInterface $listenerProvider,
-    ) {}
+    ) {
+    }
 
     /**
      * @template Event of object
