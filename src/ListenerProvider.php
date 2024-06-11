@@ -19,15 +19,15 @@ use Ghostwriter\EventDispatcher\Exception\SubscriberNotFoundException;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Interface\SubscriberInterface;
-use Throwable;
 use Override;
+use Throwable;
 
 use function array_key_exists;
 use function class_exists;
+use function enum_exists;
 use function interface_exists;
 use function is_a;
 use function method_exists;
-use function enum_exists;
 use function trait_exists;
 
 /**
@@ -46,35 +46,7 @@ final class ListenerProvider implements ListenerProviderInterface
         private readonly ContainerInterface $container,
         private array $listeners = [],
         private array $subscribers = [],
-    ) {}
-
-    /**
-     * @template Event of object
-     * @template Listener of object
-     *
-     * @param array<class-string<Event>,class-string<(callable(Event):void)&Listener>> $listeners
-     * @param array<class-string<SubscriberInterface>>                                 $subscribers
-     *
-     * @throws Throwable
-     */
-    public static function new(
-        ?ContainerInterface $container = null,
-        array $listeners = [],
-        array $subscribers = [],
-    ): self {
-        $container ??= Container::getInstance();
-
-        $listenerProvider = new self($container);
-
-        foreach ($listeners as $event => $listener) {
-            $listenerProvider->bind($event, $listener);
-        }
-
-        foreach ($subscribers as $subscriber) {
-            $listenerProvider->subscribe($subscriber);
-        }
-
-        return $listenerProvider;
+    ) {
     }
 
     /**
@@ -134,6 +106,29 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
+     * @param class-string<SubscriberInterface> $subscriber
+     *
+     * @throws SubscriberMustImplementSubscriberInterfaceException
+     * @throws ContainerNotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws ExceptionInterface
+     * @throws Throwable
+     */
+    #[Override]
+    public function subscribe(string $subscriber): void
+    {
+        if (! is_a($subscriber, SubscriberInterface::class, true)) {
+            throw new SubscriberMustImplementSubscriberInterfaceException($subscriber);
+        }
+
+        if (array_key_exists($subscriber, $this->subscribers)) {
+            throw new SubscriberAlreadyRegisteredException($subscriber);
+        }
+
+        $this->container->invoke($subscriber, [$this->subscribers[$subscriber] = self::new()]);
+    }
+
+    /**
      * @template Event of object
      * @template Listener of object
      *
@@ -166,29 +161,6 @@ final class ListenerProvider implements ListenerProviderInterface
     /**
      * @param class-string<SubscriberInterface> $subscriber
      *
-     * @throws SubscriberMustImplementSubscriberInterfaceException
-     * @throws ContainerNotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
-     * @throws ExceptionInterface
-     * @throws Throwable
-     */
-    #[Override]
-    public function subscribe(string $subscriber): void
-    {
-        if (! is_a($subscriber, SubscriberInterface::class, true)) {
-            throw new SubscriberMustImplementSubscriberInterfaceException($subscriber);
-        }
-
-        if (array_key_exists($subscriber, $this->subscribers)) {
-            throw new SubscriberAlreadyRegisteredException($subscriber);
-        }
-
-        $this->container->invoke($subscriber, [$this->subscribers[$subscriber] = self::new()]);
-    }
-
-    /**
-     * @param class-string<SubscriberInterface> $subscriber
-     *
      * @throws SubscriberNotFoundException
      * @throws Throwable
      */
@@ -202,6 +174,35 @@ final class ListenerProvider implements ListenerProviderInterface
         unset($this->subscribers[$subscriber]);
 
         $this->container->remove($subscriber);
+    }
+
+    /**
+     * @template Event of object
+     * @template Listener of object
+     *
+     * @param array<class-string<Event>,class-string<(callable(Event):void)&Listener>> $listeners
+     * @param array<class-string<SubscriberInterface>>                                 $subscribers
+     *
+     * @throws Throwable
+     */
+    public static function new(
+        ?ContainerInterface $container = null,
+        array $listeners = [],
+        array $subscribers = [],
+    ): self {
+        $container ??= Container::getInstance();
+
+        $listenerProvider = new self($container);
+
+        foreach ($listeners as $event => $listener) {
+            $listenerProvider->bind($event, $listener);
+        }
+
+        foreach ($subscribers as $subscriber) {
+            $listenerProvider->subscribe($subscriber);
+        }
+
+        return $listenerProvider;
     }
 
     /**
