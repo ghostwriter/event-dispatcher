@@ -6,7 +6,6 @@ namespace Tests\Unit;
 
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
-use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
@@ -23,7 +22,6 @@ use function sprintf;
 
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
-#[CoversClass(EventServiceProvider::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(EventNotFoundException::class)]
 #[CoversClass(ListenerAlreadyExistsException::class)]
