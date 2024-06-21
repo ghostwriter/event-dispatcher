@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
+use Ghostwriter\Container\Attribute\Inject;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
@@ -17,6 +18,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
 {
     public function __construct(
         private ContainerInterface $container,
+        #[Inject(ListenerProvider::class)]
         private ListenerProviderInterface $listenerProvider,
     ) {
     }
@@ -68,14 +70,9 @@ final readonly class EventDispatcher implements EventDispatcherInterface
     {
         $container = Container::getInstance();
 
-        if (! $container->has(EventServiceProvider::class)) {
-            $container->provide(EventServiceProvider::class);
-        }
-
-        if ($listenerProvider instanceof ListenerProviderInterface) {
-            return new self($container, $listenerProvider);
-        }
-
-        return $container->get(self::class);
+        return match (true) {
+            $listenerProvider instanceof ListenerProviderInterface => new self($container, $listenerProvider),
+            default => $container->get(self::class),
+        };
     }
 }
