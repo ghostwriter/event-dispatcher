@@ -6,7 +6,6 @@ namespace Tests\Unit\Exception;
 
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
-use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -17,7 +16,6 @@ use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
-#[CoversClass(EventServiceProvider::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(ListenerAlreadyExistsException::class)]
 final class ListenerAlreadyExistsExceptionTest extends AbstractTestCase
