@@ -6,7 +6,6 @@ namespace Tests\Unit\Exception;
 
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
-use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Exception\ListenerNotFoundException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use NonExistentTestEventListener;
@@ -18,7 +17,6 @@ use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
-#[CoversClass(EventServiceProvider::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(ListenerNotFoundException::class)]
 final class ListenerNotFoundExceptionTest extends AbstractTestCase
