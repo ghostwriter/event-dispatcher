@@ -6,7 +6,6 @@ namespace Tests\Unit;
 
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
-use Ghostwriter\EventDispatcher\EventServiceProvider;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
@@ -24,7 +23,6 @@ use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
-#[CoversClass(EventServiceProvider::class)]
 #[CoversClass(ListenerProvider::class)]
 final class EventDispatcherTest extends AbstractTestCase
 {
