@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ghostwriter/container",
-            "version": "4.0.0",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/container.git",
-                "reference": "02df4b37082d0d96959103bd29a1f7e2a68b51f5"
+                "reference": "5779b4aecde687c4f44d953d3762ccb776f0ed44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/container/zipball/02df4b37082d0d96959103bd29a1f7e2a68b51f5",
-                "reference": "02df4b37082d0d96959103bd29a1f7e2a68b51f5",
+                "url": "https://api.github.com/repos/ghostwriter/container/zipball/5779b4aecde687c4f44d953d3762ccb776f0ed44",
+                "reference": "5779b4aecde687c4f44d953d3762ccb776f0ed44",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-21T01:37:38+00:00"
+            "time": "2024-07-13T14:57:49+00:00"
         }
     ],
     "packages-dev": [
