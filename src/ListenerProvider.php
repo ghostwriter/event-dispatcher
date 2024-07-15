@@ -23,6 +23,7 @@ use Override;
 use Throwable;
 
 use function array_key_exists;
+use function array_keys;
 use function class_exists;
 use function enum_exists;
 use function interface_exists;
@@ -40,12 +41,12 @@ final class ListenerProvider implements ListenerProviderInterface
      * @template Listener of object
      *
      * @param array<class-string<Event>,array<class-string<(callable(Event):void)&Listener>,null>> $listeners
-     * @param array<class-string<SubscriberInterface>,ListenerProviderInterface>                   $subscribers
+     * @param array<class-string<SubscriberInterface>,ListenerProviderInterface>                   $listenerProviders
      */
     public function __construct(
         private readonly ContainerInterface $container,
         private array $listeners = [],
-        private array $subscribers = [],
+        private array $listenerProviders = [],
     ) {
     }
 
@@ -61,9 +62,9 @@ final class ListenerProvider implements ListenerProviderInterface
     #[Override]
     public function bind(string $event, string $listener): void
     {
-        self::assertEvent($event);
+        $this->assertEvent($event);
 
-        self::assertListener($listener);
+        $this->assertListener($listener);
 
         if (
             array_key_exists($event, $this->listeners)
@@ -91,17 +92,17 @@ final class ListenerProvider implements ListenerProviderInterface
                 continue;
             }
 
-            foreach ($listeners as $listener => $_) {
+            foreach (array_keys($listeners) as $listener) {
                 yield $listener;
             }
         }
 
-        foreach ($this->subscribers as $provider) {
-            if (! $provider instanceof ListenerProviderInterface) {
+        foreach ($this->listenerProviders as $listenerProvider) {
+            if (! $listenerProvider instanceof ListenerProviderInterface) {
                 continue;
             }
 
-            yield from $provider->listeners($event);
+            yield from $listenerProvider->listeners($event);
         }
     }
 
@@ -121,11 +122,11 @@ final class ListenerProvider implements ListenerProviderInterface
             throw new SubscriberMustImplementSubscriberInterfaceException($subscriber);
         }
 
-        if (array_key_exists($subscriber, $this->subscribers)) {
+        if (array_key_exists($subscriber, $this->listenerProviders)) {
             throw new SubscriberAlreadyRegisteredException($subscriber);
         }
 
-        $this->container->invoke($subscriber, [$this->subscribers[$subscriber] = self::new()]);
+        $this->container->invoke($subscriber, [$this->listenerProviders[$subscriber] ??= self::new()]);
     }
 
     /**
@@ -167,13 +168,56 @@ final class ListenerProvider implements ListenerProviderInterface
     #[Override]
     public function unsubscribe(string $subscriber): void
     {
-        if (! array_key_exists($subscriber, $this->subscribers)) {
+        if (! array_key_exists($subscriber, $this->listenerProviders)) {
             throw new SubscriberNotFoundException($subscriber);
         }
 
-        unset($this->subscribers[$subscriber]);
+        unset($this->listenerProviders[$subscriber]);
 
         $this->container->remove($subscriber);
+    }
+
+    /**
+     * @template Event of object
+     *
+     * @param class-string<Event>|string $event
+     *
+     * @psalm-assert class-string<Event> $event
+     *
+     * @throws EventNotFoundException
+     */
+    private function assertEvent(string $event): void
+    {
+        match (true) {
+            default => throw new EventNotFoundException($event),
+            $event === 'object',
+            class_exists($event),
+            interface_exists($event),
+            trait_exists($event),
+            enum_exists($event) => null,
+        };
+    }
+
+    /**
+     * @template Event of object
+     * @template Listener of object
+     *
+     * @param class-string<(callable(Event):void)&Listener> $listener
+     *
+     * @psalm-assert class-string<(callable(Event):void)&Listener> $listener
+     *
+     * @throws ListenerNotFoundException
+     * @throws ListenerMissingInvokeMethodException
+     */
+    private function assertListener(string $listener): void
+    {
+        if (! class_exists($listener)) {
+            throw new ListenerNotFoundException($listener);
+        }
+
+        if (! method_exists($listener, '__invoke')) {
+            throw new ListenerMissingInvokeMethodException($listener);
+        }
     }
 
     /**
@@ -203,48 +247,5 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         return $listenerProvider;
-    }
-
-    /**
-     * @template Event of object
-     *
-     * @param class-string<Event>|string $event
-     *
-     * @psalm-assert class-string<Event> $event
-     *
-     * @throws EventNotFoundException
-     */
-    private static function assertEvent(string $event): void
-    {
-        match (true) {
-            default => throw new EventNotFoundException($event),
-            $event === 'object',
-            class_exists($event),
-            interface_exists($event),
-            trait_exists($event),
-            enum_exists($event) => null,
-        };
-    }
-
-    /**
-     * @template Event of object
-     * @template Listener of object
-     *
-     * @param class-string<(callable(Event):void)&Listener> $listener
-     *
-     * @psalm-assert class-string<(callable(Event):void)&Listener> $listener
-     *
-     * @throws ListenerNotFoundException
-     * @throws ListenerMissingInvokeMethodException
-     */
-    private static function assertListener(string $listener): void
-    {
-        if (! class_exists($listener)) {
-            throw new ListenerNotFoundException($listener);
-        }
-
-        if (! method_exists($listener, '__invoke')) {
-            throw new ListenerMissingInvokeMethodException($listener);
-        }
     }
 }
