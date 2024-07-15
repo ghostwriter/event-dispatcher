@@ -31,26 +31,34 @@ Registering and dispatching an Event Listener.
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 
+// Create an event class
 final class ExampleEvent
 {
 }
 
+// Create an Event Listener
 final class ExampleEventListener
 {
     public function __invoke(ExampleEvent $event): void
     {
-        // ... print $event::class;
+        // Handle the event, e.g., print the event class name
+        // echo $event::class;
     }
 }
 
-$provider = ListenerProvider::new();
+// Create a ListenerProvider
+$provider = ListenerProvider::new(); // or new ListenerProvider()
 
+// Bind the Listener to the Event
 $provider->bind(ExampleEvent::class, ExampleEventListener::class);
 
-$dispatcher = EventDispatcher::new($provider);
+// Create an EventDispatcher
+$dispatcher = EventDispatcher::new($provider); // or new EventDispatcher($provider)
 
+// Dispatch the Event.
 $event = $dispatcher->dispatch(new ExampleEvent());
 
+// Assert the Event is the same as the dispatched Event
 assert($event instanceof ExampleEvent);
 ```
 
@@ -78,14 +86,19 @@ final class EventSubscriber implements SubscriberInterface {
     }
 }
 
-$provider = ListenerProvider::new();
+// Create a ListenerProvider
+$provider = ListenerProvider::new(); // or new ListenerProvider()
 
+// Subscribe the EventSubscriber
 $provider->subscribe(EventSubscriber::class);
 
-$dispatcher = EventDispatcher::new($provider);
+// Create an EventDispatcher
+$dispatcher = EventDispatcher::new($provider); // or new EventDispatcher($provider)
 
+// Dispatch the Event.
 $event = $dispatcher->dispatch(new TestEvent());
 
+// Assert the Event is the same as the dispatched Event
 assert($event instanceof TestEvent);
 ```
 
