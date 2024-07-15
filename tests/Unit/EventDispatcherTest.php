@@ -98,9 +98,9 @@ final class EventDispatcherTest extends AbstractTestCase
             $this->dispatch($this->testEvent);
 
             self::fail('Expected an exception to be not thrown');
-        } catch (Throwable $exception) {
-            self::assertInstanceOf($this->throwable::class, $exception);
-            self::assertSame($this->testEvent::class, $exception->getMessage());
+        } catch (Throwable $throwable) {
+            self::assertInstanceOf($this->throwable::class, $throwable);
+            self::assertSame($this->testEvent::class, $throwable->getMessage());
         }
     }
 
@@ -122,15 +122,15 @@ final class EventDispatcherTest extends AbstractTestCase
      */
     public function testThrows(): void
     {
-        $event = new TestEvent();
+        $testEvent = new TestEvent();
         $listener = TestListener::class;
-        $throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
+        $runtimeException = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
 
-        $errorEvent = new ErrorEvent($event, $listener, $throwable);
+        $errorEvent = new ErrorEvent($testEvent, $listener, $runtimeException);
         //
-        $this->expectException($throwable::class);
-        $this->expectExceptionMessage($throwable->getMessage());
-        $this->expectExceptionCode($throwable->getCode());
+        $this->expectException($runtimeException::class);
+        $this->expectExceptionMessage($runtimeException->getMessage());
+        $this->expectExceptionCode($runtimeException->getCode());
 
         $this->eventDispatcher->dispatch($errorEvent);
 
