@@ -17,8 +17,7 @@ use Ghostwriter\EventDispatcher\ListenerProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
-use function is_a;
-use function sprintf;
+use function array_map;
 
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
@@ -43,13 +42,20 @@ final class ExceptionsTest extends AbstractTestCase
         SubscriberMustImplementSubscriberInterfaceException::class,
     ];
 
+    /**
+     * @throws Throwable
+     */
     public function testExceptionsImplementExceptionInterface(): void
     {
-        foreach (self::EXCEPTIONS as $exception) {
-            self::assertTrue(
-                is_a($exception, ExceptionInterface::class, true),
-                sprintf('Exception "%s" does not implement "%s"', $exception, ExceptionInterface::class)
-            );
-        }
+        self::assertContainsOnlyInstancesOf(
+            ExceptionInterface::class,
+            array_map(
+                /**
+                 * @param class-string<ExceptionInterface> $exception
+                 */
+                static fn (string $exception): ExceptionInterface => new $exception(),
+                self::EXCEPTIONS,
+            ),
+        );
     }
 }
