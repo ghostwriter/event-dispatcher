@@ -15,6 +15,7 @@
             "role": "Developer"
         }
     ],
+    "homepage": "https://github.com/ghostwriter/event-dispatcher",
     "support": {
         "issues": "https://github.com/ghostwriter/event-dispatcher/issues",
         "forum": "https://github.com/ghostwriter/event-dispatcher/discussions",
