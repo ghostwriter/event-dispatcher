@@ -1,6 +1,6 @@
 # Event Dispatcher
 
-[![Compliance](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/compliance.yml)
+[![Automation](https://github.com/ghostwriter/event-dispatcher/actions/workflows/automation.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/automation.yml)
 [![Supported PHP Version](https://badgen.net/packagist/php/ghostwriter/event-dispatcher?color=8892bf)](https://www.php.net/supported-versions)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/event-dispatcher&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
 [![Mutation Coverage](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fghostwriter%2Fevent-dispatcher%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/ghostwriter/event-dispatcher/main)
