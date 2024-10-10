@@ -33,7 +33,7 @@
     "_comment": "#BlackLivesMatter",
     "require": {
         "php": ">=8.3",
-        "ghostwriter/container": "^4.0.2"
+        "ghostwriter/container": "^4.0.3"
     },
     "require-dev": {
         "ghostwriter/coding-standard": "dev-main"
@@ -103,6 +103,7 @@
         "psalm:shepherd": "@psalm --no-diff --shepherd --stats",
         "psalm:update": "@psalm --no-diff --update-baseline=psalm-baseline.xml",
         "rector": "@bin_rector",
+        "rector:dry-run": "@rector --dry-run",
         "test": [
             "@phpunit",
             "@psalm:shepherd",
