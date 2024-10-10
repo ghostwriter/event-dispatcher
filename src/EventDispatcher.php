@@ -24,6 +24,19 @@ final readonly class EventDispatcher implements EventDispatcherInterface
     }
 
     /**
+     * @throws Throwable
+     */
+    public static function new(?ListenerProviderInterface $listenerProvider = null): self
+    {
+        $container = Container::getInstance();
+
+        return match (true) {
+            $listenerProvider instanceof ListenerProviderInterface => new self($container, $listenerProvider),
+            default => $container->get(self::class),
+        };
+    }
+
+    /**
      * @template Event of object
      *
      * @param Event $event
@@ -61,18 +74,5 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         }
 
         return $event;
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public static function new(?ListenerProviderInterface $listenerProvider = null): self
-    {
-        $container = Container::getInstance();
-
-        return match (true) {
-            $listenerProvider instanceof ListenerProviderInterface => new self($container, $listenerProvider),
-            default => $container->get(self::class),
-        };
     }
 }
