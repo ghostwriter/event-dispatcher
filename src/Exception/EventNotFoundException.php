@@ -7,6 +7,4 @@ namespace Ghostwriter\EventDispatcher\Exception;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use InvalidArgumentException;
 
-final class EventNotFoundException extends InvalidArgumentException implements ExceptionInterface
-{
-}
+final class EventNotFoundException extends InvalidArgumentException implements ExceptionInterface {}
