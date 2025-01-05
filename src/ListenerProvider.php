@@ -22,6 +22,15 @@ use Ghostwriter\EventDispatcher\Interface\SubscriberInterface;
 use Override;
 use Throwable;
 
+use function array_key_exists;
+use function array_keys;
+use function class_exists;
+use function enum_exists;
+use function interface_exists;
+use function is_a;
+use function method_exists;
+use function trait_exists;
+
 /**
  * Maps registered Listeners, Providers and Subscribers.
  */
@@ -38,15 +47,14 @@ final class ListenerProvider implements ListenerProviderInterface
         private readonly ContainerInterface $container,
         private array $listeners = [],
         private array $listenerProviders = [],
-    ) {
-    }
+    ) {}
 
     /**
      * @template Event of object
      * @template Listener of object
      *
      * @param array<class-string<Event>,class-string<(callable(Event):void)&Listener>> $listeners
-     * @param array<class-string<SubscriberInterface>>                                 $subscribers
+     * @param list<class-string<SubscriberInterface>>                                  $subscribers
      *
      * @throws Throwable
      */
@@ -87,8 +95,8 @@ final class ListenerProvider implements ListenerProviderInterface
         $this->assertListener($listener);
 
         if (
-            \array_key_exists($event, $this->listeners)
-            && \array_key_exists($listener, $this->listeners[$event])
+            array_key_exists($event, $this->listeners)
+            && array_key_exists($listener, $this->listeners[$event])
         ) {
             throw new ListenerAlreadyExistsException($listener);
         }
@@ -112,7 +120,7 @@ final class ListenerProvider implements ListenerProviderInterface
                 continue;
             }
 
-            foreach (\array_keys($listeners) as $listener) {
+            foreach (array_keys($listeners) as $listener) {
                 yield $listener;
             }
         }
@@ -138,11 +146,11 @@ final class ListenerProvider implements ListenerProviderInterface
     #[Override]
     public function subscribe(string $subscriber): void
     {
-        if (! \is_a($subscriber, SubscriberInterface::class, true)) {
+        if (! is_a($subscriber, SubscriberInterface::class, true)) {
             throw new SubscriberMustImplementSubscriberInterfaceException($subscriber);
         }
 
-        if (\array_key_exists($subscriber, $this->listenerProviders)) {
+        if (array_key_exists($subscriber, $this->listenerProviders)) {
             throw new SubscriberAlreadyRegisteredException($subscriber);
         }
 
@@ -163,7 +171,7 @@ final class ListenerProvider implements ListenerProviderInterface
         $removed = false;
 
         foreach ($this->listeners as $event => $listeners) {
-            if (! \array_key_exists($listener, $listeners)) {
+            if (! array_key_exists($listener, $listeners)) {
                 continue;
             }
 
@@ -188,7 +196,7 @@ final class ListenerProvider implements ListenerProviderInterface
     #[Override]
     public function unsubscribe(string $subscriber): void
     {
-        if (! \array_key_exists($subscriber, $this->listenerProviders)) {
+        if (! array_key_exists($subscriber, $this->listenerProviders)) {
             throw new SubscriberNotFoundException($subscriber);
         }
 
@@ -210,11 +218,11 @@ final class ListenerProvider implements ListenerProviderInterface
     {
         match (true) {
             default => throw new EventNotFoundException($event),
-            $event === 'object',
-            \class_exists($event),
-            \interface_exists($event),
-            \trait_exists($event),
-            \enum_exists($event) => null,
+            'object' === $event,
+            class_exists($event),
+            interface_exists($event),
+            trait_exists($event),
+            enum_exists($event) => null,
         };
     }
 
@@ -231,11 +239,11 @@ final class ListenerProvider implements ListenerProviderInterface
      */
     private function assertListener(string $listener): void
     {
-        if (! \class_exists($listener)) {
+        if (! class_exists($listener)) {
             throw new ListenerNotFoundException($listener);
         }
 
-        if (! \method_exists($listener, '__invoke')) {
+        if (! method_exists($listener, '__invoke')) {
             throw new ListenerMissingInvokeMethodException($listener);
         }
     }
