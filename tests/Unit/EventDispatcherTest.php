@@ -127,7 +127,7 @@ final class EventDispatcherTest extends AbstractTestCase
         $runtimeException = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
 
         $errorEvent = new ErrorEvent($testEvent, $listener, $runtimeException);
-        //
+
         $this->expectException($runtimeException::class);
         $this->expectExceptionMessage($runtimeException->getMessage());
         $this->expectExceptionCode($runtimeException->getCode());
