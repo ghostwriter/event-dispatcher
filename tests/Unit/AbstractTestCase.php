@@ -23,6 +23,8 @@ use Tests\Fixture\TestEventListener;
 use Tests\Fixture\TestListener;
 use Throwable;
 
+use function iterator_to_array;
+
 abstract class AbstractTestCase extends TestCase
 {
     public const int ERROR_CODE = 42;
@@ -75,7 +77,7 @@ abstract class AbstractTestCase extends TestCase
      */
     final public function assertListenersCount(int $expectedCount, object $event): void
     {
-        self::assertCount($expectedCount, \iterator_to_array($this->listenerProvider->listeners($event)));
+        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->listeners($event)));
     }
 
     /**
@@ -100,8 +102,7 @@ abstract class AbstractTestCase extends TestCase
 
         yield from [
             stdClass::class => [new stdClass()],
-            'noop' => [new class() {
-            }],
+            'noop' => [new class() {}],
             TestEvent::class => [$testEvent],
             ErrorEvent::class => [
                 new ErrorEvent(
