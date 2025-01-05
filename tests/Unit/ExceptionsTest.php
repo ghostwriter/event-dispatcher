@@ -17,6 +17,8 @@ use Ghostwriter\EventDispatcher\ListenerProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Throwable;
 
+use function array_map;
+
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
@@ -29,7 +31,7 @@ use Throwable;
 final class ExceptionsTest extends AbstractTestCase
 {
     /**
-     * @var array<class-string<Throwable>>
+     * @var list<class-string<Throwable>>
      */
     public const array EXCEPTIONS = [
         EventNotFoundException::class,
@@ -47,7 +49,7 @@ final class ExceptionsTest extends AbstractTestCase
     {
         self::assertContainsOnlyInstancesOf(
             ExceptionInterface::class,
-            \array_map(
+            array_map(
                 /**
                  * @param class-string<ExceptionInterface> $exception
                  */
