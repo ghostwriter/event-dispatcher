@@ -18,9 +18,9 @@
     "homepage": "https://github.com/ghostwriter/event-dispatcher",
     "support": {
         "issues": "https://github.com/ghostwriter/event-dispatcher/issues",
+        "source": "https://github.com/ghostwriter/event-dispatcher",
         "rss": "https://github.com/ghostwriter/event-dispatcher/releases.atom",
-        "security": "https://github.com/ghostwriter/event-dispatcher/security/advisories/new",
-        "source": "https://github.com/ghostwriter/event-dispatcher"
+        "security": "https://github.com/ghostwriter/event-dispatcher/security/advisories/new"
     },
     "funding": [
         {
@@ -50,11 +50,9 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Tests\\Fixture\\": "tests/fixture/",
             "Tests\\Unit\\": "tests/unit/"
         },
-        "files": [
-            "tests/fixture/functions.php"
-        ],
         "exclude-from-classmap": [
             "tests/fixture/"
         ]
@@ -67,14 +65,14 @@
         "classmap-authoritative": false,
         "discard-changes": true,
         "optimize-autoloader": true,
+        "platform": {
+            "php": "8.3.999"
+        },
         "preferred-install": "dist",
         "prepend-autoloader": true,
         "process-timeout": 5000,
         "sort-packages": true,
-        "use-parent-dir": false,
-        "platform": {
-            "php": "8.3.999"
-        }
+        "use-parent-dir": false
     },
     "scripts": {
         "bin_ecs": "ecs check --clear-cache --no-interaction",
