@@ -24,8 +24,7 @@ final readonly class ErrorEvent implements ErrorEventInterface
         private object $event,
         private string $listener,
         private Throwable $throwable
-    ) {
-    }
+    ) {}
 
     /**
      * @return Event
