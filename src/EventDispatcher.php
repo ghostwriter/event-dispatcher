@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
-use Ghostwriter\Container\Attribute\Inject;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
+use Ghostwriter\EventDispatcher\Container\ServiceProvider;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Interface\Event\StoppableEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Override;
@@ -18,22 +19,29 @@ final readonly class EventDispatcher implements EventDispatcherInterface
 {
     public function __construct(
         private ContainerInterface $container,
-        #[Inject(ListenerProvider::class)]
         private ListenerProviderInterface $listenerProvider,
     ) {}
 
     /**
      * @throws Throwable
      */
-    public static function new(?ListenerProviderInterface $listenerProvider = null): self
-    {
-        $container = Container::getInstance();
+    public static function new(
+        ?ListenerProviderInterface $listenerProvider = null,
+        ?ContainerInterface $container = null,
+    ): self {
+        $container ??= Container::getInstance();
 
-        if ($listenerProvider instanceof ListenerProviderInterface) {
-            $container->set(ListenerProviderInterface::class, $listenerProvider);
+        if (! $container->has(ServiceProvider::class)) {
+            $container->provide(ServiceProvider::class);
         }
 
-        return new self($container, $container->get(ListenerProviderInterface::class));
+        if ($listenerProvider instanceof ListenerProviderInterface) {
+            $container->set($listenerProvider::class, $listenerProvider);
+
+            return new self($container, $listenerProvider);
+        }
+
+        return $container->get(self::class);
     }
 
     /**
@@ -48,8 +56,12 @@ final readonly class EventDispatcher implements EventDispatcherInterface
     #[Override]
     public function dispatch(object $event): object
     {
-        $isErrorEvent = $event instanceof ErrorEventInterface;
+        $isStoppable = $event instanceof StoppableEventInterface;
+        if ($isStoppable && $event->isPropagationStopped()) {
+            return $event;
+        }
 
+        $isErrorEvent = $event instanceof ErrorEventInterface;
         foreach ($this->listenerProvider->listeners($event) as $listener) {
             try {
                 $this->container->invoke($listener, [$event]);
@@ -70,6 +82,14 @@ final readonly class EventDispatcher implements EventDispatcherInterface
                 $this->dispatch($errorEvent);
 
                 throw $throwable;
+            }
+
+            if (! $isStoppable) {
+                continue;
+            }
+
+            if ($event->isPropagationStopped()) {
+                break;
             }
         }
 
