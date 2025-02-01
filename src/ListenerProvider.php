@@ -154,7 +154,7 @@ final class ListenerProvider implements ListenerProviderInterface
             throw new SubscriberAlreadyRegisteredException($subscriber);
         }
 
-        $this->container->invoke($subscriber, [$this->listenerProviders[$subscriber] ??= self::new()]);
+        $this->container->invoke($subscriber, [$this->listenerProviders[$subscriber] ??= self::new($this->container)]);
     }
 
     /**

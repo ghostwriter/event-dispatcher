@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Exception;
 
+use Ghostwriter\EventDispatcher\Container\ServiceProvider;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
@@ -18,6 +19,7 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
+#[CoversClass(ServiceProvider::class)]
 final class ListenerMissingInvokeMethodExceptionTest extends AbstractTestCase
 {
     /**

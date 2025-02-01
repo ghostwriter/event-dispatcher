@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use Ghostwriter\EventDispatcher\Container\ServiceProvider;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
@@ -24,6 +25,7 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
+#[CoversClass(ServiceProvider::class)]
 final class EventDispatcherTest extends AbstractTestCase
 {
     /**
@@ -122,11 +124,10 @@ final class EventDispatcherTest extends AbstractTestCase
      */
     public function testThrows(): void
     {
-        $testEvent = new TestEvent();
         $listener = TestListener::class;
         $runtimeException = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
 
-        $errorEvent = new ErrorEvent($testEvent, $listener, $runtimeException);
+        $errorEvent = new ErrorEvent($this->testEvent, $listener, $runtimeException);
 
         $this->expectException($runtimeException::class);
         $this->expectExceptionMessage($runtimeException->getMessage());

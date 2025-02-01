@@ -9,11 +9,6 @@ use Tests\Fixture\TestEvent2;
 
 final class IntersectionParameterTypeDeclarationListener
 {
-    /**
-     * @see https://github.com/vimeo/psalm/issues/10905
-     *
-     * @psalm-suppress ReservedWord
-     */
     public function __invoke(
         TestEvent&TestEvent2 $testEvent
     ): void {
