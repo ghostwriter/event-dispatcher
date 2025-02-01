@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Exception;
 
+use Ghostwriter\EventDispatcher\Container\ServiceProvider;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\SubscriberAlreadyRegisteredException;
@@ -18,6 +19,7 @@ use Throwable;
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(SubscriberAlreadyRegisteredException::class)]
 #[CoversClass(ListenerProvider::class)]
+#[CoversClass(ServiceProvider::class)]
 final class SubscriberAlreadyRegisteredExceptionTest extends AbstractTestCase
 {
     /**
