@@ -20,7 +20,20 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         private ContainerInterface $container,
         #[Inject(ListenerProvider::class)]
         private ListenerProviderInterface $listenerProvider,
-    ) {
+    ) {}
+
+    /**
+     * @throws Throwable
+     */
+    public static function new(?ListenerProviderInterface $listenerProvider = null): self
+    {
+        $container = Container::getInstance();
+
+        if ($listenerProvider instanceof ListenerProviderInterface) {
+            $container->set(ListenerProviderInterface::class, $listenerProvider);
+        }
+
+        return new self($container, $container->get(ListenerProviderInterface::class));
     }
 
     /**
@@ -61,18 +74,5 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         }
 
         return $event;
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public static function new(?ListenerProviderInterface $listenerProvider = null): self
-    {
-        $container = Container::getInstance();
-
-        return match (true) {
-            $listenerProvider instanceof ListenerProviderInterface => new self($container, $listenerProvider),
-            default => $container->get(self::class),
-        };
     }
 }

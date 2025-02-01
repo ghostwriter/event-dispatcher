@@ -102,8 +102,7 @@ abstract class AbstractTestCase extends TestCase
 
         yield from [
             stdClass::class => [new stdClass()],
-            'noop' => [new class() {
-            }],
+            'noop' => [new class() {}],
             TestEvent::class => [$testEvent],
             ErrorEvent::class => [
                 new ErrorEvent(
