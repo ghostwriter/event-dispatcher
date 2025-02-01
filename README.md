@@ -43,13 +43,13 @@ final class ExampleEventListener
 }
 
 // Create a ListenerProvider
-$provider = ListenerProvider::new(); // or new ListenerProvider()
+$listenerProvider = ListenerProvider::new(); // or new ListenerProvider(Container::getInstance())
 
 // Bind the Listener to the Event
-$provider->bind(ExampleEvent::class, ExampleEventListener::class);
+$listenerProvider->bind(ExampleEvent::class, ExampleEventListener::class);
 
 // Create an EventDispatcher
-$dispatcher = EventDispatcher::new($provider); // or new EventDispatcher($provider)
+$dispatcher = EventDispatcher::new($listenerProvider); // or new EventDispatcher($listenerProvider)
 
 // Dispatch the Event.
 $event = $dispatcher->dispatch(new ExampleEvent());
@@ -83,13 +83,13 @@ final class EventSubscriber implements SubscriberInterface {
 }
 
 // Create a ListenerProvider
-$provider = ListenerProvider::new(); // or new ListenerProvider()
+$listenerProvider = ListenerProvider::new(); // or new ListenerProvider(Container::getInstance())
 
 // Subscribe the EventSubscriber
-$provider->subscribe(EventSubscriber::class);
+$listenerProvider->subscribe(EventSubscriber::class);
 
 // Create an EventDispatcher
-$dispatcher = EventDispatcher::new($provider); // or new EventDispatcher($provider)
+$dispatcher = EventDispatcher::new($listenerProvider); // or new EventDispatcher($listenerProvider)
 
 // Dispatch the Event.
 $event = $dispatcher->dispatch(new TestEvent());

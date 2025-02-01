@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Ghostwriter\Container\Container;
+use Ghostwriter\EventDispatcher\Container\ServiceProvider;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
@@ -20,6 +20,7 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
+#[CoversClass(ServiceProvider::class)]
 final class ListenerProviderTest extends AbstractTestCase
 {
     /**
@@ -27,28 +28,24 @@ final class ListenerProviderTest extends AbstractTestCase
      */
     public function testProviderBind(): void
     {
-        $testEvent = new TestEvent();
-
-        self::assertEmpty($testEvent->read());
+        self::assertEmpty($this->testEvent->read());
 
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
 
         $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
 
-        $this->assertListenersCount(1, $testEvent);
+        $this->assertListenersCount(1, $this->testEvent);
 
-        $container = Container::getInstance();
-
-        $listeners = $this->listenerProvider->listeners($testEvent);
+        $listeners = $this->listenerProvider->listeners($this->testEvent);
         foreach ($listeners as $listener) {
-            $container->invoke($listener, [$testEvent]);
+            $this->container->invoke($listener, [$this->testEvent]);
         }
 
-        self::assertCount(1, $testEvent->read());
+        self::assertCount(1, $this->testEvent->read());
 
         $this->listenerProvider->unbind(TestEventListener::class);
 
-        $this->assertListenersCount(0, $testEvent);
+        $this->assertListenersCount(0, $this->testEvent);
     }
 
     /**
@@ -56,17 +53,15 @@ final class ListenerProviderTest extends AbstractTestCase
      */
     public function testProviderDetectsEventType(): void
     {
-        $testEvent = new TestEvent();
-
-        $this->assertListenersCount(0, $testEvent);
+        $this->assertListenersCount(0, $this->testEvent);
 
         $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
 
-        $this->assertListenersCount(1, $testEvent);
+        $this->assertListenersCount(1, $this->testEvent);
 
         $this->listenerProvider->unbind(TestEventListener::class);
 
-        $this->assertListenersCount(0, $testEvent);
+        $this->assertListenersCount(0, $this->testEvent);
     }
 
     /**
