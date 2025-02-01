@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use Ghostwriter\EventDispatcher\Container\ServiceProvider;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
@@ -28,6 +29,7 @@ use function array_map;
 #[CoversClass(ListenerNotFoundException::class)]
 #[CoversClass(SubscriberAlreadyRegisteredException::class)]
 #[CoversClass(SubscriberMustImplementSubscriberInterfaceException::class)]
+#[CoversClass(ServiceProvider::class)]
 final class ExceptionsTest extends AbstractTestCase
 {
     /**

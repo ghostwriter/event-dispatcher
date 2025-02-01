@@ -6,6 +6,7 @@ namespace Tests\Unit;
 
 use Generator;
 use Ghostwriter\Container\Container;
+use Ghostwriter\Container\Interface\ContainerInterface;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
@@ -31,6 +32,8 @@ abstract class AbstractTestCase extends TestCase
 
     public const string ERROR_MESSAGE = 'Could not handle the event!';
 
+    protected ContainerInterface $container;
+
     protected ErrorEventInterface $errorEvent;
 
     protected EventDispatcherInterface $eventDispatcher;
@@ -51,8 +54,9 @@ abstract class AbstractTestCase extends TestCase
     {
         parent::setUp();
 
+        $this->container = Container::getInstance();
         $this->listenerProvider = ListenerProvider::new();
-        $this->eventDispatcher = EventDispatcher::new($this->listenerProvider);
+        $this->eventDispatcher = EventDispatcher::new($this->listenerProvider, $this->container);
 
         $this->testEvent = new TestEvent();
         $this->listener = TestEventListener::class;
