@@ -11,6 +11,7 @@ use Throwable;
  *
  * @template Event of object
  * @template Listener of object
+ * @template Reason of Throwable
  */
 interface ErrorEventInterface
 {
@@ -30,6 +31,8 @@ interface ErrorEventInterface
 
     /**
      * Returns the exception thrown by the listener.
+     *
+     * @return Reason
      */
     public function throwable(): Throwable;
 }

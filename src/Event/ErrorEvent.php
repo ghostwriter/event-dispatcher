@@ -11,14 +11,16 @@ use Throwable;
 /**
  * @template Event of object
  * @template Listener of object
+ * @template Reason of Throwable
  *
- * @implements ErrorEventInterface<Event,Listener>
+ * @implements ErrorEventInterface<Event, Listener, Reason>
  */
 final readonly class ErrorEvent implements ErrorEventInterface
 {
     /**
      * @param Event                                         $event
      * @param class-string<(callable(Event):void)&Listener> $listener
+     * @param Reason                                        $throwable
      */
     public function __construct(
         private object $event,
@@ -44,6 +46,9 @@ final readonly class ErrorEvent implements ErrorEventInterface
         return $this->listener;
     }
 
+    /**
+     * @return Reason
+     */
     #[Override]
     public function throwable(): Throwable
     {
