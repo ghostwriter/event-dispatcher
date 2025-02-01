@@ -7,6 +7,4 @@ namespace Ghostwriter\EventDispatcher\Exception;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use InvalidArgumentException;
 
-final class SubscriberMustImplementSubscriberInterfaceException extends InvalidArgumentException implements ExceptionInterface
-{
-}
+final class SubscriberMustImplementSubscriberInterfaceException extends InvalidArgumentException implements ExceptionInterface {}
