@@ -31,7 +31,7 @@ use function array_map;
 final class ExceptionsTest extends AbstractTestCase
 {
     /**
-     * @var array<class-string<Throwable>>
+     * @var list<class-string<Throwable>>
      */
     public const array EXCEPTIONS = [
         EventNotFoundException::class,
