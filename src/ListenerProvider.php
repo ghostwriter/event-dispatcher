@@ -47,7 +47,35 @@ final class ListenerProvider implements ListenerProviderInterface
         private readonly ContainerInterface $container,
         private array $listeners = [],
         private array $listenerProviders = [],
-    ) {
+    ) {}
+
+    /**
+     * @template Event of object
+     * @template Listener of object
+     *
+     * @param array<class-string<Event>,class-string<(callable(Event):void)&Listener>> $listeners
+     * @param list<class-string<SubscriberInterface>>                                  $subscribers
+     *
+     * @throws Throwable
+     */
+    public static function new(
+        ?ContainerInterface $container = null,
+        array $listeners = [],
+        array $subscribers = [],
+    ): self {
+        $container ??= Container::getInstance();
+
+        $listenerProvider = new self($container);
+
+        foreach ($listeners as $event => $listener) {
+            $listenerProvider->bind($event, $listener);
+        }
+
+        foreach ($subscribers as $subscriber) {
+            $listenerProvider->subscribe($subscriber);
+        }
+
+        return $listenerProvider;
     }
 
     /**
@@ -190,7 +218,7 @@ final class ListenerProvider implements ListenerProviderInterface
     {
         match (true) {
             default => throw new EventNotFoundException($event),
-            $event === 'object',
+            'object' === $event,
             class_exists($event),
             interface_exists($event),
             trait_exists($event),
@@ -218,34 +246,5 @@ final class ListenerProvider implements ListenerProviderInterface
         if (! method_exists($listener, '__invoke')) {
             throw new ListenerMissingInvokeMethodException($listener);
         }
-    }
-
-    /**
-     * @template Event of object
-     * @template Listener of object
-     *
-     * @param array<class-string<Event>,class-string<(callable(Event):void)&Listener>> $listeners
-     * @param array<class-string<SubscriberInterface>>                                 $subscribers
-     *
-     * @throws Throwable
-     */
-    public static function new(
-        ?ContainerInterface $container = null,
-        array $listeners = [],
-        array $subscribers = [],
-    ): self {
-        $container ??= Container::getInstance();
-
-        $listenerProvider = new self($container);
-
-        foreach ($listeners as $event => $listener) {
-            $listenerProvider->bind($event, $listener);
-        }
-
-        foreach ($subscribers as $subscriber) {
-            $listenerProvider->subscribe($subscriber);
-        }
-
-        return $listenerProvider;
     }
 }
