@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cbc390aa6a8b72922b1ba8a59c9c5133",
+    "content-hash": "5a2266db0801c30db7804ea322a3358a",
     "packages": [
         {
             "name": "ghostwriter/container",
-            "version": "4.0.4",
+            "version": "4.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/container.git",
-                "reference": "2fcb892e45f0410709ae0c0ddd4b5c54ddadd889"
+                "reference": "a0aa3c884e1b8e4bb1b044c72ebac74675a45bf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/container/zipball/2fcb892e45f0410709ae0c0ddd4b5c54ddadd889",
-                "reference": "2fcb892e45f0410709ae0c0ddd4b5c54ddadd889",
+                "url": "https://api.github.com/repos/ghostwriter/container/zipball/a0aa3c884e1b8e4bb1b044c72ebac74675a45bf6",
+                "reference": "a0aa3c884e1b8e4bb1b044c72ebac74675a45bf6",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-01T21:19:38+00:00"
+            "time": "2025-02-02T00:23:20+00:00"
         }
     ],
     "packages-dev": [
