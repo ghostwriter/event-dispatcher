@@ -4,29 +4,27 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b618b0f0e0bae2fd14113417e30f1a2",
+    "content-hash": "88151c55dd1d4f35fb6dc2cb92bd8f99",
     "packages": [
         {
             "name": "ghostwriter/container",
-            "version": "4.0.5",
+            "version": "5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/container.git",
-                "reference": "a0aa3c884e1b8e4bb1b044c72ebac74675a45bf6"
+                "reference": "e92b51b825b9b3883bfab6d1077e050bd8035d78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/container/zipball/a0aa3c884e1b8e4bb1b044c72ebac74675a45bf6",
-                "reference": "a0aa3c884e1b8e4bb1b044c72ebac74675a45bf6",
+                "url": "https://api.github.com/repos/ghostwriter/container/zipball/e92b51b825b9b3883bfab6d1077e050bd8035d78",
+                "reference": "e92b51b825b9b3883bfab6d1077e050bd8035d78",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.3"
+                "php": ">=8.4"
             },
             "require-dev": {
-                "ghostwriter/coding-standard": "@dev",
-                "ghostwriter/psalm-plugin": "@dev",
-                "ghostwriter/testify": "@dev"
+                "ghostwriter/coding-standard": "dev-main"
             },
             "type": "library",
             "autoload": {
@@ -64,7 +62,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-02T00:23:20+00:00"
+            "time": "2025-02-21T19:09:09+00:00"
         }
     ],
     "packages-dev": [
