@@ -4,8 +4,68 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e554743b5cc3e2a6a7eab12598f12984",
+    "content-hash": "13a1ed03c07494eaed718d38a04df5b3",
     "packages": [
+        {
+            "name": "ghostwriter/container",
+            "version": "5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ghostwriter/container.git",
+                "reference": "e92b51b825b9b3883bfab6d1077e050bd8035d78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ghostwriter/container/zipball/e92b51b825b9b3883bfab6d1077e050bd8035d78",
+                "reference": "e92b51b825b9b3883bfab6d1077e050bd8035d78",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4"
+            },
+            "require-dev": {
+                "ghostwriter/coding-standard": "dev-main"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ghostwriter\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nathanael Esayeas",
+                    "email": "nathanael.esayeas@protonmail.com",
+                    "homepage": "https://github.com/ghostwriter",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Provides an extensible Dependency Injection Service Container for Automated Object Composition, Interception, and Lifetime Management.",
+            "homepage": "https://github.com/ghostwriter/container",
+            "keywords": [
+                "container",
+                "ghostwriter"
+            ],
+            "support": {
+                "issues": "https://github.com/ghostwriter/container/issues",
+                "rss": "https://github.com/ghostwriter/container/releases.atom",
+                "security": "https://github.com/ghostwriter/container/security/advisories/new",
+                "source": "https://github.com/ghostwriter/container"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/ghostwriter",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-21T19:09:09+00:00"
+        }
+    ],
+    "packages-dev": [
         {
             "name": "composer/ca-bundle",
             "version": "1.5.5",
@@ -650,18 +710,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "c8944b9eeda6a09b79aa8c3314190b20a4d35c5b"
+                "reference": "3ea929a51fe02b1ea0abc6c1f0c07d5b4f915b03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/c8944b9eeda6a09b79aa8c3314190b20a4d35c5b",
-                "reference": "c8944b9eeda6a09b79aa8c3314190b20a4d35c5b",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/3ea929a51fe02b1ea0abc6c1f0c07d5b4f915b03",
+                "reference": "3ea929a51fe02b1ea0abc6c1f0c07d5b4f915b03",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^2.6.0",
                 "composer-runtime-api": "^2.2.2",
-                "composer/composer": "2.8.6",
+                "composer/composer": "^2.8.6",
                 "composer/semver": "^3.4.3",
                 "ext-ctype": "*",
                 "ext-curl": "*",
@@ -687,7 +747,7 @@
                 "ext-zlib": "*",
                 "mockery/mockery": "^1.6.12",
                 "php": "^8.4",
-                "phpunit/phpunit": "12.0.5",
+                "phpunit/phpunit": "^12.0.5",
                 "symfony/var-dumper": "^7.2.3"
             },
             "conflict": {
@@ -751,65 +811,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-25T16:36:58+00:00"
-        },
-        {
-            "name": "ghostwriter/container",
-            "version": "5.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ghostwriter/container.git",
-                "reference": "e92b51b825b9b3883bfab6d1077e050bd8035d78"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/container/zipball/e92b51b825b9b3883bfab6d1077e050bd8035d78",
-                "reference": "e92b51b825b9b3883bfab6d1077e050bd8035d78",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.4"
-            },
-            "require-dev": {
-                "ghostwriter/coding-standard": "dev-main"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Ghostwriter\\Container\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Nathanael Esayeas",
-                    "email": "nathanael.esayeas@protonmail.com",
-                    "homepage": "https://github.com/ghostwriter",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Provides an extensible Dependency Injection Service Container for Automated Object Composition, Interception, and Lifetime Management.",
-            "homepage": "https://github.com/ghostwriter/container",
-            "keywords": [
-                "container",
-                "ghostwriter"
-            ],
-            "support": {
-                "issues": "https://github.com/ghostwriter/container/issues",
-                "rss": "https://github.com/ghostwriter/container/releases.atom",
-                "security": "https://github.com/ghostwriter/container/security/advisories/new",
-                "source": "https://github.com/ghostwriter/container"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sponsors/ghostwriter",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-02-21T19:09:09+00:00"
+            "time": "2025-02-25T16:53:32+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -4084,7 +4086,6 @@
             "time": "2024-03-03T12:36:25+00:00"
         }
     ],
-    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
@@ -4093,7 +4094,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.4"
+        "php": "^8.4"
     },
     "platform-dev": [],
     "platform-overrides": {
