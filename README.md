@@ -1,4 +1,4 @@
-# EventDispatcher
+# Event Dispatcher
 
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/event-dispatcher&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
 [![Automation](https://github.com/ghostwriter/event-dispatcher/actions/workflows/automation.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/automation.yml)
