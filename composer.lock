@@ -1901,19 +1901,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "79b1ab6977ae385e8e9500f7a12bc54d0e125cf7"
+                "reference": "819fd1014358c4dc0b575d93227feb7303b39785"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/79b1ab6977ae385e8e9500f7a12bc54d0e125cf7",
-                "reference": "79b1ab6977ae385e8e9500f7a12bc54d0e125cf7",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/819fd1014358c4dc0b575d93227feb7303b39785",
+                "reference": "819fd1014358c4dc0b575d93227feb7303b39785",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^2.6.0",
                 "composer-runtime-api": "^2.2.2",
-                "composer/composer": "^2.8.6",
-                "composer/semver": "^3.4.3",
+                "composer/composer": "@stable",
+                "composer/semver": "@stable",
                 "ext-ctype": "*",
                 "ext-curl": "*",
                 "ext-dom": "*",
@@ -1936,20 +1936,24 @@
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
                 "ext-zlib": "*",
-                "infection/infection": "^0.29.14",
-                "mockery/mockery": "^1.6.12",
+                "infection/infection": "@stable",
+                "mockery/mockery": "@stable",
                 "php": "^8.4",
-                "phpunit/phpunit": "^12.0.7",
-                "symfony/var-dumper": "^7.2.3",
-                "vimeo/psalm": "^6.8.9"
+                "phpunit/phpunit": "@stable",
+                "symfony/var-dumper": "@stable",
+                "vimeo/psalm": "@stable"
+            },
+            "conflict": {
+                "pestphp/pest": "*",
+                "phpunit/phpunit": "<12.0"
             },
             "require-dev": {
-                "doctrine/inflector": "^2.0.10",
-                "ghostwriter/case-converter": "^2.0.0",
-                "ghostwriter/container": "^5.0.0",
-                "ghostwriter/filesystem": "^0.1.1",
-                "ghostwriter/json": "^3.0.0",
-                "ghostwriter/shell": "^0.1.0"
+                "doctrine/inflector": "@stable",
+                "ghostwriter/case-converter": "@stable",
+                "ghostwriter/container": "@stable",
+                "ghostwriter/filesystem": "@stable",
+                "ghostwriter/json": "@stable",
+                "ghostwriter/shell": "@stable"
             },
             "default-branch": true,
             "bin": [
@@ -1959,6 +1963,51 @@
             "type": "composer-plugin",
             "extra": {
                 "class": "Ghostwriter\\CodingStandard\\Plugin\\ComposerPlugin",
+                "ghostwriter": {
+                    "conflict": {
+                        "enabled": true,
+                        "vendors": [
+                            "250",
+                            "acmephp",
+                            "asm89",
+                            "async",
+                            "bilge",
+                            "binarykitten",
+                            "codelegance",
+                            "connectors",
+                            "doctrine",
+                            "ezsystems",
+                            "growthbook",
+                            "jdorn",
+                            "joomla",
+                            "jwage",
+                            "kazist",
+                            "khanamiryan",
+                            "larastan",
+                            "nunomaduro",
+                            "object-calisthenics",
+                            "ocramius",
+                            "pegasus",
+                            "pestphp",
+                            "phptal",
+                            "phptype",
+                            "pimcore",
+                            "provider",
+                            "roave",
+                            "scriptfusion",
+                            "silverstripe",
+                            "socialiteproviders",
+                            "spatie",
+                            "tga",
+                            "topthink",
+                            "yiisoft",
+                            "yuan1994",
+                            "zendframework",
+                            "zetacomponents",
+                            "zf-commons"
+                        ]
+                    }
+                },
                 "plugin-optional": false,
                 "plugin-modifies-downloads": false,
                 "plugin-modifies-install-path": false
@@ -2001,7 +2050,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-12T03:24:28+00:00"
+            "time": "2025-03-16T02:31:09+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -3381,16 +3430,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.0.4",
+            "version": "12.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "79e5ef5897068689c7c325554d6df905480ce942"
+                "reference": "da732486790670c622aa367eb3dbb7e1619e68be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/79e5ef5897068689c7c325554d6df905480ce942",
-                "reference": "79e5ef5897068689c7c325554d6df905480ce942",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/da732486790670c622aa367eb3dbb7e1619e68be",
+                "reference": "da732486790670c622aa367eb3dbb7e1619e68be",
                 "shasum": ""
             },
             "require": {
@@ -3446,7 +3495,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.0.4"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.0.5"
             },
             "funding": [
                 {
@@ -3454,7 +3503,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-25T13:27:48+00:00"
+            "time": "2025-03-15T07:24:51+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
