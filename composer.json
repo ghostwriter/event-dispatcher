@@ -49,11 +49,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Fixture\\": "tests/fixture/",
+            "Tests\\Fixture\\": "tests/Fixture/",
             "Tests\\Unit\\": "tests/Unit/"
         },
         "exclude-from-classmap": [
-            "tests/fixture/"
+            "tests/Fixture/"
         ]
     },
     "config": {
