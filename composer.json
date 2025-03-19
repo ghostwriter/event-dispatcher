@@ -1,7 +1,7 @@
 {
     "name": "ghostwriter/event-dispatcher",
     "description": "Event Dispatcher implementation.",
-    "license": "BSD-3-Clause",
+    "license": "BSD-4-Clause",
     "type": "library",
     "keywords": [
         "ghostwriter",
@@ -35,7 +35,7 @@
     ],
     "require": {
         "php": "^8.4",
-        "ghostwriter/container": "^5.0.0"
+        "ghostwriter/container": "^5.0.1"
     },
     "require-dev": {
         "ghostwriter/coding-standard": "dev-main"
@@ -49,11 +49,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Fixture\\": "tests/fixture/",
-            "Tests\\Unit\\": "tests/unit/"
+            "Tests\\Fixture\\": "tests/Fixture/",
+            "Tests\\Unit\\": "tests/Unit/"
         },
         "exclude-from-classmap": [
-            "tests/fixture/"
+            "tests/Fixture/"
         ]
     },
     "config": {
