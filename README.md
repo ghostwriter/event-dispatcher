@@ -1,4 +1,4 @@
-# EventDispatcher
+# Event Dispatcher
 
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/ghostwriter?label=Sponsor+@ghostwriter/event-dispatcher&logo=GitHub+Sponsors)](https://github.com/sponsors/ghostwriter)
 [![Automation](https://github.com/ghostwriter/event-dispatcher/actions/workflows/automation.yml/badge.svg)](https://github.com/ghostwriter/event-dispatcher/actions/workflows/automation.yml)
@@ -108,4 +108,4 @@ If you discover any security related issues, please email `nathanael.esayeas@pro
 
 ## License
 
-The BSD-3-Clause. Please see [License File](./LICENSE) for more information.
+The BSD-4-Clause. Please see [License File](./LICENSE) for more information.

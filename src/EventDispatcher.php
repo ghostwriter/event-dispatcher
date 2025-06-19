@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
+use Ghostwriter\Container\Attribute\Provider;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
 use Ghostwriter\EventDispatcher\Container\ServiceProvider;
@@ -15,6 +16,7 @@ use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Override;
 use Throwable;
 
+#[Provider(ServiceProvider::class)]
 final readonly class EventDispatcher implements EventDispatcherInterface
 {
     public function __construct(
@@ -31,14 +33,8 @@ final readonly class EventDispatcher implements EventDispatcherInterface
     ): self {
         $container ??= Container::getInstance();
 
-        if (! $container->has(ServiceProvider::class)) {
-            $container->provide(ServiceProvider::class);
-        }
-
         if ($listenerProvider instanceof ListenerProviderInterface) {
             $container->set($listenerProvider::class, $listenerProvider);
-
-            return new self($container, $listenerProvider);
         }
 
         return $container->get(self::class);
