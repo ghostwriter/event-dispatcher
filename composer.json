@@ -35,7 +35,7 @@
         "#StopGenocide"
     ],
     "require": {
-        "php": "^8.4",
+        "php": "~8.4.0",
         "ghostwriter/container": "~5.0.1"
     },
     "require-dev": {
