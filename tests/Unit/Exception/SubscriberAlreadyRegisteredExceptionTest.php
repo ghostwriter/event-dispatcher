@@ -14,12 +14,11 @@ use Tests\Fixture\Subscriber\TestEventSubscriber;
 use Tests\Unit\AbstractTestCase;
 use Throwable;
 
-#[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
-#[CoversClass(ListenerProvider::class)]
-#[CoversClass(SubscriberAlreadyRegisteredException::class)]
+#[CoversClass(EventDispatcher::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(ServiceProvider::class)]
+#[CoversClass(SubscriberAlreadyRegisteredException::class)]
 final class SubscriberAlreadyRegisteredExceptionTest extends AbstractTestCase
 {
     /**
