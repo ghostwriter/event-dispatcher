@@ -16,14 +16,14 @@
   "enable_automated_security_fixes": true
   "enable_vulnerability_alerts": true
 "milestones":
-  - "title": "5.5.1"
-    "description": "Patch release – targeting 5.5.x branch (semantic version: 5.5.1)"
+  - "title": "5.1.0"
+    "description": "Minor release – targeting 5.1.x branch (semantic version: 5.1.0)"
     "state": "open"
   - "title": "5.0.4"
     "description": "Patch release – targeting 5.0.x branch (semantic version: 5.0.4)"
     "state": "open"
-  - "title": "5.1.0"
-    "description": "Minor release – targeting 5.1.x branch (semantic version: 5.1.0)"
+  - "title": "5.1.1"
+    "description": "Patch release – targeting 5.1.x branch (semantic version: 5.1.1)"
     "state": "open"
   - "title": "6.0.0"
     "description": "Major release – targeting 6.0.x branch (semantic version: 6.0.0)"
