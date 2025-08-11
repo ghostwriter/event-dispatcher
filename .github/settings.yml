@@ -3,7 +3,6 @@
   "description": "Event Dispatcher implementation."
   "homepage": "https://github.com/ghostwriter/event-dispatcher"
   "topics": "event-dispatcher, ghostwriter"
-  "private": false
   "has_issues": true
   "has_projects": false
   "has_wiki": false
