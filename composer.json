@@ -62,8 +62,7 @@
             "tests/bootstrap.php"
         ],
         "exclude-from-classmap": [
-            "/tests/",
-            "/tests/Fixture/"
+            "/tests/"
         ]
     },
     "config": {
