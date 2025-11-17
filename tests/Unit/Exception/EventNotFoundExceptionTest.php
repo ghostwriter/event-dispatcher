@@ -18,7 +18,6 @@ use Throwable;
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(EventNotFoundException::class)]
-#[CoversClass(ServiceProvider::class)]
 final class EventNotFoundExceptionTest extends AbstractTestCase
 {
     /**

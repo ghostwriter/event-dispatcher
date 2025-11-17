@@ -25,7 +25,6 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
-#[CoversClass(ServiceProvider::class)]
 final class EventDispatcherTest extends AbstractTestCase
 {
     /**

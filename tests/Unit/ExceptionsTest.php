@@ -29,7 +29,6 @@ use function array_map;
 #[CoversClass(ListenerNotFoundException::class)]
 #[CoversClass(SubscriberAlreadyRegisteredException::class)]
 #[CoversClass(SubscriberMustImplementSubscriberInterfaceException::class)]
-#[CoversClass(ServiceProvider::class)]
 final class ExceptionsTest extends AbstractTestCase
 {
     /**

@@ -18,7 +18,6 @@ use Throwable;
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(SubscriberMustImplementSubscriberInterfaceException::class)]
-#[CoversClass(ServiceProvider::class)]
 final class SubscriberMustImplementSubscriberInterfaceExceptionTest extends AbstractTestCase
 {
     /**

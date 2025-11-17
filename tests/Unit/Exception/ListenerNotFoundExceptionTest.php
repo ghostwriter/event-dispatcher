@@ -20,7 +20,6 @@ use Throwable;
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(ListenerNotFoundException::class)]
-#[CoversClass(ServiceProvider::class)]
 final class ListenerNotFoundExceptionTest extends AbstractTestCase
 {
     /**

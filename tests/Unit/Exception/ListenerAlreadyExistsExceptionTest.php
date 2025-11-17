@@ -19,7 +19,6 @@ use Throwable;
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(ListenerAlreadyExistsException::class)]
-#[CoversClass(ServiceProvider::class)]
 final class ListenerAlreadyExistsExceptionTest extends AbstractTestCase
 {
     /**

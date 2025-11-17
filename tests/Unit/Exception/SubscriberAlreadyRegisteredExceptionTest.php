@@ -17,7 +17,6 @@ use Throwable;
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ListenerProvider::class)]
-#[CoversClass(ServiceProvider::class)]
 #[CoversClass(SubscriberAlreadyRegisteredException::class)]
 final class SubscriberAlreadyRegisteredExceptionTest extends AbstractTestCase
 {
