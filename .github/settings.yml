@@ -1,0 +1,50 @@
+"milestones":
+  - "title": "5.1.0"
+    "description": "Minor release – targeting 5.1.x branch (semantic version: 5.1.0)"
+    "state": "open"
+  - "title": "5.0.4"
+    "description": "Patch release – targeting 5.0.x branch (semantic version: 5.0.4)"
+    "state": "open"
+  - "title": "5.1.1"
+    "description": "Patch release – targeting 5.1.x branch (semantic version: 5.1.1)"
+    "state": "open"
+  - "title": "6.0.0"
+    "description": "Major release – targeting 6.0.x branch (semantic version: 6.0.0)"
+    "state": "open"
+  - "title": "5.0.3"
+    "description": "Patch release – targeting 5.0.x branch (semantic version: 5.0.3)"
+    "state": "closed"
+"repository":
+  "name": "event-dispatcher"
+  "description": "Event Dispatcher implementation."
+  "topics": "event-dispatcher, ghostwriter"
+  "homepage": "https://github.com/ghostwriter/event-dispatcher"
+  "default_branch": "5.0.x"
+  "allow_auto_merge": true
+  "allow_forking": true
+  "allow_merge_commit": true
+  "allow_rebase_merge": true
+  "allow_squash_merge": true
+  "allow_update_branch": true
+  "delete_branch_on_merge": true
+  "enable_automated_security_fixes": true
+  "enable_vulnerability_alerts": true
+  "has_discussions": false
+  "has_downloads": true
+  "has_issues": true
+  "has_projects": false
+  "has_wiki": false
+  "security_and_analysis":
+    "advanced_security":
+      "status": "enabled"
+    "code_security":
+      "status": "enabled"
+    "secret_scanning":
+      "status": "enabled"
+    "secret_scanning_ai_detection":
+      "status": "enabled"
+    "secret_scanning_non_provider_patterns":
+      "status": "enabled"
+    "secret_scanning_push_protection":
+      "status": "enabled"
+  "web_commit_signoff_required": true

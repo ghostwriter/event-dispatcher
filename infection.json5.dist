@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/infection/infection/0.29.14/resources/schema.json",
+    "$schema": "https://raw.githubusercontent.com/infection/infection/0.31.9/resources/schema.json",
     "source": {
         "directories": [
             "src"
@@ -10,16 +10,13 @@
         ]
     },
     "phpUnit": {
-        "customPath": "vendor/ghostwriter/coding-standard/tools/phpunit"
+        "customPath": "vendor/ghostwriter/coding-standard/tools/phar/phpunit"
     },
     "mutators": {
         "@default": true
     },
     "timeout": 10,
     "logs": {
-        "stryker": {
-            "report": "/.*?/"
-        },
         "text": "php:\/\/stderr",
         "github": true
     },
