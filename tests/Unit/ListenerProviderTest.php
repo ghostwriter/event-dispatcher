@@ -38,7 +38,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
         $listeners = $this->listenerProvider->listeners($this->testEvent);
         foreach ($listeners as $listener) {
-            $this->container->invoke($listener, [$this->testEvent]);
+            $this->container->call($listener, [$this->testEvent]);
         }
 
         self::assertCount(1, $this->testEvent->read());

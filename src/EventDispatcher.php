@@ -60,7 +60,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         $isErrorEvent = $event instanceof ErrorEventInterface;
         foreach ($this->listenerProvider->listeners($event) as $listener) {
             try {
-                $this->container->invoke($listener, [$event]);
+                $this->container->call($listener, [$event]);
             } catch (Throwable $throwable) {
                 if ($isErrorEvent) {
                     /**

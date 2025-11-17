@@ -2,31 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Container;
+namespace Ghostwriter\EventDispatcher\Container\Service\Definition;
 
 use Ghostwriter\Container\Interface\ContainerInterface;
-use Ghostwriter\Container\Interface\ServiceProviderInterface;
+use Ghostwriter\Container\Interface\Service\DefinitionInterface;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
-use Override;
-use Throwable;
 
-final readonly class ServiceProvider implements ServiceProviderInterface
+final readonly class EventDispatcherDefinition implements DefinitionInterface
 {
     public const array ALIASES = [
-        EventDispatcher::class => EventDispatcherInterface::class,
-        ListenerProvider::class => ListenerProviderInterface::class,
+        EventDispatcherInterface::class => EventDispatcher::class,
+        ListenerProviderInterface::class => ListenerProvider::class,
     ];
 
-    /**
-     * @throws Throwable
-     */
-    #[Override]
+    /** @throws Throwable */
+    #[\Override]
     public function __invoke(ContainerInterface $container): void
     {
-        foreach (self::ALIASES as $service => $alias) {
+        foreach (self::ALIASES as $alias => $service) {
             $container->alias($service, $alias);
         }
     }

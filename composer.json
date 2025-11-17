@@ -36,7 +36,7 @@
     ],
     "require": {
         "php": "~8.4.0 || ~8.5.0",
-        "ghostwriter/container": "^5.0.1"
+        "ghostwriter/container": "^6.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
@@ -77,6 +77,13 @@
         "process-timeout": 5000,
         "sort-packages": true,
         "use-parent-dir": false
+    },
+    "extra": {
+        "ghostwriter": {
+            "container": {
+                    "definition": "Ghostwriter\\EventDispatcher\\Container\\Service\\Definition\\EventDispatcherDefinition"
+            }
+        }
     },
     "scripts": {
         "cache:clear": "rm -rf ./.cache/*",

@@ -54,9 +54,11 @@ abstract class AbstractTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->container = Container::getInstance();
-        $this->listenerProvider = ListenerProvider::new();
-        $this->eventDispatcher = EventDispatcher::new($this->listenerProvider, $this->container);
+        $container = $this->container = Container::getInstance();
+        $container->reset();
+
+        $this->listenerProvider = $container->get(ListenerProviderInterface::class);
+        $this->eventDispatcher = $container->get(EventDispatcherInterface::class);
 
         $this->testEvent = new TestEvent();
         $this->listener = TestEventListener::class;
@@ -68,8 +70,6 @@ abstract class AbstractTestCase extends TestCase
     final protected function tearDown(): void
     {
         parent::tearDown();
-
-        Container::getInstance()->__destruct();
     }
 
     /**

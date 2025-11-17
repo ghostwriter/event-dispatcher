@@ -154,7 +154,7 @@ final class ListenerProvider implements ListenerProviderInterface
             throw new SubscriberAlreadyRegisteredException($subscriber);
         }
 
-        $this->container->invoke($subscriber, [$this->listenerProviders[$subscriber] ??= self::new($this->container)]);
+        $this->container->call($subscriber, [$this->listenerProviders[$subscriber] ??= self::new($this->container)]);
     }
 
     /**
@@ -184,7 +184,7 @@ final class ListenerProvider implements ListenerProviderInterface
             throw new ListenerNotFoundException($listener);
         }
 
-        $this->container->remove($listener);
+        $this->container->unset($listener);
     }
 
     /**
@@ -202,7 +202,7 @@ final class ListenerProvider implements ListenerProviderInterface
 
         unset($this->listenerProviders[$subscriber]);
 
-        $this->container->remove($subscriber);
+        $this->container->unset($subscriber);
     }
 
     /**
