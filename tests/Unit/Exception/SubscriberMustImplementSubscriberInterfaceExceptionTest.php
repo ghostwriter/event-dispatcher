@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Exception;
 
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
+use Ghostwriter\EventDispatcher\Container\Service\Definition\EventDispatcherDefinition;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\SubscriberMustImplementSubscriberInterfaceException;
@@ -18,6 +18,7 @@ use Throwable;
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(SubscriberMustImplementSubscriberInterfaceException::class)]
+#[CoversClass(EventDispatcherDefinition::class)]
 final class SubscriberMustImplementSubscriberInterfaceExceptionTest extends AbstractTestCase
 {
     /**

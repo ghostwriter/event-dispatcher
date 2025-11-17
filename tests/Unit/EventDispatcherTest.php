@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
+use Ghostwriter\EventDispatcher\Container\Service\Definition\EventDispatcherDefinition;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
@@ -25,11 +25,10 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
+#[CoversClass(EventDispatcherDefinition::class)]
 final class EventDispatcherTest extends AbstractTestCase
 {
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testBlackLivesMatterListener(): void
     {
         self::assertEmpty($this->testEvent->read());
@@ -56,17 +55,13 @@ final class EventDispatcherTest extends AbstractTestCase
         $this->dispatch($event);
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testImplementsDispatcherInterfaceAndPsrEventDispatcherInterface(): void
     {
         self::assertInstanceOf(EventDispatcherInterface::class, EventDispatcher::new());
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testMustCallListenersSynchronouslyInTheOrderTheyAreReturnedFromAProvider(): void
     {
         self::assertEmpty($this->testEvent->read());
@@ -86,9 +81,7 @@ final class EventDispatcherTest extends AbstractTestCase
         self::assertCount(2, $this->testEvent->read());
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testSuppressTestEventRaiseAnExceptionListener(): void
     {
         $this->listenerProvider->bind(TestEvent::class, TestEventRaiseAnExceptionListener::class);
@@ -105,9 +98,7 @@ final class EventDispatcherTest extends AbstractTestCase
         }
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testTestEventRaiseAnExceptionListener(): void
     {
         $this->expectException(RuntimeException::class);
@@ -118,9 +109,7 @@ final class EventDispatcherTest extends AbstractTestCase
         $this->dispatch($this->testEvent);
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testThrows(): void
     {
         $listener = TestListener::class;

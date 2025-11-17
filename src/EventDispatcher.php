@@ -24,9 +24,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         private ListenerProviderInterface $listenerProvider,
     ) {}
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public static function new(
         ?ListenerProviderInterface $listenerProvider = null,
         ?ContainerInterface $container = null,
@@ -67,7 +65,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
                      * If an error is raised while processing an ErrorEvent,
                      * re-throw the original throwable to prevent recursion.
                      *
-                     * @var ErrorEventInterface $event
+                     * @var ErrorEventInterface
                      */
                     throw $event->throwable();
                 }

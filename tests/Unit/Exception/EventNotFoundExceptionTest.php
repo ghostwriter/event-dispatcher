@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Exception;
 
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
+use Ghostwriter\EventDispatcher\Container\Service\Definition\EventDispatcherDefinition;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
@@ -18,11 +18,10 @@ use Throwable;
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(EventNotFoundException::class)]
+#[CoversClass(EventDispatcherDefinition::class)]
 final class EventNotFoundExceptionTest extends AbstractTestCase
 {
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testThrowsEventNotFoundException(): void
     {
         $this->expectException(EventNotFoundException::class);

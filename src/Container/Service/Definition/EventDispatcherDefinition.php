@@ -10,6 +10,7 @@ use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use Override;
 
 final readonly class EventDispatcherDefinition implements DefinitionInterface
 {
@@ -19,7 +20,7 @@ final readonly class EventDispatcherDefinition implements DefinitionInterface
     ];
 
     /** @throws Throwable */
-    #[\Override]
+    #[Override]
     public function __invoke(ContainerInterface $container): void
     {
         foreach (self::ALIASES as $alias => $service) {

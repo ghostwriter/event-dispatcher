@@ -8,12 +8,10 @@ use Generator;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
-use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
-use Ghostwriter\EventDispatcher\ListenerProvider;
 use Override;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -46,9 +44,7 @@ abstract class AbstractTestCase extends TestCase
 
     protected Throwable $throwable;
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     #[Override]
     final protected function setUp(): void
     {
@@ -97,9 +93,7 @@ abstract class AbstractTestCase extends TestCase
         self::assertSame($event, $this->eventDispatcher->dispatch($event));
     }
 
-    /**
-     * @return Generator<string,array{0:object}>
-     */
+    /** @return Generator<string,array{0:object}> */
     public static function eventDataProvider(): Generator
     {
         $testEvent = new TestEvent();

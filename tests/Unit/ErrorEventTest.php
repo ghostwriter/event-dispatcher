@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
+use Ghostwriter\EventDispatcher\Container\Service\Definition\EventDispatcherDefinition;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
@@ -17,11 +17,10 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
+#[CoversClass(EventDispatcherDefinition::class)]
 final class ErrorEventTest extends AbstractTestCase
 {
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testErrorEventComposesEventListenerAndThrowable(): void
     {
         self::assertSame($this->testEvent, $this->errorEvent->event());
@@ -32,17 +31,13 @@ final class ErrorEventTest extends AbstractTestCase
         self::assertSame(self::ERROR_CODE, $this->errorEvent->throwable()->getCode());
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testErrorEventImplementsErrorEventInterface(): void
     {
         self::assertInstanceOf(ErrorEventInterface::class, $this->errorEvent);
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testErrorEventListenerThrowsRuntimeException(): void
     {
         $this->listenerProvider->bind(ErrorEvent::class, ErrorEventListener::class);
@@ -54,25 +49,19 @@ final class ErrorEventTest extends AbstractTestCase
         $this->eventDispatcher->dispatch($this->errorEvent);
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testGetEvent(): void
     {
         self::assertSame($this->testEvent, $this->errorEvent->event());
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testGetListener(): void
     {
         self::assertSame($this->listener, $this->errorEvent->listener());
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testGetThrowable(): void
     {
         self::assertSame($this->throwable, $this->errorEvent->throwable());

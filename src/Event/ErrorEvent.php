@@ -28,27 +28,21 @@ final readonly class ErrorEvent implements ErrorEventInterface
         private Throwable $throwable
     ) {}
 
-    /**
-     * @return Event
-     */
+    /** @return Event */
     #[Override]
     public function event(): object
     {
         return $this->event;
     }
 
-    /**
-     * @return class-string<(callable(Event):void)&Listener>
-     */
+    /** @return class-string<(callable(Event):void)&Listener> */
     #[Override]
     public function listener(): string
     {
         return $this->listener;
     }
 
-    /**
-     * @return Reason
-     */
+    /** @return Reason */
     #[Override]
     public function throwable(): Throwable
     {

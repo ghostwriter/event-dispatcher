@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
+use Ghostwriter\EventDispatcher\Container\Service\Definition\EventDispatcherDefinition;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
@@ -20,11 +20,10 @@ use Throwable;
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(ListenerProvider::class)]
+#[CoversClass(EventDispatcherDefinition::class)]
 final class ListenerProviderTest extends AbstractTestCase
 {
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testProviderBind(): void
     {
         self::assertEmpty($this->testEvent->read());
@@ -47,9 +46,7 @@ final class ListenerProviderTest extends AbstractTestCase
         $this->assertListenersCount(0, $this->testEvent);
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testProviderDetectsEventType(): void
     {
         $this->assertListenersCount(0, $this->testEvent);
@@ -63,9 +60,7 @@ final class ListenerProviderTest extends AbstractTestCase
         $this->assertListenersCount(0, $this->testEvent);
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testProviderDetectsIntersectionTypes(): void
     {
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
@@ -82,9 +77,7 @@ final class ListenerProviderTest extends AbstractTestCase
         }
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testProviderDetectsUnionTypes(): void
     {
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
@@ -101,17 +94,13 @@ final class ListenerProviderTest extends AbstractTestCase
         }
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testProviderImplementsProviderInterface(): void
     {
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testProviderListenToAllEvents(): void
     {
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);

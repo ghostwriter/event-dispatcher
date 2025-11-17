@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Exception;
 
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
+use Ghostwriter\EventDispatcher\Container\Service\Definition\EventDispatcherDefinition;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\SubscriberAlreadyRegisteredException;
@@ -17,12 +17,11 @@ use Throwable;
 #[CoversClass(ErrorEvent::class)]
 #[CoversClass(EventDispatcher::class)]
 #[CoversClass(ListenerProvider::class)]
+#[CoversClass(EventDispatcherDefinition::class)]
 #[CoversClass(SubscriberAlreadyRegisteredException::class)]
 final class SubscriberAlreadyRegisteredExceptionTest extends AbstractTestCase
 {
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testThrowsSubscriberAlreadyRegisteredException(): void
     {
         $this->expectException(SubscriberAlreadyRegisteredException::class);

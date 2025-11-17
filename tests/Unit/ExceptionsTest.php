@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
+use Ghostwriter\EventDispatcher\Container\Service\Definition\EventDispatcherDefinition;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
@@ -29,11 +29,10 @@ use function array_map;
 #[CoversClass(ListenerNotFoundException::class)]
 #[CoversClass(SubscriberAlreadyRegisteredException::class)]
 #[CoversClass(SubscriberMustImplementSubscriberInterfaceException::class)]
+#[CoversClass(EventDispatcherDefinition::class)]
 final class ExceptionsTest extends AbstractTestCase
 {
-    /**
-     * @var list<class-string<Throwable>>
-     */
+    /** @var list<class-string<Throwable>> */
     public const array EXCEPTIONS = [
         EventNotFoundException::class,
         ListenerAlreadyExistsException::class,
@@ -43,9 +42,7 @@ final class ExceptionsTest extends AbstractTestCase
         SubscriberMustImplementSubscriberInterfaceException::class,
     ];
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testExceptionsImplementExceptionInterface(): void
     {
         self::assertContainsOnlyInstancesOf(
