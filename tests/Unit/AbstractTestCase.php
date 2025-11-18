@@ -14,6 +14,8 @@ use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Override;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
+use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 use RuntimeException;
 use stdClass;
 use Tests\Fixture\TestEvent;
@@ -53,8 +55,8 @@ abstract class AbstractTestCase extends TestCase
         $container = $this->container = Container::getInstance();
         $container->reset();
 
-        $this->listenerProvider = $container->get(ListenerProviderInterface::class);
-        $this->eventDispatcher = $container->get(EventDispatcherInterface::class);
+        $this->listenerProvider = $container->get(PsrListenerProviderInterface::class);
+        $this->eventDispatcher = $container->get(PsrEventDispatcherInterface::class);
 
         $this->testEvent = new TestEvent();
         $this->listener = TestEventListener::class;
@@ -77,7 +79,7 @@ abstract class AbstractTestCase extends TestCase
      */
     final public function assertListenersCount(int $expectedCount, object $event): void
     {
-        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->listeners($event)));
+        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->getListenersForEvent($event)));
     }
 
     /**

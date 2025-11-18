@@ -17,7 +17,7 @@
 "repository":
   "name": "event-dispatcher"
   "description": "Event Dispatcher implementation."
-  "topics": "event-dispatcher, ghostwriter"
+  "topics": "event-dispatcher, ghostwriter, psr, psr-14, events"
   "homepage": "https://github.com/ghostwriter/event-dispatcher"
   "default_branch": "5.0.x"
   "allow_auto_merge": true

@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
-use Ghostwriter\Container\Attribute\Provider;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
 use Ghostwriter\EventDispatcher\Event\ErrorEvent;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
-use Ghostwriter\EventDispatcher\Interface\Event\StoppableEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Override;
+use Psr\EventDispatcher\StoppableEventInterface;
 use Throwable;
 
-#[Provider(ServiceProvider::class)]
 final readonly class EventDispatcher implements EventDispatcherInterface
 {
     public function __construct(
@@ -56,7 +53,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         }
 
         $isErrorEvent = $event instanceof ErrorEventInterface;
-        foreach ($this->listenerProvider->listeners($event) as $listener) {
+        foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
             try {
                 $this->container->call($listener, [$event]);
             } catch (Throwable $throwable) {

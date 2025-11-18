@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Interface;
 
-use Generator;
+use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 
-interface ListenerProviderInterface
+interface ListenerProviderInterface extends PsrListenerProviderInterface
 {
     /**
      * @template Event of object
@@ -25,9 +25,9 @@ interface ListenerProviderInterface
      *
      * @param Event $event
      *
-     * @return Generator<class-string<Listener>>
+     * @return iterable<class-string<Listener>>
      */
-    public function listeners(object $event): Generator;
+    public function getListenersForEvent(object $event): iterable;
 
     /**
      * @param class-string<SubscriberInterface> $subscriber

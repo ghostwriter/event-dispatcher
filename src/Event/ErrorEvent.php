@@ -15,17 +15,19 @@ use Throwable;
  *
  * @implements ErrorEventInterface<Event, Listener, Reason>
  */
-final readonly class ErrorEvent implements ErrorEventInterface
+final class ErrorEvent implements ErrorEventInterface
 {
+    private bool $propagationStopped = false;
+
     /**
      * @param Event                                         $event
      * @param class-string<(callable(Event):void)&Listener> $listener
      * @param Reason                                        $throwable
      */
     public function __construct(
-        private object $event,
-        private string $listener,
-        private Throwable $throwable
+        private readonly object $event,
+        private readonly string $listener,
+        private readonly Throwable $throwable
     ) {}
 
     /** @return Event */
@@ -35,11 +37,23 @@ final readonly class ErrorEvent implements ErrorEventInterface
         return $this->event;
     }
 
+    #[Override]
+    public function isPropagationStopped(): bool
+    {
+        return $this->propagationStopped;
+    }
+
     /** @return class-string<(callable(Event):void)&Listener> */
     #[Override]
     public function listener(): string
     {
         return $this->listener;
+    }
+
+    #[Override]
+    public function stopPropagation(): void
+    {
+        $this->propagationStopped = true;
     }
 
     /** @return Reason */

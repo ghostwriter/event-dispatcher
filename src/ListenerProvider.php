@@ -6,9 +6,9 @@ namespace Ghostwriter\EventDispatcher;
 
 use Generator;
 use Ghostwriter\Container\Container;
+use Ghostwriter\Container\Interface\ContainerExceptionInterface;
 use Ghostwriter\Container\Interface\ContainerInterface;
-use Ghostwriter\Container\Interface\Exception\NotFoundExceptionInterface as ContainerNotFoundExceptionInterface;
-use Ghostwriter\Container\Interface\ExceptionInterface as ContainerExceptionInterface;
+use Ghostwriter\Container\Interface\Exception\NotFoundExceptionInterface;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
@@ -20,6 +20,7 @@ use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\Interface\SubscriberInterface;
 use Override;
+use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 use Throwable;
 
 use function array_key_exists;
@@ -29,7 +30,6 @@ use function enum_exists;
 use function interface_exists;
 use function is_a;
 use function method_exists;
-use function trait_exists;
 
 /**
  * Maps registered Listeners, Providers and Subscribers.
@@ -94,10 +94,7 @@ final class ListenerProvider implements ListenerProviderInterface
 
         $this->assertListener($listener);
 
-        if (
-            array_key_exists($event, $this->listeners)
-            && array_key_exists($listener, $this->listeners[$event])
-        ) {
+        if (array_key_exists($event, $this->listeners) && array_key_exists($listener, $this->listeners[$event])) {
             throw new ListenerAlreadyExistsException($listener);
         }
 
@@ -113,7 +110,7 @@ final class ListenerProvider implements ListenerProviderInterface
      * @return Generator<class-string<(callable(Event):void)&Listener>>
      */
     #[Override]
-    public function listeners(object $event): Generator
+    public function getListenersForEvent(object $event): Generator
     {
         foreach ($this->listeners as $type => $listeners) {
             if (! $event instanceof $type) {
@@ -126,11 +123,11 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         foreach ($this->listenerProviders as $listenerProvider) {
-            if (! $listenerProvider instanceof ListenerProviderInterface) {
+            if (! $listenerProvider instanceof PsrListenerProviderInterface) {
                 continue;
             }
 
-            yield from $listenerProvider->listeners($event);
+            yield from $listenerProvider->getListenersForEvent($event);
         }
     }
 
@@ -138,7 +135,7 @@ final class ListenerProvider implements ListenerProviderInterface
      * @param class-string<SubscriberInterface> $subscriber
      *
      * @throws SubscriberMustImplementSubscriberInterfaceException
-     * @throws ContainerNotFoundExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      * @throws ExceptionInterface
      * @throws Throwable
@@ -221,8 +218,8 @@ final class ListenerProvider implements ListenerProviderInterface
             'object' === $event,
             class_exists($event),
             interface_exists($event),
-            trait_exists($event),
-            enum_exists($event) => null,
+            enum_exists($event)
+            => null,
         };
     }
 

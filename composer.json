@@ -5,7 +5,10 @@
     "type": "library",
     "keywords": [
         "ghostwriter",
-        "event-dispatcher"
+        "event-dispatcher",
+        "psr",
+        "psr-14",
+        "events"
     ],
     "authors": [
         {
@@ -36,7 +39,8 @@
     ],
     "require": {
         "php": "~8.4.0 || ~8.5.0",
-        "ghostwriter/container": "^6.0.0"
+        "ghostwriter/container": "^6.0.0",
+        "psr/event-dispatcher": "^1.0.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
@@ -44,6 +48,9 @@
         "mockery/mockery": "^1.6.12",
         "phpunit/phpunit": "^12.4.3",
         "symfony/var-dumper": "^7.3.5"
+    },
+    "provide": {
+        "psr/event-dispatcher-implementation": "*"
     },
     "prefer-stable": true,
     "autoload": {
@@ -81,7 +88,7 @@
     "extra": {
         "ghostwriter": {
             "container": {
-                    "definition": "Ghostwriter\\EventDispatcher\\Container\\Service\\Definition\\EventDispatcherDefinition"
+                "definition": "Ghostwriter\\EventDispatcher\\Container\\Service\\Definition\\EventDispatcherDefinition"
             }
         }
     },
