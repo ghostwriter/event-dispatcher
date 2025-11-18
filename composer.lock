@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d71ecdfe6f45e9860e41b35521f62a41",
+    "content-hash": "136a8c99d3f5e196d6b7ec90c0ba6af3",
     "packages": [
         {
             "name": "ghostwriter/container",
-            "version": "6.0.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/container.git",
-                "reference": "bdd1d44a0ee4ebdf2c3141023df1e664b1439e2d"
+                "reference": "bcfb2a1e2cbff14df8d6f3fb9cc12a4c3bb369d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/container/zipball/bdd1d44a0ee4ebdf2c3141023df1e664b1439e2d",
-                "reference": "bdd1d44a0ee4ebdf2c3141023df1e664b1439e2d",
+                "url": "https://api.github.com/repos/ghostwriter/container/zipball/bcfb2a1e2cbff14df8d6f3fb9cc12a4c3bb369d4",
+                "reference": "bcfb2a1e2cbff14df8d6f3fb9cc12a4c3bb369d4",
                 "shasum": ""
             },
             "require": {
@@ -77,7 +77,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-17T21:28:34+00:00"
+            "time": "2025-11-18T05:56:22+00:00"
         },
         {
             "name": "psr/container",
