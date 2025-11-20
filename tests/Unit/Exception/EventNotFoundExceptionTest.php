@@ -27,6 +27,6 @@ final class EventNotFoundExceptionTest extends AbstractTestCase
         $this->expectException(EventNotFoundException::class);
 
         /** @psalm-suppress ArgumentTypeCoercion */
-        $this->listenerProvider->bind('does-not-exist', TestEventListener::class);
+        $this->listenerProvider->listen('does-not-exist', TestEventListener::class);
     }
 }

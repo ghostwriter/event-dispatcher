@@ -27,7 +27,7 @@ final class ListenerAlreadyExistsExceptionTest extends AbstractTestCase
     {
         $this->expectException(ListenerAlreadyExistsException::class);
 
-        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
-        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
     }
 }

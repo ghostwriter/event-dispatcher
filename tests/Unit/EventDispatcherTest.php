@@ -33,7 +33,7 @@ final class EventDispatcherTest extends AbstractTestCase
     {
         self::assertEmpty($this->testEvent->read());
 
-        $this->listenerProvider->bind(TestEventInterface::class, BlackLivesMatterListener::class);
+        $this->listenerProvider->listen(TestEventInterface::class, BlackLivesMatterListener::class);
 
         $this->dispatch($this->testEvent);
 
@@ -84,9 +84,9 @@ final class EventDispatcherTest extends AbstractTestCase
     /** @throws Throwable */
     public function testSuppressTestEventRaiseAnExceptionListener(): void
     {
-        $this->listenerProvider->bind(TestEvent::class, TestEventRaiseAnExceptionListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventRaiseAnExceptionListener::class);
 
-        $this->listenerProvider->bind(ErrorEventInterface::class, LogTestEventExceptionMessageListener::class);
+        $this->listenerProvider->listen(ErrorEventInterface::class, LogTestEventExceptionMessageListener::class);
 
         try {
             $this->dispatch($this->testEvent);
@@ -104,7 +104,7 @@ final class EventDispatcherTest extends AbstractTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($this->testEvent::class);
 
-        $this->listenerProvider->bind(TestEvent::class, TestEventRaiseAnExceptionListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventRaiseAnExceptionListener::class);
 
         $this->dispatch($this->testEvent);
     }

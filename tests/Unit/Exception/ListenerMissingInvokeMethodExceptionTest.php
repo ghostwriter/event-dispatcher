@@ -27,6 +27,6 @@ final class ListenerMissingInvokeMethodExceptionTest extends AbstractTestCase
     {
         $this->expectException(ListenerMissingInvokeMethodException::class);
 
-        $this->listenerProvider->bind(ErrorEventInterface::class, MissingInvokeMethodListener::class);
+        $this->listenerProvider->listen(ErrorEventInterface::class, MissingInvokeMethodListener::class);
     }
 }

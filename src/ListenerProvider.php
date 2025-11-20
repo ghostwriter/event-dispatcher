@@ -8,7 +8,7 @@ use Generator;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerExceptionInterface;
 use Ghostwriter\Container\Interface\ContainerInterface;
-use Ghostwriter\Container\Interface\Exception\NotFoundExceptionInterface;
+use Ghostwriter\Container\Interface\Exception\ContainerNotFoundExceptionInterface;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
@@ -68,7 +68,7 @@ final class ListenerProvider implements ListenerProviderInterface
         $listenerProvider = new self($container);
 
         foreach ($listeners as $event => $listener) {
-            $listenerProvider->bind($event, $listener);
+            $listenerProvider->listen($event, $listener);
         }
 
         foreach ($subscribers as $subscriber) {
@@ -76,29 +76,6 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         return $listenerProvider;
-    }
-
-    /**
-     * @template Event of object
-     * @template Listener of object
-     *
-     * @param 'object'|class-string<Event>                  $event
-     * @param class-string<(callable(Event):void)&Listener> $listener
-     *
-     * @throws ExceptionInterface
-     */
-    #[Override]
-    public function bind(string $event, string $listener): void
-    {
-        $this->assertEvent($event);
-
-        $this->assertListener($listener);
-
-        if (array_key_exists($event, $this->listeners) && array_key_exists($listener, $this->listeners[$event])) {
-            throw new ListenerAlreadyExistsException($listener);
-        }
-
-        $this->listeners[$event][$listener] = null;
     }
 
     /**
@@ -132,10 +109,33 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
+     * @template Event of object
+     * @template Listener of object
+     *
+     * @param 'object'|class-string<Event>                  $event
+     * @param class-string<(callable(Event):void)&Listener> $listener
+     *
+     * @throws ExceptionInterface
+     */
+    #[Override]
+    public function listen(string $event, string $listener): void
+    {
+        $this->assertEvent($event);
+
+        $this->assertListener($listener);
+
+        if (array_key_exists($event, $this->listeners) && array_key_exists($listener, $this->listeners[$event])) {
+            throw new ListenerAlreadyExistsException($listener);
+        }
+
+        $this->listeners[$event][$listener] = null;
+    }
+
+    /**
      * @param class-string<SubscriberInterface> $subscriber
      *
      * @throws SubscriberMustImplementSubscriberInterfaceException
-     * @throws NotFoundExceptionInterface
+     * @throws ContainerNotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      * @throws ExceptionInterface
      * @throws Throwable

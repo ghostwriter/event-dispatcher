@@ -40,7 +40,7 @@ final class ErrorEventTest extends AbstractTestCase
     /** @throws Throwable */
     public function testErrorEventListenerThrowsRuntimeException(): void
     {
-        $this->listenerProvider->bind(ErrorEvent::class, ErrorEventListener::class);
+        $this->listenerProvider->listen(ErrorEvent::class, ErrorEventListener::class);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(self::ERROR_MESSAGE);

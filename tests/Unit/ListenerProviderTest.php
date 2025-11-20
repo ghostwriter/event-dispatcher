@@ -30,7 +30,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
 
-        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
 
         $this->assertListenersCount(1, $this->testEvent);
 
@@ -51,7 +51,7 @@ final class ListenerProviderTest extends AbstractTestCase
     {
         $this->assertListenersCount(0, $this->testEvent);
 
-        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
 
         $this->assertListenersCount(1, $this->testEvent);
 
@@ -66,8 +66,8 @@ final class ListenerProviderTest extends AbstractTestCase
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
             $this->assertListenersCount(0, $event);
 
-            $this->listenerProvider->bind(TestEvent::class, IntersectionParameterTypeDeclarationListener::class);
-            $this->listenerProvider->bind(TestEvent2::class, IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->listen(TestEvent::class, IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->listen(TestEvent2::class, IntersectionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(1, $event);
 
@@ -83,8 +83,8 @@ final class ListenerProviderTest extends AbstractTestCase
         foreach ([new TestEvent(), new TestEvent2()] as $event) {
             $this->assertListenersCount(0, $event);
 
-            $this->listenerProvider->bind(TestEvent::class, UnionParameterTypeDeclarationListener::class);
-            $this->listenerProvider->bind(TestEvent2::class, UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->listen(TestEvent::class, UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->listen(TestEvent2::class, UnionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(1, $event);
 
@@ -105,7 +105,7 @@ final class ListenerProviderTest extends AbstractTestCase
     {
         self::assertInstanceOf(ListenerProviderInterface::class, $this->listenerProvider);
 
-        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
 
         $this->assertListenersCount(1, new TestEvent());
 

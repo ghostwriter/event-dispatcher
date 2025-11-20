@@ -46,7 +46,7 @@ final class ExampleEventListener
 $listenerProvider = ListenerProvider::new(); // or new ListenerProvider(Container::getInstance())
 
 // Bind the Listener to the Event
-$listenerProvider->bind(ExampleEvent::class, ExampleEventListener::class);
+$listenerProvider->listen(ExampleEvent::class, ExampleEventListener::class);
 
 // Create an EventDispatcher
 $dispatcher = EventDispatcher::new($listenerProvider); // or new EventDispatcher($listenerProvider)
@@ -75,7 +75,7 @@ final class EventSubscriber implements SubscriberInterface {
     public function __invoke(ListenerProviderInterface $provider): void
     {
         // InvokableListener '::__invoke'
-        $provider->bind(
+        $provider->listen(
             TestEvent::class, 
             TestEventListener::class,
         );
