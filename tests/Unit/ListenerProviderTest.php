@@ -41,7 +41,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
         self::assertCount(1, $this->testEvent->read());
 
-        $this->listenerProvider->unbind(TestEventListener::class);
+        $this->listenerProvider->forget(TestEventListener::class);
 
         $this->assertListenersCount(0, $this->testEvent);
     }
@@ -55,7 +55,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
         $this->assertListenersCount(1, $this->testEvent);
 
-        $this->listenerProvider->unbind(TestEventListener::class);
+        $this->listenerProvider->forget(TestEventListener::class);
 
         $this->assertListenersCount(0, $this->testEvent);
     }
@@ -71,7 +71,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
             $this->assertListenersCount(1, $event);
 
-            $this->listenerProvider->unbind(IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->forget(IntersectionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(0, $event);
         }
@@ -88,7 +88,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
             $this->assertListenersCount(1, $event);
 
-            $this->listenerProvider->unbind(UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->forget(UnionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(0, $event);
         }
@@ -109,7 +109,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
         $this->assertListenersCount(1, new TestEvent());
 
-        $this->listenerProvider->unbind(TestEventListener::class);
+        $this->listenerProvider->forget(TestEventListener::class);
 
         $this->assertListenersCount(0, new TestEvent());
     }

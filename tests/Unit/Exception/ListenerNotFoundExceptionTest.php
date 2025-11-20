@@ -40,6 +40,6 @@ final class ListenerNotFoundExceptionTest extends AbstractTestCase
     {
         $this->expectException(ListenerNotFoundException::class);
 
-        $this->listenerProvider->unbind(TestEventListener::class);
+        $this->listenerProvider->forget(TestEventListener::class);
     }
 }

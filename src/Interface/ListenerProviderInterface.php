@@ -44,7 +44,7 @@ interface ListenerProviderInterface extends PsrListenerProviderInterface
      *
      * @throws ExceptionInterface
      */
-    public function unbind(string $listener): void;
+    public function forget(string $listener): void;
 
     /**
      * @param class-string<SubscriberInterface> $subscriber

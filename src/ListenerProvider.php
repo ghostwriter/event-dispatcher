@@ -163,7 +163,7 @@ final class ListenerProvider implements ListenerProviderInterface
      * @throws ListenerNotFoundException
      */
     #[Override]
-    public function unbind(string $listener): void
+    public function forget(string $listener): void
     {
         $removed = false;
 
