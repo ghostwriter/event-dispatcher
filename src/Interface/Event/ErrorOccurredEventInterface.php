@@ -13,7 +13,7 @@ use Throwable;
  * @template Listener of object
  * @template Reason of Throwable
  */
-interface ErrorEventInterface extends StoppableEventInterface
+interface ErrorOccurredEventInterface extends StoppableEventInterface
 {
     /**
      * Returns the event that triggered this error event.

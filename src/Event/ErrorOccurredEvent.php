@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Event;
 
-use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Interface\Event\ErrorOccurredEventInterface;
 use Override;
 use Throwable;
 
@@ -13,9 +13,9 @@ use Throwable;
  * @template Listener of object
  * @template Reason of Throwable
  *
- * @implements ErrorEventInterface<Event, Listener, Reason>
+ * @implements ErrorOccurredEventInterface<Event, Listener, Reason>
  */
-final class ErrorEvent implements ErrorEventInterface
+final class ErrorOccurredEvent implements ErrorOccurredEventInterface
 {
     private bool $propagationStopped = false;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Ghostwriter\EventDispatcher\Container\Service\Definition\EventDispatcherDefinition;
-use Ghostwriter\EventDispatcher\Event\ErrorEvent;
+use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
@@ -18,7 +18,7 @@ use Tests\Fixture\TestEventListener;
 use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
-#[CoversClass(ErrorEvent::class)]
+#[CoversClass(ErrorOccurredEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(EventDispatcherDefinition::class)]
 final class ListenerProviderTest extends AbstractTestCase
@@ -41,7 +41,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
         self::assertCount(1, $this->testEvent->read());
 
-        $this->listenerProvider->forget(TestEventListener::class);
+        $this->listenerProvider->remove(TestEventListener::class);
 
         $this->assertListenersCount(0, $this->testEvent);
     }
@@ -55,7 +55,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
         $this->assertListenersCount(1, $this->testEvent);
 
-        $this->listenerProvider->forget(TestEventListener::class);
+        $this->listenerProvider->remove(TestEventListener::class);
 
         $this->assertListenersCount(0, $this->testEvent);
     }
@@ -71,7 +71,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
             $this->assertListenersCount(1, $event);
 
-            $this->listenerProvider->forget(IntersectionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->remove(IntersectionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(0, $event);
         }
@@ -88,7 +88,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
             $this->assertListenersCount(1, $event);
 
-            $this->listenerProvider->forget(UnionParameterTypeDeclarationListener::class);
+            $this->listenerProvider->remove(UnionParameterTypeDeclarationListener::class);
 
             $this->assertListenersCount(0, $event);
         }
@@ -109,7 +109,7 @@ final class ListenerProviderTest extends AbstractTestCase
 
         $this->assertListenersCount(1, new TestEvent());
 
-        $this->listenerProvider->forget(TestEventListener::class);
+        $this->listenerProvider->remove(TestEventListener::class);
 
         $this->assertListenersCount(0, new TestEvent());
     }

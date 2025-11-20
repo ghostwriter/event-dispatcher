@@ -7,8 +7,8 @@ namespace Tests\Unit;
 use Generator;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
-use Ghostwriter\EventDispatcher\Event\ErrorEvent;
-use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
+use Ghostwriter\EventDispatcher\Interface\Event\ErrorOccurredEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
@@ -34,7 +34,7 @@ abstract class AbstractTestCase extends TestCase
 
     protected ContainerInterface $container;
 
-    protected ErrorEventInterface $errorEvent;
+    protected ErrorOccurredEventInterface $errorEvent;
 
     protected EventDispatcherInterface $eventDispatcher;
 
@@ -61,7 +61,7 @@ abstract class AbstractTestCase extends TestCase
         $this->testEvent = new TestEvent();
         $this->listener = TestEventListener::class;
         $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
-        $this->errorEvent = new ErrorEvent($this->testEvent, $this->listener, $this->throwable);
+        $this->errorEvent = new ErrorOccurredEvent($this->testEvent, $this->listener, $this->throwable);
     }
 
     #[Override]
@@ -104,8 +104,8 @@ abstract class AbstractTestCase extends TestCase
             stdClass::class => [new stdClass()],
             'noop' => [new class() {}],
             TestEvent::class => [$testEvent],
-            ErrorEvent::class => [
-                new ErrorEvent(
+            ErrorOccurredEvent::class => [
+                new ErrorOccurredEvent(
                     $testEvent,
                     TestListener::class,
                     new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)

@@ -30,13 +30,6 @@ interface ListenerProviderInterface extends PsrListenerProviderInterface
     public function listen(string $event, string $listener): void;
 
     /**
-     * @param class-string<SubscriberInterface> $subscriber
-     *
-     * @throws ExceptionInterface
-     */
-    public function subscribe(string $subscriber): void;
-
-    /**
      * @template Event of object
      * @template Listener of (callable(Event):void)&object
      *
@@ -44,12 +37,5 @@ interface ListenerProviderInterface extends PsrListenerProviderInterface
      *
      * @throws ExceptionInterface
      */
-    public function forget(string $listener): void;
-
-    /**
-     * @param class-string<SubscriberInterface> $subscriber
-     *
-     * @throws ExceptionInterface
-     */
-    public function unsubscribe(string $subscriber): void;
+    public function remove(string $listener): void;
 }

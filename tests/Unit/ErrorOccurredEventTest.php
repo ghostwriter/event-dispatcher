@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Ghostwriter\EventDispatcher\Container\Service\Definition\EventDispatcherDefinition;
-use Ghostwriter\EventDispatcher\Event\ErrorEvent;
+use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
-use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Interface\Event\ErrorOccurredEventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use RuntimeException;
@@ -15,10 +15,10 @@ use Tests\Fixture\Listener\ErrorEventListener;
 use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
-#[CoversClass(ErrorEvent::class)]
+#[CoversClass(ErrorOccurredEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(EventDispatcherDefinition::class)]
-final class ErrorEventTest extends AbstractTestCase
+final class ErrorOccurredEventTest extends AbstractTestCase
 {
     /** @throws Throwable */
     public function testErrorEventComposesEventListenerAndThrowable(): void
@@ -34,13 +34,13 @@ final class ErrorEventTest extends AbstractTestCase
     /** @throws Throwable */
     public function testErrorEventImplementsErrorEventInterface(): void
     {
-        self::assertInstanceOf(ErrorEventInterface::class, $this->errorEvent);
+        self::assertInstanceOf(ErrorOccurredEventInterface::class, $this->errorEvent);
     }
 
     /** @throws Throwable */
     public function testErrorEventListenerThrowsRuntimeException(): void
     {
-        $this->listenerProvider->listen(ErrorEvent::class, ErrorEventListener::class);
+        $this->listenerProvider->listen(ErrorOccurredEvent::class, ErrorEventListener::class);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(self::ERROR_MESSAGE);
