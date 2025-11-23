@@ -17,19 +17,13 @@ use Throwable;
 
 final readonly class EventDispatcherDefinition implements DefinitionInterface
 {
-    public const array ALIASES = [
-        PsrEventDispatcherInterface::class => EventDispatcherInterface::class,
-        PsrListenerProviderInterface::class => ListenerProviderInterface::class,
-        EventDispatcherInterface::class => EventDispatcher::class,
-        ListenerProviderInterface::class => ListenerProvider::class,
-    ];
-
     /** @throws Throwable */
     #[Override]
     public function __invoke(ContainerInterface $container): void
     {
-        foreach (self::ALIASES as $alias => $service) {
-            $container->alias($service, $alias);
-        }
+        $container->alias(EventDispatcher::class, EventDispatcherInterface::class);
+        $container->alias(EventDispatcherInterface::class, PsrEventDispatcherInterface::class);
+        $container->alias(ListenerProvider::class, ListenerProviderInterface::class);
+        $container->alias(ListenerProviderInterface::class, PsrListenerProviderInterface::class);
     }
 }
