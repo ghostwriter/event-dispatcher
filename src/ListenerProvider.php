@@ -58,8 +58,10 @@ final class ListenerProvider implements ListenerProviderInterface
     public function getListenersForEvent(object $event): Generator
     {
         foreach ($this->listeners as $type => $listeners) {
-            if (! $event instanceof $type) {
-                continue;
+            if (! is_a($event, $type, true)) {
+                if ($type !== 'object') {
+                    continue;
+                }
             }
 
             foreach (array_keys($listeners) as $listener) {
