@@ -88,7 +88,7 @@
     "extra": {
         "ghostwriter": {
             "container": {
-                "definition": "Ghostwriter\\EventDispatcher\\Container\\Service\\Definition\\EventDispatcherDefinition"
+                "definition": "Ghostwriter\\EventDispatcher\\Container\\EventDispatcherDefinition"
             }
         }
     },

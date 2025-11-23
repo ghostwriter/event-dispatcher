@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ghostwriter\EventDispatcher\Container\Service\Definition;
+namespace Ghostwriter\EventDispatcher\Container;
 
 use Ghostwriter\Container\Interface\ContainerInterface;
 use Ghostwriter\Container\Interface\Service\DefinitionInterface;
