@@ -7,10 +7,10 @@
     "state": "open"
   - "title": "6.0.2"
     "description": "Patch release – targeting 6.0.x branch (semantic version: 6.0.2)"
-    "state": "open"
-  - "title": "6.0.1"
-    "description": "Patch release – targeting 6.0.x branch (semantic version: 6.0.1)"
     "state": "closed"
+  - "title": "6.0.3"
+    "description": "Patch release – targeting 6.0.x branch (semantic version: 6.0.3)"
+    "state": "open"
 "repository":
   "name": "event-dispatcher"
   "description": "Event Dispatcher implementation."
