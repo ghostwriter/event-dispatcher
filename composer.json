@@ -92,8 +92,8 @@
             }
         },
         "thanks": {
-            "url": "https://github.com/ghostwriter/event-dispatcher",
-            "name": "ghostwriter/event-dispatcher"
+            "name": "ghostwriter/event-dispatcher",
+            "url": "https://github.com/ghostwriter/event-dispatcher"
         }
     },
     "scripts": {
