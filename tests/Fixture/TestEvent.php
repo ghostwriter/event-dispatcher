@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Fixture;
 
 use Override;
-use Tests\Fixture\TestEventInterface;
 
 final class TestEvent implements TestEventInterface
 {

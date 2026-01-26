@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/sebastianbergmann/phpunit/12.2/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/sebastianbergmann/phpunit/12.5/phpunit.xsd"
     beStrictAboutChangesToGlobalState="true"
     beStrictAboutCoverageMetadata="true"
     beStrictAboutOutputDuringTests="true"
@@ -10,13 +10,6 @@
     cacheResult="false"
     colors="true"
     displayDetailsOnAllIssues="true"
-    displayDetailsOnIncompleteTests="true"
-    displayDetailsOnPhpunitDeprecations="true"
-    displayDetailsOnSkippedTests="true"
-    displayDetailsOnTestsThatTriggerDeprecations="true"
-    displayDetailsOnTestsThatTriggerErrors="true"
-    displayDetailsOnTestsThatTriggerNotices="true"
-    displayDetailsOnTestsThatTriggerWarnings="true"
     executionOrder="depends,random"
     failOnDeprecation="true"
     failOnEmptyTestSuite="true"

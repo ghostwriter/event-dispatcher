@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Fixture\Listener;
 
 use Tests\Fixture\TestEventInterface;
-use RuntimeException;
 
 final class BlackLivesMatterListener
 {

@@ -7,15 +7,15 @@ namespace Tests\Unit;
 use Generator;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
-use Ghostwriter\EventDispatcher\Event\ErrorEvent;
-use Ghostwriter\EventDispatcher\EventDispatcher;
-use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
+use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
+use Ghostwriter\EventDispatcher\Interface\Event\ErrorOccurredEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
-use Ghostwriter\EventDispatcher\ListenerProvider;
 use Override;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
+use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 use RuntimeException;
 use stdClass;
 use Tests\Fixture\TestEvent;
@@ -34,7 +34,7 @@ abstract class AbstractTestCase extends TestCase
 
     protected ContainerInterface $container;
 
-    protected ErrorEventInterface $errorEvent;
+    protected ErrorOccurredEventInterface $errorEvent;
 
     protected EventDispatcherInterface $eventDispatcher;
 
@@ -46,30 +46,28 @@ abstract class AbstractTestCase extends TestCase
 
     protected Throwable $throwable;
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     #[Override]
     final protected function setUp(): void
     {
         parent::setUp();
 
-        $this->container = Container::getInstance();
-        $this->listenerProvider = ListenerProvider::new();
-        $this->eventDispatcher = EventDispatcher::new($this->listenerProvider, $this->container);
+        $container = $this->container = Container::getInstance();
+        $container->reset();
+
+        $this->listenerProvider = $container->get(PsrListenerProviderInterface::class);
+        $this->eventDispatcher = $container->get(PsrEventDispatcherInterface::class);
 
         $this->testEvent = new TestEvent();
         $this->listener = TestEventListener::class;
         $this->throwable = new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE);
-        $this->errorEvent = new ErrorEvent($this->testEvent, $this->listener, $this->throwable);
+        $this->errorEvent = new ErrorOccurredEvent($this->testEvent, $this->listener, $this->throwable);
     }
 
     #[Override]
     final protected function tearDown(): void
     {
         parent::tearDown();
-
-        Container::getInstance()->__destruct();
     }
 
     /**
@@ -81,7 +79,7 @@ abstract class AbstractTestCase extends TestCase
      */
     final public function assertListenersCount(int $expectedCount, object $event): void
     {
-        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->listeners($event)));
+        self::assertCount($expectedCount, iterator_to_array($this->listenerProvider->getListenersForEvent($event)));
     }
 
     /**
@@ -97,9 +95,7 @@ abstract class AbstractTestCase extends TestCase
         self::assertSame($event, $this->eventDispatcher->dispatch($event));
     }
 
-    /**
-     * @return Generator<string,array{0:object}>
-     */
+    /** @return Generator<string,array{0:object}> */
     public static function eventDataProvider(): Generator
     {
         $testEvent = new TestEvent();
@@ -108,8 +104,8 @@ abstract class AbstractTestCase extends TestCase
             stdClass::class => [new stdClass()],
             'noop' => [new class() {}],
             TestEvent::class => [$testEvent],
-            ErrorEvent::class => [
-                new ErrorEvent(
+            ErrorOccurredEvent::class => [
+                new ErrorOccurredEvent(
                     $testEvent,
                     TestListener::class,
                     new RuntimeException(self::ERROR_MESSAGE, self::ERROR_CODE)

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Interface;
 
-interface EventDispatcherInterface
+use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
+
+interface EventDispatcherInterface extends PsrEventDispatcherInterface
 {
     /**
      * Provide all relevant listeners an event to process.
