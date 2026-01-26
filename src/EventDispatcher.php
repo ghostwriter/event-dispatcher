@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher;
 
-use Ghostwriter\Container\Attribute\Provider;
 use Ghostwriter\Container\Container;
 use Ghostwriter\Container\Interface\ContainerInterface;
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
-use Ghostwriter\EventDispatcher\Event\ErrorEvent;
-use Ghostwriter\EventDispatcher\Interface\Event\ErrorEventInterface;
-use Ghostwriter\EventDispatcher\Interface\Event\StoppableEventInterface;
+use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
+use Ghostwriter\EventDispatcher\Interface\Event\ErrorOccurredEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Override;
+use Psr\EventDispatcher\StoppableEventInterface;
 use Throwable;
 
-#[Provider(ServiceProvider::class)]
 final readonly class EventDispatcher implements EventDispatcherInterface
 {
     public function __construct(
@@ -24,9 +21,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
         private ListenerProviderInterface $listenerProvider,
     ) {}
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public static function new(
         ?ListenerProviderInterface $listenerProvider = null,
         ?ContainerInterface $container = null,
@@ -57,23 +52,23 @@ final readonly class EventDispatcher implements EventDispatcherInterface
             return $event;
         }
 
-        $isErrorEvent = $event instanceof ErrorEventInterface;
-        foreach ($this->listenerProvider->listeners($event) as $listener) {
+        $isErrorEvent = $event instanceof ErrorOccurredEventInterface;
+        foreach ($this->listenerProvider->getListenersForEvent($event) as $listener) {
             try {
-                $this->container->invoke($listener, [$event]);
+                $this->container->call($listener, [$event]);
             } catch (Throwable $throwable) {
                 if ($isErrorEvent) {
                     /**
                      * If an error is raised while processing an ErrorEvent,
                      * re-throw the original throwable to prevent recursion.
                      *
-                     * @var ErrorEventInterface $event
+                     * @var ErrorOccurredEventInterface
                      */
                     throw $event->throwable();
                 }
 
-                /** @var ErrorEventInterface&Event $errorEvent */
-                $errorEvent = new ErrorEvent($event, $listener, $throwable);
+                /** @var ErrorOccurredEventInterface&Event $errorEvent */
+                $errorEvent = new ErrorOccurredEvent($event, $listener, $throwable);
 
                 $this->dispatch($errorEvent);
 

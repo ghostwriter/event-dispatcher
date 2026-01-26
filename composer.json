@@ -1,11 +1,14 @@
 {
     "name": "ghostwriter/event-dispatcher",
     "description": "Event Dispatcher implementation.",
-    "license": "BSD-4-Clause",
+    "license": "BSD-3-Clause",
     "type": "library",
     "keywords": [
         "ghostwriter",
-        "event-dispatcher"
+        "event-dispatcher",
+        "psr",
+        "psr-14",
+        "events"
     ],
     "authors": [
         {
@@ -31,22 +34,24 @@
     "_comment": [
         "#BlackLivesMatter",
         "#FreePalestine",
-        "#StandWithUkraine"
+        "#StandWithUkraine",
+        "#StopGenocide"
     ],
     "require": {
-        "php": "^8.4",
-        "ghostwriter/container": "~5.0.1"
+        "php": "~8.4.0 || ~8.5.0",
+        "ghostwriter/container": "^6.0.1",
+        "psr/event-dispatcher": "^1.0.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
         "ghostwriter/coding-standard": "dev-main",
-        "infection/infection": "~0.29.14",
-        "mockery/mockery": "~1.6.12",
-        "phpunit/phpunit": "~12.1.6",
-        "symfony/var-dumper": "~7.3.0",
-        "vimeo/psalm": "~6.12.0"
+        "mockery/mockery": "^1.6.12",
+        "phpunit/phpunit": "^12.5.7",
+        "symfony/var-dumper": "^8.0.4"
     },
-    "minimum-stability": "stable",
+    "provide": {
+        "psr/event-dispatcher-implementation": "*"
+    },
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
@@ -55,20 +60,17 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Fixture\\": "tests/Fixture/",
-            "Tests\\Unit\\": "tests/Unit/"
+            "": "tests/Fixture/",
+            "Tests\\": "tests/"
         },
         "files": [
             "tests/bootstrap.php"
         ],
-        "exclude-from-classmap": [
-            "tests/Fixture/"
-        ]
+        "exclude-from-classmap": ["/tests/"]
     },
     "config": {
         "allow-plugins": {
-            "ghostwriter/coding-standard": true,
-            "infection/extension-installer": true
+            "ghostwriter/coding-standard": true
         },
         "bump-after-update": false,
         "classmap-authoritative": false,
@@ -83,68 +85,29 @@
         "sort-packages": true,
         "use-parent-dir": false
     },
+    "extra": {
+        "ghostwriter": {
+            "container": {
+                "definition": "Ghostwriter\\EventDispatcher\\Container\\EventDispatcherDefinition"
+            }
+        },
+        "thanks": {
+            "name": "ghostwriter/event-dispatcher",
+            "url": "https://github.com/ghostwriter/event-dispatcher"
+        }
+    },
     "scripts": {
-        "bin_composer": "vendor/ghostwriter/coding-standard/tools/composer",
-        "bin_ecs": "ecs check --clear-cache --no-interaction",
-        "bin_infection": "vendor/ghostwriter/coding-standard/tools/infection --ansi --min-covered-msi=0 --min-msi=0 --show-mutations --threads=max",
-        "bin_normalize": "vendor/ghostwriter/coding-standard/tools/composer-normalize",
-        "bin_phive": "vendor/ghostwriter/coding-standard/tools/phive",
-        "bin_phpunit": "vendor/bin/phpunit --do-not-cache-result --colors=always",
-        "bin_psalm": "vendor/ghostwriter/coding-standard/tools/psalm --no-cache",
-        "bin_rector": "rector process --no-ansi --clear-cache",
         "cache:clear": "rm -rf ./.cache/*",
-        "check": [
-            "@cache:clear",
-            "@bin_composer validate",
-            "@test"
-        ],
-        "dev": [
-            "@cache:clear",
-            "@check",
-            "@psalm:update",
-            "@psalm:security",
-            "@psalm:dry-run"
-        ],
-        "docker": [
-            "@docker:build",
-            "@docker:run"
-        ],
+        "check": ["@cache:clear", "tools/phar/composer validate", "@test"],
+        "docker": ["@docker:build", "@docker:run"],
         "docker:build": "docker buildx build --pull --tag workspace .",
         "docker:run": "docker run -v $(PWD):/github/workspace -w=/github/workspace -e GITHUB_DEBUG=1 -e GITHUB_WORKSPACE=/github/workspace -e GITHUB_TOKEN=github-token -e SIGNING_SECRET_KEY=secret-key workspace",
-        "ecs": "@bin_ecs --fix",
         "git:submodule:update": "git submodule update --depth=1 --init --recursive --recommend-shallow --remote",
-        "infection": [
-            "@xdebug",
-            "@bin_infection"
-        ],
-        "normalize": "@bin_normalize --no-cache --diff --no-check-lock --no-scripts --no-plugins",
-        "phive": [
-            "@bin_phive update --force-accept-unsigned",
-            "@bin_phive purge"
-        ],
-        "phpunit": [
-            "@xdebug",
-            "@bin_phpunit"
-        ],
-        "phpunit:migrate": [
-            "@xdebug",
-            "@bin_phpunit --migrate-configuration"
-        ],
-        "psalm": "@bin_psalm --show-info=true --no-diff --shepherd --stats",
-        "psalm:alter": "@bin_psalm --alter --allow-backwards-incompatible-changes=false --safe-types",
-        "psalm:baseline": "@bin_psalm --no-diff --set-baseline=psalm-baseline.xml",
-        "psalm:dry-run": "@bin_psalm --alter --issues=all --dry-run",
-        "psalm:fix": "@bin_psalm --alter --issues=UnnecessaryVarAnnotation",
-        "psalm:security": "@bin_psalm --no-diff --taint-analysis",
-        "psalm:shepherd": "@psalm --no-diff --shepherd --stats",
-        "psalm:update": "@bin_psalm --no-diff --update-baseline=psalm-baseline.xml",
-        "rector": "@bin_rector",
-        "rector:dry-run": "@rector --dry-run",
-        "test": [
-            "@phpunit",
-            "@infection",
-            "@psalm"
-        ],
+        "infection": ["@xdebug", "tools/phar/infection --min-covered-msi=0 --min-msi=0 --show-mutations --threads=max"],
+        "phpbench": "tools/phar/phpbench run --report='extends:aggregate,cols:[benchmark,subject,revs,its,mem_peak,mode,rstdev]' --time-unit=milliseconds ./tests/Benchmark",
+        "phpunit": ["@xdebug", "vendor/bin/phpunit --do-not-cache-result --colors=always"],
+        "test": ["@phpunit", "@infection"],
+        "unused": "tools/phar/composer-unused --no-interaction --ansi",
         "xdebug": "@putenv XDEBUG_MODE=coverage"
     }
 }

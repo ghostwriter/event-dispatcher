@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Interface\Event;
 
+use Psr\EventDispatcher\StoppableEventInterface as PsrStoppableEventInterface;
+
 /**
  * An Event that may be interrupted when the event has been handled.
  */
-interface StoppableEventInterface
+interface StoppableEventInterface extends PsrStoppableEventInterface
 {
-    /**
-     * Determine if the previous listener halted propagation.
-     *
-     * @return bool
-     *              True if no further listeners should be called.
-     *              False to continue calling listeners.
-     */
-    public function isPropagationStopped(): bool;
+    public function stopPropagation(): void;
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Exception;
 
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
-use Ghostwriter\EventDispatcher\Event\ErrorEvent;
+use Ghostwriter\EventDispatcher\Container\EventDispatcherDefinition;
+use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\ListenerNotFoundException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
@@ -17,10 +17,10 @@ use Tests\Unit\AbstractTestCase;
 use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
-#[CoversClass(ErrorEvent::class)]
+#[CoversClass(ErrorOccurredEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(ListenerNotFoundException::class)]
-#[CoversClass(ServiceProvider::class)]
+#[CoversClass(EventDispatcherDefinition::class)]
 final class ListenerNotFoundExceptionTest extends AbstractTestCase
 {
     /**
@@ -32,16 +32,14 @@ final class ListenerNotFoundExceptionTest extends AbstractTestCase
     {
         $this->expectException(ListenerNotFoundException::class);
 
-        $this->listenerProvider->bind(TestEvent::class, NonExistentTestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, NonExistentTestEventListener::class);
     }
 
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testRemove(): void
     {
         $this->expectException(ListenerNotFoundException::class);
 
-        $this->listenerProvider->unbind(TestEventListener::class);
+        $this->listenerProvider->remove(TestEventListener::class);
     }
 }

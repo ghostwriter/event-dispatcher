@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Exception;
 
-use Ghostwriter\EventDispatcher\Container\ServiceProvider;
-use Ghostwriter\EventDispatcher\Event\ErrorEvent;
+use Ghostwriter\EventDispatcher\Container\EventDispatcherDefinition;
+use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
@@ -16,20 +16,18 @@ use Tests\Unit\AbstractTestCase;
 use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
-#[CoversClass(ErrorEvent::class)]
+#[CoversClass(ErrorOccurredEvent::class)]
 #[CoversClass(ListenerProvider::class)]
 #[CoversClass(ListenerAlreadyExistsException::class)]
-#[CoversClass(ServiceProvider::class)]
+#[CoversClass(EventDispatcherDefinition::class)]
 final class ListenerAlreadyExistsExceptionTest extends AbstractTestCase
 {
-    /**
-     * @throws Throwable
-     */
+    /** @throws Throwable */
     public function testListen(): void
     {
         $this->expectException(ListenerAlreadyExistsException::class);
 
-        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
-        $this->listenerProvider->bind(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
+        $this->listenerProvider->listen(TestEvent::class, TestEventListener::class);
     }
 }

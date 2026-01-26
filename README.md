@@ -46,7 +46,7 @@ final class ExampleEventListener
 $listenerProvider = ListenerProvider::new(); // or new ListenerProvider(Container::getInstance())
 
 // Bind the Listener to the Event
-$listenerProvider->bind(ExampleEvent::class, ExampleEventListener::class);
+$listenerProvider->listen(ExampleEvent::class, ExampleEventListener::class);
 
 // Create an EventDispatcher
 $dispatcher = EventDispatcher::new($listenerProvider); // or new EventDispatcher($listenerProvider)
@@ -56,47 +56,7 @@ $event = $dispatcher->dispatch(new ExampleEvent());
 
 // Assert the Event is the same as the dispatched Event
 assert($event instanceof ExampleEvent);
-```
-
-### Event Subscriber
-
-Registering an Event Subscriber.
-
-```php
-use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
-use Ghostwriter\EventDispatcher\Interface\SubscriberInterface;
-use Override;
-
-final class EventSubscriber implements SubscriberInterface {
-    /**
-     * @throws Throwable
-     */
-    #[Override]
-    public function __invoke(ListenerProviderInterface $provider): void
-    {
-        // InvokableListener '::__invoke'
-        $provider->bind(
-            TestEvent::class, 
-            TestEventListener::class,
-        );
-    }
-}
-
-// Create a ListenerProvider
-$listenerProvider = ListenerProvider::new(); // or new ListenerProvider(Container::getInstance())
-
-// Subscribe the EventSubscriber
-$listenerProvider->subscribe(EventSubscriber::class);
-
-// Create an EventDispatcher
-$dispatcher = EventDispatcher::new($listenerProvider); // or new EventDispatcher($listenerProvider)
-
-// Dispatch the Event.
-$event = $dispatcher->dispatch(new TestEvent());
-
-// Assert the Event is the same as the dispatched Event
-assert($event instanceof TestEvent);
-```
+``` 
 
 ### Changelog
 
@@ -108,4 +68,4 @@ If you discover any security related issues, please email `nathanael.esayeas@pro
 
 ## License
 
-The BSD-4-Clause. Please see [License File](./LICENSE) for more information.
+The BSD-3-Clause. Please see [License File](./LICENSE) for more information.
