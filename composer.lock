@@ -815,12 +815,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "e97f356c1abb489bfd0ff79c4f58d0907d0c202e"
+                "reference": "17186e5635e2f6f8086c7cdb38df92d7e139a142"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/e97f356c1abb489bfd0ff79c4f58d0907d0c202e",
-                "reference": "e97f356c1abb489bfd0ff79c4f58d0907d0c202e",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/17186e5635e2f6f8086c7cdb38df92d7e139a142",
+                "reference": "17186e5635e2f6f8086c7cdb38df92d7e139a142",
                 "shasum": ""
             },
             "require": {
@@ -888,17 +888,6 @@
                 "pestphp/pest": "*"
             },
             "default-branch": true,
-            "bin": [
-                "tools/phar/composer-normalize",
-                "tools/phar/composer-require-checker",
-                "tools/phar/composer-unused",
-                "tools/phar/infection",
-                "tools/phar/phive",
-                "tools/phar/phpactor",
-                "tools/phar/phpbench",
-                "tools/phar/phpdocumentor",
-                "tools/phar/psalm"
-            ],
             "type": "composer-plugin",
             "extra": {
                 "class": "Ghostwriter\\CodingStandard\\Plugin\\ComposerPlugin",
@@ -996,7 +985,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-10T17:22:18+00:00"
+            "time": "2026-02-13T20:45:18+00:00"
         },
         {
             "name": "ghostwriter/config",
