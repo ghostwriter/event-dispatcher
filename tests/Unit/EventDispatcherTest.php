@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Ghostwriter\EventDispatcher\Container\EventDispatcherDefinition;
 use Ghostwriter\EventDispatcher\Container\ListenerProviderFactory;
 use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
@@ -28,7 +27,6 @@ use Throwable;
 #[UsesClass(ListenerProviderFactory::class)]
 #[UsesClass(ErrorOccurredEvent::class)]
 #[UsesClass(ListenerProvider::class)]
-#[UsesClass(EventDispatcherDefinition::class)]
 final class EventDispatcherTest extends AbstractTestCase
 {
     /** @throws Throwable */
