@@ -34,7 +34,7 @@
     "_comment": ["#BlackLivesMatter", "#FreePalestine", "#StandWithIran", "#StandWithUkraine", "#StopGenocide"],
     "require": {
         "php": "~8.4.0 || ~8.5.0",
-        "ghostwriter/container": "^6.0.1",
+        "ghostwriter/container": "^6.1.0",
         "psr/event-dispatcher": "^1.0.0"
     },
     "require-dev": {
