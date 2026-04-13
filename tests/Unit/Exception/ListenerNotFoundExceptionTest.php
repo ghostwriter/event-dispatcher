@@ -5,22 +5,25 @@ declare(strict_types=1);
 namespace Tests\Unit\Exception;
 
 use Ghostwriter\EventDispatcher\Container\EventDispatcherDefinition;
+use Ghostwriter\EventDispatcher\Container\ListenerProviderFactory;
 use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\ListenerNotFoundException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use NonExistentTestEventListener;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Tests\Fixture\TestEvent;
 use Tests\Fixture\TestEventListener;
 use Tests\Unit\AbstractTestCase;
 use Throwable;
 
-#[CoversClass(EventDispatcher::class)]
-#[CoversClass(ErrorOccurredEvent::class)]
-#[CoversClass(ListenerProvider::class)]
 #[CoversClass(ListenerNotFoundException::class)]
-#[CoversClass(EventDispatcherDefinition::class)]
+#[UsesClass(ErrorOccurredEvent::class)]
+#[UsesClass(EventDispatcher::class)]
+#[UsesClass(EventDispatcherDefinition::class)]
+#[UsesClass(ListenerProvider::class)]
+#[UsesClass(ListenerProviderFactory::class)]
 final class ListenerNotFoundExceptionTest extends AbstractTestCase
 {
     /**

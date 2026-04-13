@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Ghostwriter\EventDispatcher\Container\EventDispatcherDefinition;
+use Ghostwriter\EventDispatcher\Container\ListenerProviderFactory;
 use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorOccurredEventInterface;
@@ -12,6 +13,7 @@ use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use RuntimeException;
 use Tests\Fixture\Listener\BlackLivesMatterListener;
 use Tests\Fixture\Listener\LogTestEventExceptionMessageListener;
@@ -23,9 +25,10 @@ use Tests\Fixture\TestListener;
 use Throwable;
 
 #[CoversClass(EventDispatcher::class)]
-#[CoversClass(ErrorOccurredEvent::class)]
-#[CoversClass(ListenerProvider::class)]
-#[CoversClass(EventDispatcherDefinition::class)]
+#[UsesClass(ListenerProviderFactory::class)]
+#[UsesClass(ErrorOccurredEvent::class)]
+#[UsesClass(ListenerProvider::class)]
+#[UsesClass(EventDispatcherDefinition::class)]
 final class EventDispatcherTest extends AbstractTestCase
 {
     /** @throws Throwable */

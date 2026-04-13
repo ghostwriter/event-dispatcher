@@ -5,19 +5,22 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Ghostwriter\EventDispatcher\Container\EventDispatcherDefinition;
+use Ghostwriter\EventDispatcher\Container\ListenerProviderFactory;
 use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorOccurredEventInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use RuntimeException;
 use Tests\Fixture\Listener\ErrorEventListener;
 use Throwable;
 
-#[CoversClass(EventDispatcher::class)]
 #[CoversClass(ErrorOccurredEvent::class)]
-#[CoversClass(ListenerProvider::class)]
-#[CoversClass(EventDispatcherDefinition::class)]
+#[UsesClass(EventDispatcher::class)]
+#[UsesClass(EventDispatcherDefinition::class)]
+#[UsesClass(ListenerProvider::class)]
+#[UsesClass(ListenerProviderFactory::class)]
 final class ErrorOccurredEventTest extends AbstractTestCase
 {
     /** @throws Throwable */

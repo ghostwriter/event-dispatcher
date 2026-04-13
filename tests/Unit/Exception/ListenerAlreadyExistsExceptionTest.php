@@ -5,21 +5,24 @@ declare(strict_types=1);
 namespace Tests\Unit\Exception;
 
 use Ghostwriter\EventDispatcher\Container\EventDispatcherDefinition;
+use Ghostwriter\EventDispatcher\Container\ListenerProviderFactory;
 use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\ListenerAlreadyExistsException;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Tests\Fixture\TestEvent;
 use Tests\Fixture\TestEventListener;
 use Tests\Unit\AbstractTestCase;
 use Throwable;
 
-#[CoversClass(EventDispatcher::class)]
-#[CoversClass(ErrorOccurredEvent::class)]
-#[CoversClass(ListenerProvider::class)]
 #[CoversClass(ListenerAlreadyExistsException::class)]
-#[CoversClass(EventDispatcherDefinition::class)]
+#[UsesClass(EventDispatcher::class)]
+#[UsesClass(ListenerProviderFactory::class)]
+#[UsesClass(ErrorOccurredEvent::class)]
+#[UsesClass(ListenerProvider::class)]
+#[UsesClass(EventDispatcherDefinition::class)]
 final class ListenerAlreadyExistsExceptionTest extends AbstractTestCase
 {
     /** @throws Throwable */
