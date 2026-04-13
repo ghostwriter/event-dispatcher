@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Exception;
 
+use Ghostwriter\EventDispatcher\Container\EventDispatcherProvider;
 use Ghostwriter\EventDispatcher\Container\ListenerProviderFactory;
 use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
@@ -18,6 +19,7 @@ use Throwable;
 #[CoversClass(EventNotFoundException::class)]
 #[UsesClass(ErrorOccurredEvent::class)]
 #[UsesClass(EventDispatcher::class)]
+#[UsesClass(EventDispatcherProvider::class)]
 #[UsesClass(ListenerProvider::class)]
 #[UsesClass(ListenerProviderFactory::class)]
 final class EventNotFoundExceptionTest extends AbstractTestCase
