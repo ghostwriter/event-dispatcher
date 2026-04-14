@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Ghostwriter\EventDispatcher\Container;
 
 use Ghostwriter\Container\Interface\BuilderInterface;
-use Ghostwriter\Container\Interface\ContainerInterface;
-use Ghostwriter\Container\Interface\Service\ProviderInterface;
+use Ghostwriter\Container\Service\Provider\AbstractProvider;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
@@ -19,12 +18,8 @@ use Throwable;
 /**
  * @see EventDispatcherTest
  */
-final readonly class EventDispatcherProvider implements ProviderInterface
+final class EventDispatcherProvider extends AbstractProvider
 {
-    /** @throws Throwable */
-    #[Override]
-    public function boot(ContainerInterface $container): void {}
-
     /** @throws Throwable */
     #[Override]
     public function register(BuilderInterface $builder): void
