@@ -36,13 +36,13 @@ final readonly class EventDispatcher implements EventDispatcherInterface
     }
 
     /**
-     * @template Event of object
+     * @template TEvent of object
      *
-     * @param Event $event
+     * @param TEvent $event
      *
      * @throws Throwable
      *
-     * @return Event
+     * @return TEvent
      */
     #[Override]
     public function dispatch(object $event): object
@@ -67,7 +67,7 @@ final readonly class EventDispatcher implements EventDispatcherInterface
                     throw $event->throwable();
                 }
 
-                /** @var ErrorOccurredEventInterface&Event $errorEvent */
+                /** @var ErrorOccurredEventInterface&TEvent $errorEvent */
                 $errorEvent = new ErrorOccurredEvent($event, $listener, $throwable);
 
                 $this->dispatch($errorEvent);

@@ -9,30 +9,30 @@ use Throwable;
 /**
  * An object that contains information about an error triggered by Event handling.
  *
- * @template Event of object
- * @template Listener of object
- * @template Reason of Throwable
+ * @template TEvent of object
+ * @template TListener of class-string<(callable(TEvent):void)&object>
+ * @template TReason of Throwable
  */
 interface ErrorOccurredEventInterface extends StoppableEventInterface
 {
     /**
      * Returns the event that triggered this error event.
      *
-     * @return Event
+     * @return TEvent
      */
     public function event(): object;
 
     /**
      * Returns the listener that raised the error.
      *
-     * @return class-string<(callable(Event):void)&Listener>
+     * @return TListener
      */
     public function listener(): string;
 
     /**
      * Returns the exception thrown by the listener.
      *
-     * @return Reason
+     * @return TReason
      */
     public function throwable(): Throwable;
 }
