@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Ghostwriter\EventDispatcher\Container\EventDispatcherDefinition;
+use Ghostwriter\EventDispatcher\Container\EventDispatcherProvider;
+use Ghostwriter\EventDispatcher\Container\ListenerProviderFactory;
 use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\EventNotFoundException;
@@ -14,18 +15,20 @@ use Ghostwriter\EventDispatcher\Exception\ListenerNotFoundException;
 use Ghostwriter\EventDispatcher\Interface\ExceptionInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Throwable;
 
 use function array_map;
 
-#[CoversClass(EventDispatcher::class)]
-#[CoversClass(ErrorOccurredEvent::class)]
-#[CoversClass(ListenerProvider::class)]
 #[CoversClass(EventNotFoundException::class)]
 #[CoversClass(ListenerAlreadyExistsException::class)]
 #[CoversClass(ListenerMissingInvokeMethodException::class)]
 #[CoversClass(ListenerNotFoundException::class)]
-#[CoversClass(EventDispatcherDefinition::class)]
+#[UsesClass(ErrorOccurredEvent::class)]
+#[UsesClass(EventDispatcher::class)]
+#[UsesClass(EventDispatcherProvider::class)]
+#[UsesClass(ListenerProvider::class)]
+#[UsesClass(ListenerProviderFactory::class)]
 final class ExceptionsTest extends AbstractTestCase
 {
     /** @var list<class-string<Throwable>> */
