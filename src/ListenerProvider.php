@@ -22,6 +22,7 @@ use function class_exists;
 use function enum_exists;
 use function interface_exists;
 use function method_exists;
+use function sprintf;
 
 /**
  * Maps registered Listeners, Providers and Subscribers.
@@ -29,10 +30,10 @@ use function method_exists;
 final class ListenerProvider implements ListenerProviderInterface
 {
     /**
-     * @template Event of object
-     * @template Listener of object
+     * @template TEvent of object
+     * @template TListener of class-string<(callable(TEvent):void)&object>
      *
-     * @var array<class-string<Event>,array<class-string<(callable(Event):void)&Listener>,null>>
+     * @var array<class-string<TEvent>,array<class-string<(callable(TEvent):void)&TListener>,null>>
      */
     private array $listeners = [];
 
@@ -41,41 +42,39 @@ final class ListenerProvider implements ListenerProviderInterface
     ) {}
 
     /** @throws Throwable */
-    public static function new(): self
+    public static function new(?ContainerInterface $container = null): self
     {
-        return Container::getInstance()->get(self::class);
+        $container ??= Container::getInstance();
+
+        return $container->get(self::class);
     }
 
     /**
-     * @template Event of object
-     * @template Listener of object
+     * @template TEvent of object
+     * @template TListener of class-string<(callable(TEvent):void)&object>
      *
-     * @param Event $event
+     * @param TEvent $event
      *
-     * @return Generator<class-string<(callable(Event):void)&Listener>>
+     * @return Generator<TListener>
      */
     #[Override]
     public function getListenersForEvent(object $event): Generator
     {
         foreach ($this->listeners as $type => $listeners) {
-            if (! is_a($event, $type, true)) {
-                if ($type !== 'object') {
-                    continue;
-                }
+            if (! $event instanceof $type && 'object' !== $type) {
+                continue;
             }
 
-            foreach (array_keys($listeners) as $listener) {
-                yield $listener;
-            }
+            yield from array_keys($listeners);
         }
     }
 
     /**
-     * @template Event of object
-     * @template Listener of object
+     * @template TEvent of object
+     * @template TListener of class-string<(callable(TEvent):void)&object>
      *
-     * @param 'object'|class-string<Event>                  $event
-     * @param class-string<(callable(Event):void)&Listener> $listener
+     * @param 'object'|class-string<TEvent>                   $event
+     * @param class-string<(callable(TEvent):void)&TListener> $listener
      *
      * @throws ExceptionInterface
      */
@@ -87,17 +86,21 @@ final class ListenerProvider implements ListenerProviderInterface
         $this->assertListener($listener);
 
         if (array_key_exists($event, $this->listeners) && array_key_exists($listener, $this->listeners[$event])) {
-            throw new ListenerAlreadyExistsException($listener);
+            throw new ListenerAlreadyExistsException(sprintf(
+                'Listener "%s" is already registered for event "%s".',
+                $listener,
+                $event,
+            ));
         }
 
         $this->listeners[$event][$listener] = null;
     }
 
     /**
-     * @template Event of object
-     * @template Listener of object
+     * @template TEvent of object
+     * @template TListener of class-string<(callable(TEvent):void)&object>
      *
-     * @param class-string<(callable(Event):void)&Listener> $listener
+     * @param TListener $listener
      *
      * @throws ListenerNotFoundException
      */
@@ -117,25 +120,26 @@ final class ListenerProvider implements ListenerProviderInterface
         }
 
         if (! $removed) {
-            throw new ListenerNotFoundException($listener);
+            throw new ListenerNotFoundException(sprintf('Listener "%s" not found.', $listener));
         }
 
         $this->container->unset($listener);
     }
 
     /**
-     * @template Event of object
+     * @template TEvent of object
      *
-     * @param class-string<Event>|string $event
-     *
-     * @psalm-assert class-string<Event> $event
+     * @param 'object'|class-string<TEvent> $event
      *
      * @throws EventNotFoundException
      */
     private function assertEvent(string $event): void
     {
         match (true) {
-            default => throw new EventNotFoundException($event),
+            default => throw new EventNotFoundException(sprintf(
+                'Event "%s" must be a class-string or "object".',
+                $event,
+            )),
             'object' === $event,
             class_exists($event),
             interface_exists($event),
@@ -145,12 +149,10 @@ final class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @template Event of object
-     * @template Listener of object
+     * @template TEvent of object
+     * @template TListener of class-string<(callable(TEvent):void)&object>
      *
-     * @param class-string<(callable(Event):void)&Listener> $listener
-     *
-     * @psalm-assert class-string<(callable(Event):void)&Listener> $listener
+     * @param TListener $listener
      *
      * @throws ListenerNotFoundException
      * @throws ListenerMissingInvokeMethodException
@@ -158,11 +160,17 @@ final class ListenerProvider implements ListenerProviderInterface
     private function assertListener(string $listener): void
     {
         if (! class_exists($listener)) {
-            throw new ListenerNotFoundException($listener);
+            throw new ListenerNotFoundException(sprintf(
+                'Listener "%s" must be a class-string of an existing class.',
+                $listener,
+            ));
         }
 
         if (! method_exists($listener, '__invoke')) {
-            throw new ListenerMissingInvokeMethodException($listener);
+            throw new ListenerMissingInvokeMethodException(sprintf(
+                'Listener "%s" must have an __invoke() method.',
+                $listener,
+            ));
         }
     }
 }

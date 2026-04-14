@@ -11,13 +11,13 @@ interface EventDispatcherInterface extends PsrEventDispatcherInterface
     /**
      * Provide all relevant listeners an event to process.
      *
-     * @template Event of object
+     * @template TEvent of object
      *
-     * @param Event $event
+     * @param TEvent $event
      *
      * @throws ExceptionInterface
      *
-     * @return Event
+     * @return TEvent
      */
     public function dispatch(object $event): object;
 }
