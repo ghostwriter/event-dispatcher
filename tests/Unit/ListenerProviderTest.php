@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Ghostwriter\EventDispatcher\Container\EventDispatcherDefinition;
+use Ghostwriter\EventDispatcher\Container\EventDispatcherProvider;
+use Ghostwriter\EventDispatcher\Container\ListenerProviderFactory;
 use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Tests\Fixture\Listener\IntersectionParameterTypeDeclarationListener;
 use Tests\Fixture\Listener\UnionParameterTypeDeclarationListener;
 use Tests\Fixture\TestEvent;
@@ -17,10 +19,11 @@ use Tests\Fixture\TestEvent2;
 use Tests\Fixture\TestEventListener;
 use Throwable;
 
-#[CoversClass(EventDispatcher::class)]
-#[CoversClass(ErrorOccurredEvent::class)]
 #[CoversClass(ListenerProvider::class)]
-#[CoversClass(EventDispatcherDefinition::class)]
+#[UsesClass(ErrorOccurredEvent::class)]
+#[UsesClass(EventDispatcher::class)]
+#[UsesClass(EventDispatcherProvider::class)]
+#[UsesClass(ListenerProviderFactory::class)]
 final class ListenerProviderTest extends AbstractTestCase
 {
     /** @throws Throwable */
