@@ -9,20 +9,20 @@ use Override;
 use Throwable;
 
 /**
- * @template Event of object
- * @template Listener of object
- * @template Reason of Throwable
+ * @template TEvent of object
+ * @template TListener of class-string<(callable(TEvent):void)&object>
+ * @template TReason of Throwable
  *
- * @implements ErrorOccurredEventInterface<Event, Listener, Reason>
+ * @implements ErrorOccurredEventInterface<TEvent, TListener, TReason>
  */
 final class ErrorOccurredEvent implements ErrorOccurredEventInterface
 {
     private bool $propagationStopped = false;
 
     /**
-     * @param Event                                         $event
-     * @param class-string<(callable(Event):void)&Listener> $listener
-     * @param Reason                                        $throwable
+     * @param TEvent    $event
+     * @param TListener $listener
+     * @param TReason   $throwable
      */
     public function __construct(
         private readonly object $event,
@@ -30,7 +30,7 @@ final class ErrorOccurredEvent implements ErrorOccurredEventInterface
         private readonly Throwable $throwable
     ) {}
 
-    /** @return Event */
+    /** @return TEvent */
     #[Override]
     public function event(): object
     {
@@ -43,7 +43,7 @@ final class ErrorOccurredEvent implements ErrorOccurredEventInterface
         return $this->propagationStopped;
     }
 
-    /** @return class-string<(callable(Event):void)&Listener> */
+    /** @return TListener */
     #[Override]
     public function listener(): string
     {
@@ -56,7 +56,7 @@ final class ErrorOccurredEvent implements ErrorOccurredEventInterface
         $this->propagationStopped = true;
     }
 
-    /** @return Reason */
+    /** @return TReason */
     #[Override]
     public function throwable(): Throwable
     {

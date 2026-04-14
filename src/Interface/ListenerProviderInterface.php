@@ -9,31 +9,31 @@ use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterfac
 interface ListenerProviderInterface extends PsrListenerProviderInterface
 {
     /**
-     * @template Event of object
-     * @template Listener of (callable(Event):void)&object
+     * @template TEvent of object
+     * @template TListener of (callable(TEvent):void)&object
      *
-     * @param Event $event
+     * @param TEvent $event
      *
-     * @return iterable<class-string<Listener>>
+     * @return iterable<class-string<TListener>>
      */
     public function getListenersForEvent(object $event): iterable;
 
     /**
-     * @template Event of object
-     * @template Listener of object
+     * @template TEvent of object
+     * @template TListener of (callable(TEvent):void)&object
      *
-     * @param 'object'|class-string<Event>                  $event
-     * @param class-string<(callable(Event):void)&Listener> $listener
+     * @param 'object'|class-string<TEvent> $event
+     * @param class-string<TListener>       $listener
      *
      * @throws ExceptionInterface
      */
     public function listen(string $event, string $listener): void;
 
     /**
-     * @template Event of object
-     * @template Listener of (callable(Event):void)&object
+     * @template TEvent of object
+     * @template TListener of (callable(TEvent):void)&object
      *
-     * @param class-string<Listener> $listener
+     * @param class-string<TListener> $listener
      *
      * @throws ExceptionInterface
      */
