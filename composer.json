@@ -34,14 +34,14 @@
     "_comment": ["#BlackLivesMatter", "#FreePalestine", "#StandWithIran", "#StandWithUkraine", "#StopGenocide"],
     "require": {
         "php": "~8.4.0 || ~8.5.0",
-        "ghostwriter/container": "^6.1.0",
+        "ghostwriter/container": "^6.1.1",
         "psr/event-dispatcher": "^1.0.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
         "ghostwriter/coding-standard": "dev-main",
         "mockery/mockery": "^1.6.12",
-        "phpunit/phpunit": "^13.1.3",
+        "phpunit/phpunit": "^13.1.4",
         "symfony/var-dumper": "^8.0.8"
     },
     "provide": {
