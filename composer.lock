@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1933fbe720a3653b19b1dcb6b1bcf8d",
+    "content-hash": "19d618130aa0f1d41aac61d3ab73d1a2",
     "packages": [
         {
             "name": "ghostwriter/container",
@@ -196,12 +196,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "38d0f3a56752c8903e83461cbfa68250da5b1dfc"
+                "reference": "16d0a0e7e8f8cb9a1a6ef7eeb7e6a1e36c8e90dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/38d0f3a56752c8903e83461cbfa68250da5b1dfc",
-                "reference": "38d0f3a56752c8903e83461cbfa68250da5b1dfc",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/16d0a0e7e8f8cb9a1a6ef7eeb7e6a1e36c8e90dd",
+                "reference": "16d0a0e7e8f8cb9a1a6ef7eeb7e6a1e36c8e90dd",
                 "shasum": ""
             },
             "require": {
@@ -252,7 +252,7 @@
                 "ext-zlib": "*",
                 "mockery/mockery": "^1.6.12",
                 "php": "~8.4.0 || ~8.5.0",
-                "phpunit/phpunit": "^13.1.4",
+                "phpunit/phpunit": "^13.1.5",
                 "symfony/var-dumper": "^8.0.8"
             },
             "conflict": {
@@ -315,7 +315,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-15T07:55:22+00:00"
+            "time": "2026-04-16T07:46:10+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -1071,16 +1071,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "13.1.5",
+            "version": "13.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "89adcba73441b38db31d5c0473b61e2907311db0"
+                "reference": "c3c414ea438e5a37d00697eaea43e6e05e201a42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/89adcba73441b38db31d5c0473b61e2907311db0",
-                "reference": "89adcba73441b38db31d5c0473b61e2907311db0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c3c414ea438e5a37d00697eaea43e6e05e201a42",
+                "reference": "c3c414ea438e5a37d00697eaea43e6e05e201a42",
                 "shasum": ""
             },
             "require": {
@@ -1150,7 +1150,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.1.5"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.1.6"
             },
             "funding": [
                 {
@@ -1158,7 +1158,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-04-16T04:58:40+00:00"
+            "time": "2026-04-17T12:52:50+00:00"
         },
         {
             "name": "sebastian/cli-parser",
