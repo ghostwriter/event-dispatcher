@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19d618130aa0f1d41aac61d3ab73d1a2",
+    "content-hash": "2930da0940f6688dd8f8b0c44e5b6583",
     "packages": [
         {
             "name": "ghostwriter/container",
@@ -196,12 +196,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "16d0a0e7e8f8cb9a1a6ef7eeb7e6a1e36c8e90dd"
+                "reference": "92b83a50e9bd61fd6fd18c51796ac1c653ec0a7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/16d0a0e7e8f8cb9a1a6ef7eeb7e6a1e36c8e90dd",
-                "reference": "16d0a0e7e8f8cb9a1a6ef7eeb7e6a1e36c8e90dd",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/92b83a50e9bd61fd6fd18c51796ac1c653ec0a7e",
+                "reference": "92b83a50e9bd61fd6fd18c51796ac1c653ec0a7e",
                 "shasum": ""
             },
             "require": {
@@ -252,7 +252,7 @@
                 "ext-zlib": "*",
                 "mockery/mockery": "^1.6.12",
                 "php": "~8.4.0 || ~8.5.0",
-                "phpunit/phpunit": "^13.1.5",
+                "phpunit/phpunit": "^13.1.7",
                 "symfony/var-dumper": "^8.0.8"
             },
             "conflict": {
@@ -315,7 +315,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-16T07:46:10+00:00"
+            "time": "2026-04-18T08:50:30+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -689,16 +689,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "14.1.2",
+            "version": "14.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "c9023486f88a48dd870361591bd7caef6d2406c3"
+                "reference": "24dc6fcf9f2a983de5b3f1199fb01e88d68e7474"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/c9023486f88a48dd870361591bd7caef6d2406c3",
-                "reference": "c9023486f88a48dd870361591bd7caef6d2406c3",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/24dc6fcf9f2a983de5b3f1199fb01e88d68e7474",
+                "reference": "24dc6fcf9f2a983de5b3f1199fb01e88d68e7474",
                 "shasum": ""
             },
             "require": {
@@ -754,7 +754,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/14.1.2"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/14.1.3"
             },
             "funding": [
                 {
@@ -774,7 +774,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-15T08:27:13+00:00"
+            "time": "2026-04-18T05:41:54+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1071,16 +1071,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "13.1.6",
+            "version": "13.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c3c414ea438e5a37d00697eaea43e6e05e201a42"
+                "reference": "ddd6401641861cdef94b922ef10d484f436e8dcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c3c414ea438e5a37d00697eaea43e6e05e201a42",
-                "reference": "c3c414ea438e5a37d00697eaea43e6e05e201a42",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ddd6401641861cdef94b922ef10d484f436e8dcd",
+                "reference": "ddd6401641861cdef94b922ef10d484f436e8dcd",
                 "shasum": ""
             },
             "require": {
@@ -1094,7 +1094,7 @@
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.4.1",
-                "phpunit/php-code-coverage": "^14.1.2",
+                "phpunit/php-code-coverage": "^14.1.3",
                 "phpunit/php-file-iterator": "^7.0.0",
                 "phpunit/php-invoker": "^7.0.0",
                 "phpunit/php-text-template": "^6.0.0",
@@ -1150,7 +1150,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.1.6"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/13.1.7"
             },
             "funding": [
                 {
@@ -1158,7 +1158,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-04-17T12:52:50+00:00"
+            "time": "2026-04-18T06:14:52+00:00"
         },
         {
             "name": "sebastian/cli-parser",
