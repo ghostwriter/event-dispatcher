@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Exception;
 
 use Ghostwriter\EventDispatcher\Container\EventDispatcherProvider;
-use Ghostwriter\EventDispatcher\Container\ListenerProviderFactory;
 use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Exception\ListenerMissingInvokeMethodException;
@@ -19,7 +18,6 @@ use Throwable;
 
 #[CoversClass(ListenerMissingInvokeMethodException::class)]
 #[UsesClass(EventDispatcher::class)]
-#[UsesClass(ListenerProviderFactory::class)]
 #[UsesClass(ErrorOccurredEvent::class)]
 #[UsesClass(EventDispatcherProvider::class)]
 #[UsesClass(ListenerProvider::class)]
