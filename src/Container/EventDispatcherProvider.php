@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ghostwriter\EventDispatcher\Container;
 
-use Ghostwriter\Container\Interface\Service\FactoryInterface;
 use Ghostwriter\Container\Service\Provider\AbstractProvider;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
@@ -28,14 +27,5 @@ final class EventDispatcherProvider extends AbstractProvider
         ListenerProviderInterface::class => ListenerProvider::class,
         PsrEventDispatcherInterface::class => EventDispatcherInterface::class,
         PsrListenerProviderInterface::class => ListenerProviderInterface::class,
-    ];
-
-    /**
-     * service => factory.
-     *
-     * @var array<class-string,class-string<FactoryInterface>>
-     */
-    public const array FACTORY = [
-        ListenerProvider::class => ListenerProviderFactory::class,
     ];
 }
