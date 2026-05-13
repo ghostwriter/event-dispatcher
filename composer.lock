@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "18e32c2bb69bc2fa736bd63b660c8d86",
+    "content-hash": "976c983e49e1635f8a5f90f9b36c8a51",
     "packages": [
         {
             "name": "ghostwriter/container",
@@ -265,12 +265,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "0d05b2b7c956e14f49c8cf535c320f6cb54610f4"
+                "reference": "0a5bee924aa1414cb71091b79b241dcb42667c0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/0d05b2b7c956e14f49c8cf535c320f6cb54610f4",
-                "reference": "0d05b2b7c956e14f49c8cf535c320f6cb54610f4",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/0a5bee924aa1414cb71091b79b241dcb42667c0e",
+                "reference": "0a5bee924aa1414cb71091b79b241dcb42667c0e",
                 "shasum": ""
             },
             "require": {
@@ -322,7 +322,7 @@
                 "ext-zlib": "*",
                 "mockery/mockery": "^1.6.12",
                 "php": "~8.4.0 || ~8.5.0",
-                "phpunit/phpunit": "^13.1.8",
+                "phpunit/phpunit": "^13.1.9",
                 "symfony/var-dumper": "^8.0.8"
             },
             "conflict": {
@@ -385,7 +385,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-13T02:14:23+00:00"
+            "time": "2026-05-13T06:18:35+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
