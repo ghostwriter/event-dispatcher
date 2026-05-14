@@ -327,16 +327,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ghostwriter/coding-standard.git",
-                "reference": "c840eb81ef74b5ba5faff7c3616888b026e177ab"
+                "reference": "b7dce2470724cd286a8ba640eeae6808bba59059"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/c840eb81ef74b5ba5faff7c3616888b026e177ab",
-                "reference": "c840eb81ef74b5ba5faff7c3616888b026e177ab",
+                "url": "https://api.github.com/repos/ghostwriter/coding-standard/zipball/b7dce2470724cd286a8ba640eeae6808bba59059",
+                "reference": "b7dce2470724cd286a8ba640eeae6808bba59059",
                 "shasum": ""
             },
             "require": {
-                "boundwize/structarmed": "^0.5.1",
+                "boundwize/structarmed": "^0.5.2",
                 "ext-apcu": "*",
                 "ext-bcmath": "*",
                 "ext-ctype": "*",
@@ -447,7 +447,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-13T22:09:21+00:00"
+            "time": "2026-05-14T06:45:27+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -1526,16 +1526,16 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "8.2.0",
+            "version": "8.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "d610f05613a5cca8b8866ccdab140f8269a59b9f"
+                "reference": "cce1bb200e0062e72f9b85ccfe54d3fd38bbd044"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/d610f05613a5cca8b8866ccdab140f8269a59b9f",
-                "reference": "d610f05613a5cca8b8866ccdab140f8269a59b9f",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/cce1bb200e0062e72f9b85ccfe54d3fd38bbd044",
+                "reference": "cce1bb200e0062e72f9b85ccfe54d3fd38bbd044",
                 "shasum": ""
             },
             "require": {
@@ -1581,7 +1581,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/diff/issues",
                 "security": "https://github.com/sebastianbergmann/diff/security/policy",
-                "source": "https://github.com/sebastianbergmann/diff/tree/8.2.0"
+                "source": "https://github.com/sebastianbergmann/diff/tree/8.2.1"
             },
             "funding": [
                 {
@@ -1601,7 +1601,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-14T05:05:34+00:00"
+            "time": "2026-05-14T05:24:37+00:00"
         },
         {
             "name": "sebastian/environment",
