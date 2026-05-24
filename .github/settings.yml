@@ -77,13 +77,6 @@
 "repository":
   "name": "event-dispatcher"
   "description": "Event Dispatcher implementation."
-  "topics":
-    - "ghostwriter"
-    - "event-dispatcher"
-    - "php"
-    - "psr"
-    - "psr-14"
-    - "events"
   "homepage": "https://github.com/ghostwriter/event-dispatcher"
   "default_branch": "6.1.x"
   "allow_auto_merge": true
