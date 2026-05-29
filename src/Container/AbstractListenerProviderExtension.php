@@ -12,6 +12,10 @@ use Override;
 use Throwable;
 
 use function assert;
+use function class_exists;
+use function interface_exists;
+use function is_array;
+use function is_string;
 
 /**
  * @see AbstractListenerProviderExtensionTest
@@ -36,7 +40,17 @@ abstract readonly class AbstractListenerProviderExtension implements ExtensionIn
         assert($service instanceof ListenerProviderInterface);
 
         foreach (static::LISTENERS as $event => $listeners) {
+            assert(is_string($event));
+
+            assert(class_exists($event) || interface_exists($event) || 'object' === $event);
+
+            assert(is_array($listeners));
+
             foreach ($listeners as $listener) {
+                assert(is_string($listener));
+
+                assert(class_exists($listener));
+
                 $service->listen($event, $listener);
             }
         }
