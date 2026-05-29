@@ -9,8 +9,10 @@ use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\ListenerProviderInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use Ghostwriter\PHPUnitAssertions\Trait\AssertionsTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
+use Psr\EventDispatcher\ListenerProviderInterface as PsrListenerProviderInterface;
 use Tests\Fixture\Listener\IntersectionParameterTypeDeclarationListener;
 use Tests\Fixture\Listener\UnionParameterTypeDeclarationListener;
 use Tests\Fixture\TestEvent;
@@ -24,6 +26,20 @@ use Throwable;
 #[UsesClass(EventDispatcherProvider::class)]
 final class ListenerProviderTest extends AbstractTestCase
 {
+    use AssertionsTrait;
+
+    /** @throws Throwable */
+    public function testImplementsGhostwriterEventDispatcherInterfaceListenerProviderInterface(): void
+    {
+        self::assertClassImplementsInterface(ListenerProvider::class, ListenerProviderInterface::class);
+    }
+
+    /** @throws Throwable */
+    public function testImplementsPsrEventDispatcherListenerProviderInterface(): void
+    {
+        self::assertClassImplementsInterface(ListenerProvider::class, PsrListenerProviderInterface::class);
+    }
+
     /** @throws Throwable */
     public function testProviderBind(): void
     {
