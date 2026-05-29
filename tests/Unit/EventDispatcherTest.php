@@ -10,9 +10,11 @@ use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\Interface\Event\ErrorOccurredEventInterface;
 use Ghostwriter\EventDispatcher\Interface\EventDispatcherInterface;
 use Ghostwriter\EventDispatcher\ListenerProvider;
+use Ghostwriter\PHPUnitAssertions\Trait\AssertionsTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
+use Psr\EventDispatcher\EventDispatcherInterface as PsrEventDispatcherInterface;
 use RuntimeException;
 use Tests\Fixture\Listener\BlackLivesMatterListener;
 use Tests\Fixture\Listener\LogTestEventExceptionMessageListener;
@@ -29,6 +31,8 @@ use Throwable;
 #[UsesClass(ListenerProvider::class)]
 final class EventDispatcherTest extends AbstractTestCase
 {
+    use AssertionsTrait;
+
     /** @throws Throwable */
     public function testBlackLivesMatterListener(): void
     {
@@ -57,9 +61,15 @@ final class EventDispatcherTest extends AbstractTestCase
     }
 
     /** @throws Throwable */
-    public function testImplementsDispatcherInterfaceAndPsrEventDispatcherInterface(): void
+    public function testImplementsGhostwriterEventDispatcherInterfaceEventDispatcherInterface(): void
     {
-        self::assertInstanceOf(EventDispatcherInterface::class, EventDispatcher::new());
+        self::assertClassImplementsInterface(EventDispatcher::class, EventDispatcherInterface::class);
+    }
+
+    /** @throws Throwable */
+    public function testImplementsPsrEventDispatcherEventDispatcherInterface(): void
+    {
+        self::assertClassImplementsInterface(EventDispatcher::class, PsrEventDispatcherInterface::class);
     }
 
     /** @throws Throwable */
