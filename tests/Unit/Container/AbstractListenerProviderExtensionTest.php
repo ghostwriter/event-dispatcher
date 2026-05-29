@@ -10,12 +10,12 @@ use Ghostwriter\EventDispatcher\Event\ErrorOccurredEvent;
 use Ghostwriter\EventDispatcher\EventDispatcher;
 use Ghostwriter\EventDispatcher\ListenerProvider;
 use Ghostwriter\PHPUnitAssertions\Trait\AssertionsTrait;
-use PHPUnit\Framework\Attributes\CoversClassesThatExtendClass;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use Tests\Unit\AbstractTestCase;
 use Throwable;
 
-#[CoversClassesThatExtendClass(AbstractListenerProviderExtension::class)]
+#[CoversClass(AbstractListenerProviderExtension::class)]
 #[UsesClass(EventDispatcher::class)]
 #[UsesClass(ErrorOccurredEvent::class)]
 #[UsesClass(ListenerProvider::class)]
