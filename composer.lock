@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95fcfcbbf8057a281fd0537ad12ad6cf",
+    "content-hash": "8cadcfacd7291cbe26efdeb5827598e6",
     "packages": [
         {
             "name": "ghostwriter/container",
@@ -3717,16 +3717,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v8.1.0",
+            "version": "v8.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "c2c4df1d21477cc21c9f6dc1b14d07c3abc4963e"
+                "reference": "40096a2515a979f3125c5c928603995b8664c62a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/c2c4df1d21477cc21c9f6dc1b14d07c3abc4963e",
-                "reference": "c2c4df1d21477cc21c9f6dc1b14d07c3abc4963e",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/40096a2515a979f3125c5c928603995b8664c62a",
+                "reference": "40096a2515a979f3125c5c928603995b8664c62a",
                 "shasum": ""
             },
             "require": {
@@ -3780,7 +3780,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v8.1.0"
+                "source": "https://github.com/symfony/var-dumper/tree/v8.1.1"
             },
             "funding": [
                 {
@@ -3800,7 +3800,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-29T05:06:50+00:00"
+            "time": "2026-06-09T10:54:51+00:00"
         },
         {
             "name": "theseer/tokenizer",
