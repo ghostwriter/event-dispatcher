@@ -52,7 +52,7 @@
         "ghostwriter/coding-standard": "dev-main",
         "ghostwriter/phpunit-assertions": "^0.1.0",
         "mockery/mockery": "^1.6.12",
-        "phpunit/phpunit": "^13.2.2"
+        "phpunit/phpunit": "^13.2.4"
     },
     "provide": {
         "psr/event-dispatcher-implementation": "*"
