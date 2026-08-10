@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/sebastianbergmann/phpunit/refs/tags/13.2.0/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/sebastianbergmann/phpunit/refs/tags/13.3.0/phpunit.xsd"
     beStrictAboutChangesToGlobalState="true"
     beStrictAboutCoverageMetadata="true"
     beStrictAboutOutputDuringTests="true"
     bootstrap="vendor/autoload.php"
     cacheDirectory=".cache/phpunit"
-    cacheResult="false"
     colors="true"
     displayDetailsOnAllIssues="true"
     executionOrder="depends,random"
