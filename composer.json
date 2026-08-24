@@ -51,6 +51,7 @@
         "ext-xdebug": "*",
         "ghostwriter/coding-standard": "dev-main",
         "ghostwriter/phpunit-assertions": "^0.1.1",
+        "mockery/mockery": "^1.6",
         "phpunit/phpunit": "^13.3.1"
     },
     "provide": {
